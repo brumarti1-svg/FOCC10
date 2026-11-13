@@ -1,4 +1,11 @@
 ' ============================================================
+' FOC-C10 (Prog0347-FOCC10\frmParametri.frm): stesso form di FOC6 con
+' queste differenze, applicate qui: nel file parametri i campi SPCC/SPCW,
+' AOS/EOS, wind/unstow stow e i settori SA hanno una cifra in meno
+' (ParFile) e i settori SA/SL si scrivono con 2 decimali (ParSalva);
+' a fine invio file l'esito va in LblFine (non MsgBox) e b_Ricezione
+' torna False; timeout ACU indicizzato per canale (Port_Control(ACU)).
+' ------------------------------------------------------------
 ' FrmParametri.vb — portato da BTS1\FrmParametri.vb (stessa origine
 ' VB6, funzionalità confermata identica per il nucleo di editing
 ' parametri ACU: ValoreParametri/ParSalva/ParFile/SalvaData/
@@ -279,360 +286,360 @@ Public Class FrmParametri
         ' Tabelle di calibrazione per settore (AO/EO/PO) e campi singoli — scrittura nel Buffer
         If IsNumeric(TxtSA00.Text) Then
             If Val(TxtSA00.Text) < 0 Then
-                Buffer = Buffer & "AO 00 M" & Format(Math.Abs(Val(TxtSA00.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 00 M" & Format(Math.Abs(Val(TxtSA00.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 00 P" & Format(Val(TxtSA00.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 00 P" & Format(Val(TxtSA00.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA00.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA00.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA00.Text, 1) = "P") Then
             Buffer = Buffer & "AO 00 " & TxtSA00.Text & vbCrLf
         End If
         If IsNumeric(TxtSA01.Text) Then
             If Val(TxtSA01.Text) < 0 Then
-                Buffer = Buffer & "AO 01 M" & Format(Math.Abs(Val(TxtSA01.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 01 M" & Format(Math.Abs(Val(TxtSA01.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 01 P" & Format(Val(TxtSA01.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 01 P" & Format(Val(TxtSA01.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA01.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA01.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA01.Text, 1) = "P") Then
             Buffer = Buffer & "AO 01 " & TxtSA01.Text & vbCrLf
         End If
         If IsNumeric(TxtSA02.Text) Then
             If Val(TxtSA02.Text) < 0 Then
-                Buffer = Buffer & "AO 02 M" & Format(Math.Abs(Val(TxtSA02.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 02 M" & Format(Math.Abs(Val(TxtSA02.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 02 P" & Format(Val(TxtSA02.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 02 P" & Format(Val(TxtSA02.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA02.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA02.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA02.Text, 1) = "P") Then
             Buffer = Buffer & "AO 02 " & TxtSA02.Text & vbCrLf
         End If
         If IsNumeric(TxtSA03.Text) Then
             If Val(TxtSA03.Text) < 0 Then
-                Buffer = Buffer & "AO 03 M" & Format(Math.Abs(Val(TxtSA03.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 03 M" & Format(Math.Abs(Val(TxtSA03.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 03 P" & Format(Val(TxtSA03.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 03 P" & Format(Val(TxtSA03.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA03.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA03.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA03.Text, 1) = "P") Then
             Buffer = Buffer & "AO 03 " & TxtSA03.Text & vbCrLf
         End If
         If IsNumeric(TxtSA04.Text) Then
             If Val(TxtSA04.Text) < 0 Then
-                Buffer = Buffer & "AO 04 M" & Format(Math.Abs(Val(TxtSA04.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 04 M" & Format(Math.Abs(Val(TxtSA04.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 04 P" & Format(Val(TxtSA04.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 04 P" & Format(Val(TxtSA04.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA04.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA04.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA04.Text, 1) = "P") Then
             Buffer = Buffer & "AO 04 " & TxtSA04.Text & vbCrLf
         End If
         If IsNumeric(TxtSA05.Text) Then
             If Val(TxtSA05.Text) < 0 Then
-                Buffer = Buffer & "AO 05 M" & Format(Math.Abs(Val(TxtSA05.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 05 M" & Format(Math.Abs(Val(TxtSA05.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 05 P" & Format(Val(TxtSA05.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 05 P" & Format(Val(TxtSA05.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA05.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA05.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA05.Text, 1) = "P") Then
             Buffer = Buffer & "AO 05 " & TxtSA05.Text & vbCrLf
         End If
         If IsNumeric(TxtSA06.Text) Then
             If Val(TxtSA06.Text) < 0 Then
-                Buffer = Buffer & "AO 06 M" & Format(Math.Abs(Val(TxtSA06.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 06 M" & Format(Math.Abs(Val(TxtSA06.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 06 P" & Format(Val(TxtSA06.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 06 P" & Format(Val(TxtSA06.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA06.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA06.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA06.Text, 1) = "P") Then
             Buffer = Buffer & "AO 06 " & TxtSA06.Text & vbCrLf
         End If
         If IsNumeric(TxtSA07.Text) Then
             If Val(TxtSA07.Text) < 0 Then
-                Buffer = Buffer & "AO 07 M" & Format(Math.Abs(Val(TxtSA07.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 07 M" & Format(Math.Abs(Val(TxtSA07.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 07 P" & Format(Val(TxtSA07.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 07 P" & Format(Val(TxtSA07.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA07.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA07.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA07.Text, 1) = "P") Then
             Buffer = Buffer & "AO 07 " & TxtSA07.Text & vbCrLf
         End If
         If IsNumeric(TxtSA08.Text) Then
             If Val(TxtSA08.Text) < 0 Then
-                Buffer = Buffer & "AO 08 M" & Format(Math.Abs(Val(TxtSA08.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 08 M" & Format(Math.Abs(Val(TxtSA08.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 08 P" & Format(Val(TxtSA08.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 08 P" & Format(Val(TxtSA08.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA08.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA08.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA08.Text, 1) = "P") Then
             Buffer = Buffer & "AO 08 " & TxtSA08.Text & vbCrLf
         End If
         If IsNumeric(TxtSA09.Text) Then
             If Val(TxtSA09.Text) < 0 Then
-                Buffer = Buffer & "AO 09 M" & Format(Math.Abs(Val(TxtSA09.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 09 M" & Format(Math.Abs(Val(TxtSA09.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 09 P" & Format(Val(TxtSA09.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 09 P" & Format(Val(TxtSA09.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA09.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA09.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA09.Text, 1) = "P") Then
             Buffer = Buffer & "AO 09 " & TxtSA09.Text & vbCrLf
         End If
         If IsNumeric(TxtSA10.Text) Then
             If Val(TxtSA10.Text) < 0 Then
-                Buffer = Buffer & "AO 10 M" & Format(Math.Abs(Val(TxtSA10.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 10 M" & Format(Math.Abs(Val(TxtSA10.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 10 P" & Format(Val(TxtSA10.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 10 P" & Format(Val(TxtSA10.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA10.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA10.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA10.Text, 1) = "P") Then
             Buffer = Buffer & "AO 10 " & TxtSA10.Text & vbCrLf
         End If
         If IsNumeric(TxtSA11.Text) Then
             If Val(TxtSA11.Text) < 0 Then
-                Buffer = Buffer & "AO 11 M" & Format(Math.Abs(Val(TxtSA11.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 11 M" & Format(Math.Abs(Val(TxtSA11.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 11 P" & Format(Val(TxtSA11.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 11 P" & Format(Val(TxtSA11.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA11.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA11.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA11.Text, 1) = "P") Then
             Buffer = Buffer & "AO 11 " & TxtSA11.Text & vbCrLf
         End If
         If IsNumeric(TxtSA12.Text) Then
             If Val(TxtSA12.Text) < 0 Then
-                Buffer = Buffer & "AO 12 M" & Format(Math.Abs(Val(TxtSA12.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 12 M" & Format(Math.Abs(Val(TxtSA12.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 12 P" & Format(Val(TxtSA12.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 12 P" & Format(Val(TxtSA12.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA12.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA12.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA12.Text, 1) = "P") Then
             Buffer = Buffer & "AO 12 " & TxtSA12.Text & vbCrLf
         End If
         If IsNumeric(TxtSA13.Text) Then
             If Val(TxtSA13.Text) < 0 Then
-                Buffer = Buffer & "AO 13 M" & Format(Math.Abs(Val(TxtSA13.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 13 M" & Format(Math.Abs(Val(TxtSA13.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 13 P" & Format(Val(TxtSA13.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 13 P" & Format(Val(TxtSA13.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA13.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA13.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA13.Text, 1) = "P") Then
             Buffer = Buffer & "AO 13 " & TxtSA13.Text & vbCrLf
         End If
         If IsNumeric(TxtSA14.Text) Then
             If Val(TxtSA14.Text) < 0 Then
-                Buffer = Buffer & "AO 14 M" & Format(Math.Abs(Val(TxtSA14.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 14 M" & Format(Math.Abs(Val(TxtSA14.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 14 P" & Format(Val(TxtSA14.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 14 P" & Format(Val(TxtSA14.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA14.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA14.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA14.Text, 1) = "P") Then
             Buffer = Buffer & "AO 14 " & TxtSA14.Text & vbCrLf
         End If
         If IsNumeric(TxtSA15.Text) Then
             If Val(TxtSA15.Text) < 0 Then
-                Buffer = Buffer & "AO 15 M" & Format(Math.Abs(Val(TxtSA15.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 15 M" & Format(Math.Abs(Val(TxtSA15.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 15 P" & Format(Val(TxtSA15.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 15 P" & Format(Val(TxtSA15.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA15.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA15.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA15.Text, 1) = "P") Then
             Buffer = Buffer & "AO 15 " & TxtSA15.Text & vbCrLf
         End If
         If IsNumeric(TxtSA16.Text) Then
             If Val(TxtSA16.Text) < 0 Then
-                Buffer = Buffer & "AO 16 M" & Format(Math.Abs(Val(TxtSA16.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 16 M" & Format(Math.Abs(Val(TxtSA16.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 16 P" & Format(Val(TxtSA16.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 16 P" & Format(Val(TxtSA16.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA16.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA16.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA16.Text, 1) = "P") Then
             Buffer = Buffer & "AO 16 " & TxtSA16.Text & vbCrLf
         End If
         If IsNumeric(TxtSA17.Text) Then
             If Val(TxtSA17.Text) < 0 Then
-                Buffer = Buffer & "AO 17 M" & Format(Math.Abs(Val(TxtSA17.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 17 M" & Format(Math.Abs(Val(TxtSA17.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 17 P" & Format(Val(TxtSA17.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 17 P" & Format(Val(TxtSA17.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA17.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA17.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA17.Text, 1) = "P") Then
             Buffer = Buffer & "AO 17 " & TxtSA17.Text & vbCrLf
         End If
         If IsNumeric(TxtSA18.Text) Then
             If Val(TxtSA18.Text) < 0 Then
-                Buffer = Buffer & "AO 18 M" & Format(Math.Abs(Val(TxtSA18.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 18 M" & Format(Math.Abs(Val(TxtSA18.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 18 P" & Format(Val(TxtSA18.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 18 P" & Format(Val(TxtSA18.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA18.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA18.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA18.Text, 1) = "P") Then
             Buffer = Buffer & "AO 18 " & TxtSA18.Text & vbCrLf
         End If
         If IsNumeric(TxtSA19.Text) Then
             If Val(TxtSA19.Text) < 0 Then
-                Buffer = Buffer & "AO 19 M" & Format(Math.Abs(Val(TxtSA19.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 19 M" & Format(Math.Abs(Val(TxtSA19.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 19 P" & Format(Val(TxtSA19.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 19 P" & Format(Val(TxtSA19.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA19.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA19.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA19.Text, 1) = "P") Then
             Buffer = Buffer & "AO 19 " & TxtSA19.Text & vbCrLf
         End If
         If IsNumeric(TxtSA20.Text) Then
             If Val(TxtSA20.Text) < 0 Then
-                Buffer = Buffer & "AO 20 M" & Format(Math.Abs(Val(TxtSA20.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 20 M" & Format(Math.Abs(Val(TxtSA20.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 20 P" & Format(Val(TxtSA20.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 20 P" & Format(Val(TxtSA20.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA20.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA20.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA20.Text, 1) = "P") Then
             Buffer = Buffer & "AO 20 " & TxtSA20.Text & vbCrLf
         End If
         If IsNumeric(TxtSA21.Text) Then
             If Val(TxtSA21.Text) < 0 Then
-                Buffer = Buffer & "AO 21 M" & Format(Math.Abs(Val(TxtSA21.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 21 M" & Format(Math.Abs(Val(TxtSA21.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 21 P" & Format(Val(TxtSA21.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 21 P" & Format(Val(TxtSA21.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA21.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA21.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA21.Text, 1) = "P") Then
             Buffer = Buffer & "AO 21 " & TxtSA21.Text & vbCrLf
         End If
         If IsNumeric(TxtSA22.Text) Then
             If Val(TxtSA22.Text) < 0 Then
-                Buffer = Buffer & "AO 22 M" & Format(Math.Abs(Val(TxtSA22.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 22 M" & Format(Math.Abs(Val(TxtSA22.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 22 P" & Format(Val(TxtSA22.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 22 P" & Format(Val(TxtSA22.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA22.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA22.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA22.Text, 1) = "P") Then
             Buffer = Buffer & "AO 22 " & TxtSA22.Text & vbCrLf
         End If
         If IsNumeric(TxtSA23.Text) Then
             If Val(TxtSA23.Text) < 0 Then
-                Buffer = Buffer & "AO 23 M" & Format(Math.Abs(Val(TxtSA23.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 23 M" & Format(Math.Abs(Val(TxtSA23.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 23 P" & Format(Val(TxtSA23.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 23 P" & Format(Val(TxtSA23.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA23.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA23.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA23.Text, 1) = "P") Then
             Buffer = Buffer & "AO 23 " & TxtSA23.Text & vbCrLf
         End If
         If IsNumeric(TxtSA24.Text) Then
             If Val(TxtSA24.Text) < 0 Then
-                Buffer = Buffer & "AO 24 M" & Format(Math.Abs(Val(TxtSA24.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 24 M" & Format(Math.Abs(Val(TxtSA24.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 24 P" & Format(Val(TxtSA24.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 24 P" & Format(Val(TxtSA24.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA24.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA24.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA24.Text, 1) = "P") Then
             Buffer = Buffer & "AO 24 " & TxtSA24.Text & vbCrLf
         End If
         If IsNumeric(TxtSA25.Text) Then
             If Val(TxtSA25.Text) < 0 Then
-                Buffer = Buffer & "AO 25 M" & Format(Math.Abs(Val(TxtSA25.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 25 M" & Format(Math.Abs(Val(TxtSA25.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 25 P" & Format(Val(TxtSA25.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 25 P" & Format(Val(TxtSA25.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA25.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA25.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA25.Text, 1) = "P") Then
             Buffer = Buffer & "AO 25 " & TxtSA25.Text & vbCrLf
         End If
         If IsNumeric(TxtSA26.Text) Then
             If Val(TxtSA26.Text) < 0 Then
-                Buffer = Buffer & "AO 26 M" & Format(Math.Abs(Val(TxtSA26.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 26 M" & Format(Math.Abs(Val(TxtSA26.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 26 P" & Format(Val(TxtSA26.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 26 P" & Format(Val(TxtSA26.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA26.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA26.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA26.Text, 1) = "P") Then
             Buffer = Buffer & "AO 26 " & TxtSA26.Text & vbCrLf
         End If
         If IsNumeric(TxtSA27.Text) Then
             If Val(TxtSA27.Text) < 0 Then
-                Buffer = Buffer & "AO 27 M" & Format(Math.Abs(Val(TxtSA27.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 27 M" & Format(Math.Abs(Val(TxtSA27.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 27 P" & Format(Val(TxtSA27.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 27 P" & Format(Val(TxtSA27.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA27.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA27.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA27.Text, 1) = "P") Then
             Buffer = Buffer & "AO 27 " & TxtSA27.Text & vbCrLf
         End If
         If IsNumeric(TxtSA28.Text) Then
             If Val(TxtSA28.Text) < 0 Then
-                Buffer = Buffer & "AO 28 M" & Format(Math.Abs(Val(TxtSA28.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 28 M" & Format(Math.Abs(Val(TxtSA28.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 28 P" & Format(Val(TxtSA28.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 28 P" & Format(Val(TxtSA28.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA28.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA28.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA28.Text, 1) = "P") Then
             Buffer = Buffer & "AO 28 " & TxtSA28.Text & vbCrLf
         End If
         If IsNumeric(TxtSA29.Text) Then
             If Val(TxtSA29.Text) < 0 Then
-                Buffer = Buffer & "AO 29 M" & Format(Math.Abs(Val(TxtSA29.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 29 M" & Format(Math.Abs(Val(TxtSA29.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 29 P" & Format(Val(TxtSA29.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 29 P" & Format(Val(TxtSA29.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA29.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA29.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA29.Text, 1) = "P") Then
             Buffer = Buffer & "AO 29 " & TxtSA29.Text & vbCrLf
         End If
         If IsNumeric(TxtSA30.Text) Then
             If Val(TxtSA30.Text) < 0 Then
-                Buffer = Buffer & "AO 30 M" & Format(Math.Abs(Val(TxtSA30.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 30 M" & Format(Math.Abs(Val(TxtSA30.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 30 P" & Format(Val(TxtSA30.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 30 P" & Format(Val(TxtSA30.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA30.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA30.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA30.Text, 1) = "P") Then
             Buffer = Buffer & "AO 30 " & TxtSA30.Text & vbCrLf
         End If
         If IsNumeric(TxtSA31.Text) Then
             If Val(TxtSA31.Text) < 0 Then
-                Buffer = Buffer & "AO 31 M" & Format(Math.Abs(Val(TxtSA31.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 31 M" & Format(Math.Abs(Val(TxtSA31.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "AO 31 P" & Format(Val(TxtSA31.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "AO 31 P" & Format(Val(TxtSA31.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSA31.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSA31.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSA31.Text, 1) = "P") Then
             Buffer = Buffer & "AO 31 " & TxtSA31.Text & vbCrLf
         End If
         If IsNumeric(TxtSL00.Text) Then
             If Val(TxtSL00.Text) < 0 Then
-                Buffer = Buffer & "EO 00 M" & Format(Math.Abs(Val(TxtSL00.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 00 M" & Format(Math.Abs(Val(TxtSL00.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "EO 00 P" & Format(Val(TxtSL00.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 00 P" & Format(Val(TxtSL00.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSL00.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSL00.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSL00.Text, 1) = "P") Then
             Buffer = Buffer & "EO 00 " & TxtSL00.Text & vbCrLf
         End If
         If IsNumeric(TxtSL01.Text) Then
             If Val(TxtSL01.Text) < 0 Then
-                Buffer = Buffer & "EO 01 M" & Format(Math.Abs(Val(TxtSL01.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 01 M" & Format(Math.Abs(Val(TxtSL01.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "EO 01 P" & Format(Val(TxtSL01.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 01 P" & Format(Val(TxtSL01.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSL01.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSL01.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSL01.Text, 1) = "P") Then
             Buffer = Buffer & "EO 01 " & TxtSL01.Text & vbCrLf
         End If
         If IsNumeric(TxtSL02.Text) Then
             If Val(TxtSL02.Text) < 0 Then
-                Buffer = Buffer & "EO 02 M" & Format(Math.Abs(Val(TxtSL02.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 02 M" & Format(Math.Abs(Val(TxtSL02.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "EO 02 P" & Format(Val(TxtSL02.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 02 P" & Format(Val(TxtSL02.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSL02.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSL02.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSL02.Text, 1) = "P") Then
             Buffer = Buffer & "EO 02 " & TxtSL02.Text & vbCrLf
         End If
         If IsNumeric(TxtSL03.Text) Then
             If Val(TxtSL03.Text) < 0 Then
-                Buffer = Buffer & "EO 03 M" & Format(Math.Abs(Val(TxtSL03.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 03 M" & Format(Math.Abs(Val(TxtSL03.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "EO 03 P" & Format(Val(TxtSL03.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 03 P" & Format(Val(TxtSL03.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSL03.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSL03.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSL03.Text, 1) = "P") Then
             Buffer = Buffer & "EO 03 " & TxtSL03.Text & vbCrLf
         End If
         If IsNumeric(TxtSL04.Text) Then
             If Val(TxtSL04.Text) < 0 Then
-                Buffer = Buffer & "EO 04 M" & Format(Math.Abs(Val(TxtSL04.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 04 M" & Format(Math.Abs(Val(TxtSL04.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "EO 04 P" & Format(Val(TxtSL04.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 04 P" & Format(Val(TxtSL04.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSL04.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSL04.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSL04.Text, 1) = "P") Then
             Buffer = Buffer & "EO 04 " & TxtSL04.Text & vbCrLf
         End If
         If IsNumeric(TxtSL05.Text) Then
             If Val(TxtSL05.Text) < 0 Then
-                Buffer = Buffer & "EO 05 M" & Format(Math.Abs(Val(TxtSL05.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 05 M" & Format(Math.Abs(Val(TxtSL05.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "EO 05 P" & Format(Val(TxtSL05.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 05 P" & Format(Val(TxtSL05.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSL05.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSL05.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSL05.Text, 1) = "P") Then
             Buffer = Buffer & "EO 05 " & TxtSL05.Text & vbCrLf
         End If
         If IsNumeric(TxtSL06.Text) Then
             If Val(TxtSL06.Text) < 0 Then
-                Buffer = Buffer & "EO 06 M" & Format(Math.Abs(Val(TxtSL06.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 06 M" & Format(Math.Abs(Val(TxtSL06.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "EO 06 P" & Format(Val(TxtSL06.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 06 P" & Format(Val(TxtSL06.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSL06.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSL06.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSL06.Text, 1) = "P") Then
             Buffer = Buffer & "EO 06 " & TxtSL06.Text & vbCrLf
         End If
         If IsNumeric(TxtSL07.Text) Then
             If Val(TxtSL07.Text) < 0 Then
-                Buffer = Buffer & "EO 07 M" & Format(Math.Abs(Val(TxtSL07.Text)), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 07 M" & Format(Math.Abs(Val(TxtSL07.Text)), "00.00") & vbCrLf
             Else
-                Buffer = Buffer & "EO 07 P" & Format(Val(TxtSL07.Text), "00.000") & vbCrLf
+                Buffer = Buffer & "EO 07 P" & Format(Val(TxtSL07.Text), "00.00") & vbCrLf
             End If
         ElseIf TxtSL07.Text <> "" AndAlso (Microsoft.VisualBasic.Left(TxtSL07.Text, 1) = "M" OrElse Microsoft.VisualBasic.Left(TxtSL07.Text, 1) = "P") Then
             Buffer = Buffer & "EO 07 " & TxtSL07.Text & vbCrLf
@@ -808,7 +815,7 @@ Public Class FrmParametri
         Cursor.Current = Cursors.Default
         If Port_Control(ACU).Socket <> "S" Then
             Port = Canali(ACU).Port_IN
-            frmRicezione.tmrTimeoutMSG(ACU).Interval = If(Port_Control(Port).Time_out * 1000 > 0, Port_Control(Port).Time_out * 1000, 30000)
+            frmRicezione.tmrTimeoutMSG(ACU).Interval = If(Port_Control(ACU).Time_out * 1000 > 0, Port_Control(ACU).Time_out * 1000, 30000)
         Else
             frmRicezione.tmrTimeoutMSG(ACU).Interval = If(Port_Control(ACU).Time_out * 1000 > 0, Port_Control(ACU).Time_out * 1000, 30000)
         End If
@@ -1010,53 +1017,53 @@ Public Class FrmParametri
         End If
         ev1 = ExtractValue("SPCC", sBuffer)
         If ev1 <> "---" Then
-            TxtSPCC.Text = Microsoft.VisualBasic.Left(ev1, 7)
+            TxtSPCC.Text = Microsoft.VisualBasic.Left(ev1, 6)
             Gr_file  = InStr(1, sBuffer1, "SPCC", 1)
-            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
+            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 13, Len(sBuffer1) - 13)
         End If
         ev1 = ExtractValue("SPCW", sBuffer)
         If ev1 <> "---" Then
-            TxtSPCW.Text = Microsoft.VisualBasic.Left(ev1, 7)
+            TxtSPCW.Text = Microsoft.VisualBasic.Left(ev1, 6)
             Gr_file  = InStr(1, sBuffer1, "SPCW", 1)
-            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
+            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 13, Len(sBuffer1) - 13)
         End If
         ev1 = ExtractValue("SPDW", sBuffer)
         If ev1 <> "---" Then
-            TxtSPDW.Text = Microsoft.VisualBasic.Left(ev1, 6)
+            TxtSPDW.Text = Microsoft.VisualBasic.Left(ev1, 5)
             Gr_file  = InStr(1, sBuffer1, "SPDW", 1)
-            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 13, Len(sBuffer1) - 13)
+            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 12, Len(sBuffer1) - 12)
         End If
         ev1 = ExtractValue("SPUP", sBuffer)
         If ev1 <> "---" Then
-            TxtSPUP.Text = Microsoft.VisualBasic.Left(ev1, 6)
+            TxtSPUP.Text = Microsoft.VisualBasic.Left(ev1, 5)
             Gr_file  = InStr(1, sBuffer1, "SPUP", 1)
-            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 13, Len(sBuffer1) - 13)
+            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 12, Len(sBuffer1) - 12)
         End If
         ev1 = ExtractValue("AOS", sBuffer)
         If ev1 <> "---" Then
-            TxtAOS.Text = Microsoft.VisualBasic.Left(ev1, 7)
+            TxtAOS.Text = Microsoft.VisualBasic.Left(ev1, 6)
             Gr_file  = InStr(1, sBuffer1, "AOS", 1)
-            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 13, Len(sBuffer1) - 13)
+            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 12, Len(sBuffer1) - 12)
         End If
         ev1 = ExtractValue("EOS", sBuffer)
         If ev1 <> "---" Then
-            TxtEOS.Text = Microsoft.VisualBasic.Left(ev1, 7)
+            TxtEOS.Text = Microsoft.VisualBasic.Left(ev1, 6)
             Gr_file  = InStr(1, sBuffer1, "EOS", 1)
-            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 13, Len(sBuffer1) - 13)
+            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 12, Len(sBuffer1) - 12)
         End If
         Gr_file = InStr(1, sBuffer, "WS", 1)
         If Gr_file > 0 Then
-            TxtWSAZ.Text = Mid(sBuffer, Gr_file + 3, 7)
-            TxtWSEL.Text = Mid(sBuffer, Gr_file + 10, 7)
+            TxtWSAZ.Text = Mid(sBuffer, Gr_file + 3, 6)
+            TxtWSEL.Text = Mid(sBuffer, Gr_file + 9, 6)
             Gr_file  = InStr(1, sBuffer1, "WS", 1)
-            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 19, Len(sBuffer1) - 19)
+            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 17, Len(sBuffer1) - 17)
         End If
         Gr_file = InStr(1, sBuffer, "US", 1)
         If Gr_file > 0 Then
-            TxtUSAZ.Text = Mid(sBuffer, Gr_file + 3, 7)
-            TxtUSEL.Text = Mid(sBuffer, Gr_file + 10, 7)
+            TxtUSAZ.Text = Mid(sBuffer, Gr_file + 3, 6)
+            TxtUSEL.Text = Mid(sBuffer, Gr_file + 9, 6)
             Gr_file  = InStr(1, sBuffer1, "US", 1)
-            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 19, Len(sBuffer1) - 19)
+            sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 17, Len(sBuffer1) - 17)
         End If
 
         ' Tabelle di calibrazione per settore (AO/EO/PO) e campi singoli — lettura dal file .PAR salvato
@@ -1064,416 +1071,416 @@ Public Class FrmParametri
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA00.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA00.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA00.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA00.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 00", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 01", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA01.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA01.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA01.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA01.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 01", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 02", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA02.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA02.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA02.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA02.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 02", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 03", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA03.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA03.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA03.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA03.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 03", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 04", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA04.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA04.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA04.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA04.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 04", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 05", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA05.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA05.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA05.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA05.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 05", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 06", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA06.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA06.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA06.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA06.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 06", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 07", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA07.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA07.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA07.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA07.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 07", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 08", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA08.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA08.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA08.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA08.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 08", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 09", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA09.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA09.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA09.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA09.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 09", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 10", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA10.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA10.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA10.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA10.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 10", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 11", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA11.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA11.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA11.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA11.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 11", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 12", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA12.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA12.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA12.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA12.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 12", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 13", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA13.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA13.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA13.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA13.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 13", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 14", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA14.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA14.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA14.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA14.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 14", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 15", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA15.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA15.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA15.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA15.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 15", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 16", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA16.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA16.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA16.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA16.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 16", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 17", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA17.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA17.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA17.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA17.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 17", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 18", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA18.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA18.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA18.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA18.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 18", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 19", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA19.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA19.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA19.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA19.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 19", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 20", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA20.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA20.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA20.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA20.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 20", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 21", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA21.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA21.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA21.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA21.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 21", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 22", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA22.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA22.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA22.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA22.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 22", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 23", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA23.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA23.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA23.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA23.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 23", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 24", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA24.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA24.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA24.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA24.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 24", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 25", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA25.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA25.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA25.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA25.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 25", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 26", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA26.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA26.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA26.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA26.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 26", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 27", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA27.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA27.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA27.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA27.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 27", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 28", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA28.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA28.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA28.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA28.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 28", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 29", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA29.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA29.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA29.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA29.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 29", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 30", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA30.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA30.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA30.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA30.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 30", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "AO 31", 1)
         If Gr_file > 0 Then
             sSegno = Mid(sBuffer, Gr_file + 6, 1)
             If sSegno = "M" Then
-                TxtSA31.Text = "-" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA31.Text = "-" & Mid(sBuffer, Gr_file + 7, 5)
             Else
-                TxtSA31.Text = "+" & Mid(sBuffer, Gr_file + 7, 6)
+                TxtSA31.Text = "+" & Mid(sBuffer, Gr_file + 7, 5)
             End If
             Gr_file = InStr(1, sBuffer1, "AO 31", 1)
             If Gr_file > 0 Then
-                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 15, Len(sBuffer1) - 15)
+                sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 14, Len(sBuffer1) - 14)
             End If
         End If
         Gr_file = InStr(1, sBuffer, "EO 00", 1)
@@ -1893,7 +1900,10 @@ Public Class FrmParametri
         rs_App = dbOrbite.OpenRecordset("Parametri", dbOpenDynaset)
         rs_App.FindFirst("Antenna = '" & Antenna & "' and Satellite ='" & s_Satellite & "'")
         If rs_App.NoMatch Then
-            MsgBox("No matching parameters found", MsgBoxStyle.OkOnly)
+            ' C10: messaggio in barra di stato invece di MsgBox
+            FrmMain.stpMessaggio.Text = "There is not parameter"
+            FrmMain.TmrMsg.Enabled = True
+            rs_App.Close()
             Exit Function
         End If
 
@@ -1941,18 +1951,20 @@ Public Class FrmParametri
 
         If m_Reader Is Nothing OrElse m_Reader.EndOfStream Then
             Cursor.Current = Cursors.Default
-            MsgBox("Parameter transfer completed", MsgBoxStyle.OkOnly)
+            ' C10: etichetta lblFine invece di MsgBox; b_Ricezione a False
+            LblFine.Text = "Order sending parameters"
+            LblFine.Visible = True
             If m_Reader IsNot Nothing Then
                 m_Reader.Close()
                 m_Reader.Dispose()
                 m_Reader = Nothing
             End If
-            b_Ricezione(ACU) = True
+            b_Ricezione(ACU) = False
             b_Parametri      = False
             i_Cont           = 0
             If Port_Control(ACU).Socket <> "S" Then
                 Port = Canali(ACU).Port_IN
-                frmRicezione.tmrTimeoutMSG(ACU).Interval = If(Port_Control(Port).Time_out * 1000 > 0, Port_Control(Port).Time_out * 1000, 30000)
+                frmRicezione.tmrTimeoutMSG(ACU).Interval = If(Port_Control(ACU).Time_out * 1000 > 0, Port_Control(ACU).Time_out * 1000, 30000)
             Else
                 frmRicezione.tmrTimeoutMSG(ACU).Interval = If(Port_Control(ACU).Time_out * 1000 > 0, Port_Control(ACU).Time_out * 1000, 30000)
             End If
