@@ -8,7 +8,7 @@
 '   - ParseMAC       → messaggi MCS/MAC
 '   - ParseRX        → ricevitore (beacon, lock, fase)
 '   - ParseGRF       → Down Converter (frequenza, LO)
-'   - CostruisciComando → formattazione comandi in uscita
+'   - (comandi in uscita: CheckSum/CheckDC + Invio, vedi Gestione e frmDownConverter)
 ' ============================================================
 
 Imports System.Text
@@ -504,40 +504,8 @@ Partial Public Class FrmRicezione
     ' SEZIONE 6 — Costruzione comandi in uscita
     ' -------------------------------------------------------
 
-    ''' <summary>
-    ''' Costruisce il frame di comando ACU per puntamento Az/El.
-    ''' Formato: STX "Cmd" AZ(7) EL(6) CHECKSUM(2) ETX
-    ''' </summary>
-    Public Function CostruisciComandoPuntamento(az As Double, el As Double) As String
-        ' Solo costruzione in memoria (StringBuilder/Format su Double):
-        ' nulla qui può realisticamente lanciare.
-        Dim sb As New StringBuilder()
-        sb.Append(STX)
-        sb.Append("Cmd")
-        sb.Append(Format(az, "000.000"))
-        sb.Append(Format(el, "00.000"))
-        Dim chk As Integer = CalcolaChecksum(sb.ToString())
-        sb.Append(Format(chk, "X2"))
-        sb.Append(ETX)
-        Return sb.ToString()
-    End Function
 
-    ''' <summary>
-    ''' Costruisce il frame di richiesta stato GRF (Down Converter) —
-    ''' protocollo reale CheckDC (parentesi graffe, checksum a 1 carattere),
-    ''' non STX/ETX: stesso comando "SB" (richiesta stato) già usato da
-    ''' FrmDownConverter.CmdSTA per l'invio manuale.
-    ''' </summary>
-    Public Function CostruisciComandoGRF() As String
-        Return CheckDC("{" & Chr(AddressDC) & "SB}") & vbCr & vbLf
-    End Function
 
-    ''' <summary>
-    ''' Costruisce comando per cambio frequenza Down Converter.
-    ''' </summary>
-    Public Function CostruisciComandoFreqDC(freqMHz As Double) As String
-        Return STX & "FREQ" & Format(freqMHz, "0000.000") & ETX
-    End Function
 
     ' -------------------------------------------------------
     ' SEZIONE 7 — Utilità protocollo

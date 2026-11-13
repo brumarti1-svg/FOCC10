@@ -239,46 +239,6 @@ Partial Public Class FrmRicezione
         SocketManager.CloseRX(ind)
     End Sub
 
-    ''' Invia comando al Down Converter / GRF
-    Public Sub InviaGRF()
-        Try
-            Dim Cmd As String = CostruisciComandoGRF()
-            If Cmd <> “” Then Invio(Cmd, GRF)
-        Catch
-        End Try
-    End Sub
-
-    ' -------------------------------------------------------
-    ' Comandi canale GRF/LNA/SCU — specifici FOC6, assenti in
-    ' BTS1 (Down Converter, LNA, Switch Control Unit). Porting
-    ' diretto da Prog0357-FOC6\frmRicezione.frm (righe 3919-3977):
-    ' semplici richieste di stato/attenuazione/temperatura, nessun
-    ' controllo coinvolto (solo variabili globali + Invio generico).
-    ' -------------------------------------------------------
-    Public Sub CmdATT()
-        b_int(GRF) = True : b_Ricezione(GRF) = True
-        Send_GRF = CheckDC("{" & Chr(AddressDC) & "TA?}") & vbCr & vbLf
-        Invio(Send_GRF, GRF)
-    End Sub
-
-    Public Sub CmdAT2()
-        b_int(GRF) = True : b_Ricezione(GRF) = True
-        Send_GRF = CheckDC("{" & Chr(AddressDC) & "TB?}") & vbCr & vbLf
-        Invio(Send_GRF, GRF)
-    End Sub
-
-    Public Sub CmdSTA()
-        b_int(GRF) = True : b_Ricezione(GRF) = True
-        Send_GRF = CheckDC("{" & Chr(AddressDC) & "A}") & vbCr & vbLf
-        Invio(Send_GRF, GRF)
-    End Sub
-
-    Public Sub CmdVLT(Tipo As String)
-        b_int(GRF) = True : b_Ricezione(GRF) = True
-        Send_GRF = CheckDC("{" & Chr(AddressDC) & "QT" & Tipo & "}") & vbCr & vbLf
-        Invio(Send_GRF, GRF)
-    End Sub
-
     ''' <summary>C10: richiesta della frequenza al Down Converter ("FE?").</summary>
     Public Sub CmdGRF()
         b_int(GRF) = True : b_Ricezione(GRF) = True
@@ -290,18 +250,6 @@ Partial Public Class FrmRicezione
     Public Sub CmdPol()
         b_int(PCU) = True : b_Ricezione(PCU) = True
         Invio(ChrW(2) & "07!24" & ChrW(3), PCU)     ' STX "07!24" ETX
-    End Sub
-
-    Public Sub CmdSCU()
-        b_int(SCU) = True : b_Ricezione(SCU) = True
-        Dim SendScu As String = "{" & Chr(AddressSCU) & "?STS}5" & vbCr & vbLf
-        Invio(SendScu, SCU)
-    End Sub
-
-    Public Sub CmdLNA()
-        b_int(LNA) = True : b_Ricezione(LNA) = True
-        Dim SendLna As String = "{" & Chr(AddressLNA) & "?}Y" & vbCr & vbLf
-        Invio(SendLna, LNA)
     End Sub
 
     ''' <summary>
@@ -404,13 +352,6 @@ Partial Public Class FrmRicezione
         CType(Me.MdiParent, FrmMain).IniPort_Control()
         Ck("IniPort_Control")
 
-        ' Interrogazione SNMP del polarizzatore (canale PCU): nel VB6
-        ' originale ip_Agent viene impostato dal gestore di connessione
-        ' del socket del canale 6, ma PCU/SNMP non ha un trasporto socket
-        ' reale (dormiente, vedi frmMain.vb) — l'indirizzo si legge quindi
-        ' direttamente dalla configurazione del canale.
-        ip_Agent = Port_Control(PCU).IPAdress
-        TmrManager.Enabled = True
 
         ' Reset display DOPO la config: annulla ogni residuo della sessione precedente
         ResetVisualizzazione()
@@ -671,6 +612,8 @@ RicActive:
                         End Try
                     Case GRF
                         i_InterFre = CInt(Val(LeggiFileIni(Sezione, "Inter")))
+                    Case PCU
+                        i_InterPol = CSng(Val(LeggiFileIni(Sezione, "Inter")))      ' C10: polling polarizzatore
                 End Select
 
                 ' Timeout timer canale
@@ -688,8 +631,6 @@ RicActive:
         g_Validi = CInt(Val(LeggiFileIni("Default", "Validita")))
         g_ValTLE = CInt(Val(LeggiFileIni("Default", "ValTLE")))
         AddressDC = LeggiFileIni("Default", "AddressDC")
-        AddressLNA = LeggiFileIni("Default", "AddressLNA")
-        AddressSCU = LeggiFileIni("Default", "AddressSCU")
         BackUpPT = LeggiFileIni("Default", "BackUpPT")
         BackUpAutoT = LeggiFileIni("Default", "BackUpAutoT")
         g_ThrAuto = CDbl(Val(LeggiFileIni("Default", "ThrAuto")))

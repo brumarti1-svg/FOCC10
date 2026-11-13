@@ -160,10 +160,7 @@ Partial Public Class FrmRicezione
         Me.LblConfCNL3in = New System.Windows.Forms.Label()
         Me.LblConfCNL4in = New System.Windows.Forms.Label()
         Me.LblConfCNL6in = New System.Windows.Forms.Label()
-        Me.LblConfCNL7in = New System.Windows.Forms.Label()
-        Me.LblConfCNL8in = New System.Windows.Forms.Label()
         Me.Manager1 = New System.Windows.Forms.PictureBox()
-        Me.TmrManager = New System.Windows.Forms.Timer(Me.components)
         Me.CmdSum = New System.Windows.Forms.Button()
         Me.LblEmergency = New System.Windows.Forms.Label()
         Me.LblEmergency1 = New System.Windows.Forms.Label()
@@ -1436,27 +1433,9 @@ Partial Public Class FrmRicezione
         Me.LblConfCNL6in.Text = "POL"
         Me.LblConfCNL6in.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'LblConfCNL7in
         '
-        Me.LblConfCNL7in.BackColor = System.Drawing.Color.Yellow
-        Me.LblConfCNL7in.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.LblConfCNL7in.Location = New System.Drawing.Point(1077, 245)
-        Me.LblConfCNL7in.Name = "LblConfCNL7in"
-        Me.LblConfCNL7in.Size = New System.Drawing.Size(43, 29)
-        Me.LblConfCNL7in.TabIndex = 56
-        Me.LblConfCNL7in.Text = "LNA"
-        Me.LblConfCNL7in.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'LblConfCNL8in
         '
-        Me.LblConfCNL8in.BackColor = System.Drawing.Color.Yellow
-        Me.LblConfCNL8in.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.LblConfCNL8in.Location = New System.Drawing.Point(1077, 296)
-        Me.LblConfCNL8in.Name = "LblConfCNL8in"
-        Me.LblConfCNL8in.Size = New System.Drawing.Size(43, 29)
-        Me.LblConfCNL8in.TabIndex = 57
-        Me.LblConfCNL8in.Text = "SWI"
-        Me.LblConfCNL8in.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Manager1
         '
@@ -1467,9 +1446,7 @@ Partial Public Class FrmRicezione
         Me.Manager1.TabStop = False
         Me.Manager1.Visible = False
         '
-        'TmrManager
         '
-        Me.TmrManager.Interval = 5000
         '
         'CmdSum
         '
@@ -2193,7 +2170,6 @@ Partial Public Class FrmRicezione
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.pnlHeaders)
         Me.Controls.Add(Me.pnlAzimuth)
-        Me.Controls.Add(Me.LblConfCNL7in)
         Me.Controls.Add(Me.pnlElevazione)
         Me.Controls.Add(Me.pnlComandi)
         Me.Controls.Add(Me.pnlAcuStatus)
@@ -2233,7 +2209,6 @@ Partial Public Class FrmRicezione
         Me.Controls.Add(Me.LblConfCNL3in)
         Me.Controls.Add(Me.LblConfCNL4in)
         Me.Controls.Add(Me.LblConfCNL6in)
-        Me.Controls.Add(Me.LblConfCNL8in)
         Me.Controls.Add(Me.Manager1)
         Me.Controls.Add(Me.CmdSum)
         Me.Controls.Add(Me.LblEmergency)
@@ -2535,10 +2510,7 @@ Partial Public Class FrmRicezione
     ' LblConfCNL5in esiste già (ereditato da BTS1, Text="INT" — canale
     ' INTELSAT, presente ma inutilizzato anche lì).
     Friend LblConfCNL6in As Label
-    Friend LblConfCNL7in As Label
-    Friend LblConfCNL8in As Label
     Friend Manager1 As System.Windows.Forms.PictureBox
-    Friend WithEvents TmrManager As System.Windows.Forms.Timer
     Friend WithEvents CmdSum As System.Windows.Forms.Button
     Friend LblEmergency As Label
     Friend LblEmergency1 As Label
