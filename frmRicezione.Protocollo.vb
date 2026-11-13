@@ -50,7 +50,148 @@ Partial Public Class FrmRicezione
             Case MAC : AnalisiMAC(Ind, buffer)
             Case RX : AnalisiRX(Ind, buffer)
             Case GRF : AnalisiGRF(Ind, buffer)
+            Case PCU : AnalisiPCU(Ind, buffer)
+            Case INTELSAT
+                ' VB6 ProtIntelsat: analisi carattere per carattere
+                Port_Control(Ind).Buffer = ""
+                For Each c As Char In buffer
+                    ProtIntelsat(c)
+                Next
+            Case Else
+                ' Canali senza analisi: il buffer non deve crescere all'infinito
+                Port_Control(Ind).Buffer = ""
         End Select
+    End Sub
+
+    ' Richiesta INTELSAT in costruzione (VB6: Port_Control(INTELSAT).Buffer,
+    ' qui separato perché AnalisiOrdini riceve ogni volta i nuovi caratteri)
+    Private bufferIntelsat As String = ""
+
+    ''' <summary>
+    ''' Canale INTELSAT (C10, seriale) — porting di ProtIntelsat. Richieste
+    ''' di al più 5 caratteri terminate da CR, con un eventuale carattere di
+    ''' testata prima del codice (ripetuto nella risposta):
+    '''   DS stato PTIC (s_StatusPTIC, 18 o 20 cifre esadecimali, poi azzerato)
+    '''   DP posizione (TagDato, una sola volta)   FD frequenza beacon
+    '''   DE errori di tracking (TagError)          DT tipo "2201"
+    '''   DD livello beacon in millesimi di dB
+    ''' Risposta terminata da CR LF, registrata con ScriviLOG4.
+    ''' Non implementato nel .NET di FOC6.
+    ''' </summary>
+    Private Sub ProtIntelsat(carattere As Char)
+        Try
+            If carattere = vbLf Then
+                bufferIntelsat = ""
+                Return
+            End If
+            bufferIntelsat &= carattere
+            If bufferIntelsat.Length > 5 Then
+                bufferIntelsat = ""
+                TmrTimeoutMSG(INTELSAT).Enabled = False
+                TmrTimeoutMSG(INTELSAT).Enabled = True
+                Return
+            End If
+            If carattere <> vbCr Then Return
+
+            Dim testata As String = ""
+            Dim codice As String
+            Dim primo As String = bufferIntelsat.Substring(0, 1).ToUpperInvariant()
+            If primo <> "D" AndAlso primo <> "F" Then
+                testata = bufferIntelsat.Substring(0, 1)
+                codice = Mid$(bufferIntelsat, 2, 2)
+            Else
+                codice = Mid$(bufferIntelsat, 1, 2)
+            End If
+            bufferIntelsat = ""
+
+            Dim risposta As String = ""
+            Select Case codice.ToUpperInvariant()
+                Case "DS"
+                    risposta = "DS"
+                    Dim n As Integer = If(Ptic = "A", 18, 20)
+                    For i As Integer = 1 To n
+                        risposta &= Hex(s_StatusPTIC(i))
+                    Next
+                    risposta = testata & risposta & vbCr & vbLf
+                    For i As Integer = 1 To 20
+                        s_StatusPTIC(i) = 0
+                    Next
+                Case "DP"
+                    If TagDato = "" Then Return
+                    risposta = testata & "DP" & TagDato & vbCr & vbLf
+                    TagDato = ""
+                Case "FD"
+                    risposta = testata & "FD" & g_Frequenza & vbCr & vbLf
+                Case "DE"
+                    risposta = testata & "DE" & TagError & vbCr & vbLf
+                Case "DT"
+                    risposta = testata & "DT2201" & vbCr & vbLf
+                Case "DD"
+                    If IsNumeric(s_Lev1) Then
+                        risposta = testata & "DD10" & Format$(Val(s_Lev1) * 1000, "000000") & vbCr & vbLf
+                    Else
+                        risposta = testata & "DD10" & vbCr & vbLf
+                    End If
+            End Select
+            LblConfCNL5in.BackColor = COL_OK
+            Port_Control(INTELSAT).Port_State = PCS_NORMAL
+            TmrTimeoutMSG(INTELSAT).Enabled = False
+            TmrTimeoutMSG(INTELSAT).Enabled = True
+            If risposta <> "" Then
+                Invio(risposta, INTELSAT)
+                ScriviLOG4(risposta, 1)
+            End If
+        Catch ex As Exception
+            WriteError(0, "ProtIntelsat: " & ex.Message)
+            bufferIntelsat = ""
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Polarizzatore (C10, seriale PCU) — VB6 ProtMAC con Index = PCU: ACK
+    ''' o frame STX...ETX con lunghezza/checksum validi (VerDatiMAC) mettono
+    ''' il canale in linea (spia verde, timeout fermato); NAK chiude la
+    ''' richiesta. Il contenuto della risposta non viene usato (lblRVR
+    ''' Case 6 vuoto nel VB6): l'angolo arriva dallo stato ACU (s_POL).
+    ''' </summary>
+    Private Sub AnalisiPCU(Ind As Integer, ByRef buffer As String)
+        Try
+            Dim inLinea As Boolean = False
+            If buffer.Contains(ACK) Then
+                inLinea = True
+                buffer = buffer.Replace(CStr(ACK), "")
+            End If
+            If buffer.Contains(NAK) Then
+                TmrTimeoutMSG(PCU).Enabled = False
+                buffer = buffer.Replace(CStr(NAK), "")
+            End If
+            Do While buffer.Contains(ETX)
+                Dim posEtx As Integer = buffer.IndexOf(ETX)
+                Dim posStx As Integer = buffer.LastIndexOf(STX, posEtx)
+                Dim frame As String = If(posStx >= 0, buffer.Substring(posStx, posEtx - posStx + 1), "")
+                buffer = buffer.Substring(posEtx + 1)
+                If frame.Length > 3 Then
+                    If VerDatiMAC(frame) Then
+                        inLinea = True
+                    Else
+                        Port_Control(PCU).CKS_Error += 1
+                    End If
+                End If
+            Loop
+            If buffer.Length > 0 AndAlso buffer.IndexOf(STX) < 0 Then buffer = ""
+            If inLinea Then
+                b_Ricezione(PCU) = False
+                Port_Control(PCU).Port_State = PCS_NORMAL
+                Port_Control(PCU).Rec_State = PCR_WAIT
+                Port_Control(PCU).CKS_Error = 0
+                TmrTimeoutMSG(PCU).Enabled = False
+                LblConfCNL6in.BackColor = COL_OK
+            End If
+        Catch ex As Exception
+            WriteError(0, "AnalisiPCU: " & ex.Message)
+            buffer = ""
+        End Try
+        Port_Control(Ind).Buffer = buffer
     End Sub
 
     ' -------------------------------------------------------
