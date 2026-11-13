@@ -1024,7 +1024,7 @@ Partial Public Class FrmMain
                     Dim lockByte As String = Chr(&H40 Or If(b_Lock, BIT4, 0))
                     Dim rxByte As String = Chr(&H40 Or BIT1 Or BIT3)            ' pos 48: RX ok, segnale ok
                     Dim messaggio As String =
-                        "00000" &                                   ' pos 1-5
+                        Chr(2) & "0069" &                            ' pos 1-5: STX + lunghezza totale (69)
                         "*" &                                       ' pos 6
                         "@" &                                       ' pos 7: bit1=0 -> ora da orologio ACU
                         nowAcu.DayOfYear.ToString("000") &          ' pos 8-10: giorno giuliano
@@ -1044,7 +1044,9 @@ Partial Public Class FrmMain
                         CodificaVolt(10) & CodificaVolt(10) &       ' pos 52-57: errori Az/El = 0
                         CodificaVolt(10) & CodificaVolt(10) &       ' pos 58-63: velocità = 0
                         "@" & "@" & "@"                             ' pos 64-66
-                    Dim frameSimulato As String = messaggio & "00" & Chr(3)    ' + checksum fittizio + ETX
+                    Dim cksSim As Integer = 0
+                    For Each c As Char In messaggio : cksSim = cksSim Xor AscW(c) : Next
+                    Dim frameSimulato As String = messaggio & (cksSim And &HFF).ToString("X2") & Chr(3)    ' + checksum XOR reale + ETX (VerDatiMAC)
                     Port_Control(ACU).Buffer &= frameSimulato
                     frmRicezioneInstance.AnalisiOrdini(ACU, Port_Control(ACU).Buffer)
                     ' Va chiamata DOPO AnalisiOrdini, non prima: AnalisiOrdini

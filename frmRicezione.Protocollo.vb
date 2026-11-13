@@ -64,15 +64,46 @@ Partial Public Class FrmRicezione
     ''' caratteri prima di ETX sono un checksum (stesso "Left$(Buffer,
     ''' Len(Buffer)-3)" del VB6, che tronca checksum+ETX = 3 caratteri).
     ''' </summary>
+    ''' <summary>
+    ''' VerDatiMAC (VB6 C10): la lunghezza dichiarata (pos 2-5) deve
+    ''' coincidere con quella del frame e il checksum (XOR di tutti i
+    ''' caratteri da STX all'ultimo dato, in esadecimale) con quello ricevuto.
+    ''' </summary>
+    Public Shared Function VerDatiMAC(frame As String) As Boolean
+        If frame.Length < 8 Then Return False
+        If Val(Mid$(frame, 2, 4)) <> frame.Length Then Return False
+        Dim cks As Integer = 0
+        For i As Integer = 0 To frame.Length - 4
+            cks = cks Xor AscW(frame(i))
+        Next
+        Return (cks And &HFF) = CInt(Val("&H" & Mid$(frame, frame.Length - 2, 2)))
+    End Function
+
     Private Sub AnalisiACUReale(Ind As Integer, ByRef buffer As String)
         Try
             Do While buffer.Contains(ETX)
                 Dim posEtx As Integer = buffer.IndexOf(ETX)
-
-                ' Messaggio senza i 2 caratteri di checksum finali, come il VB6
-                Dim fineMessaggio As Integer = Math.Max(posEtx - 2, 0)
-                Dim messaggio As String = buffer.Substring(0, fineMessaggio)
+                ' C10 (VB6 frmRicezione/VerDatiMAC): frame = STX + lunghezza
+                ' totale su 4 cifre + dati + checksum XOR (2 hex) + ETX.
+                ' Eventuale sporcizia prima di STX viene scartata.
+                Dim posStx As Integer = buffer.LastIndexOf(STX, posEtx)
+                Dim frame As String = If(posStx >= 0, buffer.Substring(posStx, posEtx - posStx + 1), "")
                 buffer = buffer.Substring(posEtx + 1)
+                If frame.Length <= 3 Then Continue Do
+                If Not VerDatiMAC(frame) Then
+                    Port_Control(Ind).CKS_Error += 1
+                    WriteError(0, "ACU: messaggio scartato (lunghezza/checksum): " & frame.Replace(CStr(STX), "<STX>").Replace(CStr(ETX), "<ETX>"))
+                    Continue Do
+                End If
+                ' Messaggio senza checksum ed ETX (stesso Left$(Buffer, Len-3) del VB6)
+                Dim messaggio As String = frame.Substring(0, frame.Length - 3)
+                ' VB6: una risposta valida libera la richiesta di stato in
+                ' corso (b_Ricezione) e riporta il canale in attesa.
+                If i_Cont = 2 Then i_Cont = 1
+                Port_Control(ACU).Rec_State = PCR_STANDBY
+                Port_Control(ACU).CKS_Error = 0
+                b_Ricezione(ACU) = False
+                ScriviLOG1(Mid$(frame, 6, frame.Length - 8), 1)
 
                 If messaggio.Length > 0 Then
                     ValoreCampoMAC(messaggio)
