@@ -40,6 +40,60 @@ Partial Public Class FrmRicezione
         AggiornaBeaconLock()
         AggiornaRicevitore()
         AggiornaFase()
+        AggiornaPolLnaDaACU()
+    End Sub
+
+    ''' <summary>
+    ''' C10 (VB6 AggiornaDati): LNA in linea e polarizzazione letti dal byte
+    ''' 10 dello stato ACU (in FOC6 venivano dai cassetti LNA/SCU, assenti
+    ''' in C10). Un cambio di LNA o di polarizzazione imposta g_NewLna:
+    ''' con ChangePhase = "Y" frmMain carica e invia la fase corrispondente.
+    ''' </summary>
+    Public Sub AggiornaPolLnaDaACU()
+        If Not b_DatiAntenna OrElse CampoOp <> "*" Then Return
+        Dim ricChange As Boolean = False
+
+        If IsNumeric(Mid$(s_Az, 1, 6)) Then TxtAz.Text = Format$(Val(Mid$(s_Az, 1, 6)) / 1000, "000.000")
+        If IsNumeric(Mid$(s_El, 1, 5)) Then TxtEl.Text = Format$(Val(Mid$(s_El, 1, 5)) / 1000, "00.000")
+        TxtAzEr.Text = s_LevAz
+        TxtElEr.Text = s_LevEl
+
+        Dim lnaPrima As String = LblLNA.Text
+        If (vBytesold(10) And BIT1) = BIT1 Then
+            LblLNA.Text = "1"
+        ElseIf (vBytesold(10) And BIT2) = BIT2 Then
+            LblLNA.Text = "2"
+        ElseIf (vBytesold(10) And BIT3) = BIT3 Then
+            LblLNA.Text = "3"
+        End If
+        If lnaPrima <> LblLNA.Text Then ricChange = True
+        g_LNA = LblLNA.Text
+
+        Dim polPrima As String = LblPol.Text
+        Dim inPosizione As Boolean = (vBytesold(10) And BIT3) = BIT3
+        Select Case i_Pol
+            Case 0
+                If inPosizione Then
+                    LblPol1.Text = "Linear"
+                    If IsNumeric(Mid$(s_POL, 1, 4)) Then TxtPol.Text = Format$(Val(Mid$(s_POL, 1, 4)) / 10, "#00.0")
+                Else
+                    TxtPol.Text = ""
+                    LblPol1.Text = "Running"
+                End If
+            Case 1
+                TxtPol.Text = ""
+                If inPosizione Then
+                    LblPol1.Text = "Circular"
+                    LblPol.Text = If((vBytesold(10) And BIT4) = BIT4, "RHCP", "LHCP")
+                Else
+                    LblPol1.Text = "Running"
+                    LblPol.Text = ""
+                End If
+        End Select
+        If polPrima <> LblPol.Text Then ricChange = True
+        g_Polar = LblPol.Text
+
+        If ricChange Then g_NewLna = True
     End Sub
 
     ' -------------------------------------------------------
