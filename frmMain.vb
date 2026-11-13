@@ -110,6 +110,15 @@ Partial Public Class FrmMain
         ' C10: ACU (e PCU/INTELSAT) su seriale — InvioACU della libreria
         ' comune scrive sulla porta tramite questo aggancio.
         InvioSerialeHook = AddressOf ScriviSeriale
+        ' Simulazione ACU: esiste solo nella configurazione di build
+        ' "Simulazione" (sviluppo senza hardware). Nella versione operativa
+        ' (Debug/Release) il codice non viene compilato e il flag resta False,
+        ' così anche il beacon simulato in Acquire (libreria comune) è spento.
+#If SIMULAZIONE Then
+        b_SimulazioneACU = True
+#Else
+        b_SimulazioneACU = False
+#End If
         ' STARTUP_TIMING: stessa strumentazione temporanea già usata su
         ' BTS1 per trovare il vero collo di bottiglia dell'avvio (da
         ' rimuovere una volta trovato) — qui non c'era mai stata, quindi
@@ -938,8 +947,9 @@ Partial Public Class FrmMain
                 ' ValoreCampoMAC) dei dati veri — nessun bypass. Formato a
                 ' campi fissi identico a BTS1 (FOC6 fu allineato apposta al
                 ' protocollo BTS1, vedi commenti in Gestione.vb). Simulazione
-                ' permanente, non da rimuovere: serve per testare FOC6 senza
+                ' compilata SOLO nella configurazione "Simulazione": serve per testare senza
                 ' hardware ACU reale collegato (anche da remoto via noVNC).
+#If SIMULAZIONE Then
                 If frmRicezioneInstance IsNot Nothing Then
                     Dim azSim As Double, elSim As Double
                     Dim daTLE As Boolean = False
@@ -1081,6 +1091,7 @@ Partial Public Class FrmMain
                         frmRicezioneInstance.TmrTimeoutMSG(ACU).Enabled = True
                     End If
                 End If
+#End If
                 ' ========================================================
             End If
 
@@ -1101,6 +1112,7 @@ Partial Public Class FrmMain
         End Try
     End Sub
 
+#If SIMULAZIONE Then
     ''' <summary>
     ''' Inverso di CalcoloVolt (simulazione ACU C10): tensione 0..20 V nei
     ''' 3 byte del protocollo (nibble basso di ciascun carattere, |0x40).
@@ -1110,4 +1122,5 @@ Partial Public Class FrmMain
         n = Math.Max(0, Math.Min(4095, n))
         Return Chr(&H40 Or (n And &HF)) & Chr(&H40 Or ((n >> 4) And &HF)) & Chr(&H40 Or ((n >> 8) And &HF))
     End Function
+#End If
 End Class
