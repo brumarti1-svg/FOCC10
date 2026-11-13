@@ -170,6 +170,21 @@ Partial Public Class FrmRicezione
                 Return
             End If
 
+            ' C10: ordine al polarizzatore ("14Z ...") inoltrato sulla seriale PCU
+            If buffer.Contains("14Z ") Then
+                If LblConfCNL6in.BackColor = COL_OK Then
+                    Invio(ACK, MAC)
+                    b_int(PCU) = True
+                    b_Ricezione(PCU) = True
+                    Invio(buffer, PCU)
+                Else
+                    Invio(NAK, MAC)
+                End If
+                buffer = ""
+                Port_Control(Ind).Buffer = buffer
+                Return
+            End If
+
             b_int(ACU) = False
             Dim campo As String = If(buffer.Length >= 4, buffer.Substring(3, 1), "")
 
@@ -211,6 +226,7 @@ Partial Public Class FrmRicezione
                     LblAzimuth.Text = "" : LblElevazione.Text = ""
                     LblAzimuthC.Text = "" : LblElevazioneC.Text = ""
                     LblAzError.Text = "" : LblElError.Text = ""
+                    AzOffset = 0 : ElOffset = 0             ' C10
                 End If
             End If
 
@@ -255,10 +271,28 @@ Partial Public Class FrmRicezione
                         ElseIf i_Status = OP_AUGMENTED Then
                             sStat = &H52
                         End If
-                        Dim freq As String = Format$(f_FrqBeacon * 1000000, "00000000")
-                        Dim potenza As String = "+" & Format$(f_PowerOut * 10, "000")
+                        ' C10: frequenza da g_Frequenza (kHz, 8 cifre), segno
+                        ' della potenza solo se positiva, modo polarizzatore dai
+                        ' byte di stato ACU e angolo di polarizzazione a 5
+                        ' caratteri (campo assente nella versione FOC6/BTS1, che
+                        ' rendeva il messaggio più corto della lunghezza 0035).
+                        Dim freq As String = Format$(Val(g_Frequenza) * 1000, "00000000")
+                        Dim potenza As String = Format$(f_PowerOut * 10, "000")
+                        If f_PowerOut >= 0 Then potenza = "+" & potenza
+                        Dim modoPol As String = "C"
+                        If (vBytesold(10) And BIT3) = BIT3 Then
+                            modoPol = If(i_Pol = 0, "L", "C")
+                        Else
+                            modoPol = "S"
+                        End If
+                        d_Pol = modoPol
+                        Dim polField As String = "+0000"
+                        If IsNumeric(Mid$(s_POL, 1, 4)) Then
+                            Dim polVal As Double = Val(Mid$(s_POL, 1, 4))
+                            polField = If(polVal >= 0, "+", "-") & Math.Abs(polVal).ToString("0000")
+                        End If
                         Dim alarmPc As Integer = 0
-                        If LblConfCNL1in.BackColor <> COL_OK OrElse i_Alarm Then alarmPc = 1
+                        If LblConfCNL1in.BackColor <> COL_OK OrElse LblConfCNL3in.BackColor <> COL_OK OrElse i_Alarm Then alarmPc = 1
                         Dim i As Integer
                         If PTK = 0 Then
                             i = 0
@@ -279,15 +313,12 @@ Partial Public Class FrmRicezione
                         pc1Status = pc1Status Or &H40
                         Dim pc2Status As String = Chr(pc1Status)
                         Dim sBeac As String = "+0000"
-                        If IsNumeric(s_Lev) Then
-                            sBeac = Format$(Val(s_Lev) * 10, "#0000")
-                            If Val(s_Lev) >= 0 Then sBeac = "+" & sBeac
+                        If IsNumeric(s_Lev1) Then                 ' C10: livello del ricevitore (s_Lev1)
+                            sBeac = Format$(Val(s_Lev1) * 10, "#0000")
+                            If Val(s_Lev1) >= 0 Then sBeac = "+" & sBeac
                         End If
-                        ' d_Pol (modo operativo polarizzatore) e il secondo
-                        ' campo polarizzazione del VB6 (locale, mai
-                        ' valorizzato nell'originale): stringa vuota, come a
-                        ' runtime in VB6.
-                        Dim risposta As String = CheckSum("0035[" & Chr(sStat) & f_DCType & freq & potenza & d_Pol & "" & pc2Status & sBeac)
+                        ' C10: modo polarizzatore e angolo (5 caratteri) presenti
+                        Dim risposta As String = CheckSum("0035[" & Chr(sStat) & f_DCType & freq & potenza & d_Pol & polField & pc2Status & sBeac)
                         Invio(risposta, Ind)
 
                     Case Else
@@ -295,19 +326,20 @@ Partial Public Class FrmRicezione
                         If (s_ACULR = "L" OrElse Not b_StatusPC1) AndAlso campo <> "*" AndAlso campo <> "[" Then
                             Invio(NAK, MAC)
                         Else
-                            b_Ricezione(ACU) = False
-                            b_int(ACU) = False
-                            i_Cont = 2
-                            Attesa(0.2)
-                            InvioACU(buffer)
-                            Dim ordineValido As Boolean = False
-                            If buffer.Length >= 6 Then
-                                ordineValido = OrdiniMcs(buffer.Substring(3, buffer.Length - 6))
-                            End If
-                            If ordineValido AndAlso LblConfCNL1in.BackColor = COL_OK Then
-                                Invio(ACK, MAC)
+                            ' C10: l'ordine viene prima validato (OrdiniMcs ->
+                            ' g_aggOrdini); se valido va all'ACU con b_MCS, così
+                            ' la risposta dell'ACU torna all'MCS (ValoreCampoMAC),
+                            ' altrimenti NAK.
+                            If buffer.Length >= 6 Then OrdiniMcs(buffer.Substring(3, buffer.Length - 6))
+                            If g_aggOrdini Then
+                                b_Ricezione(ACU) = False
+                                b_int(ACU) = False
+                                i_Cont = 2
+                                b_MCS = True
+                                InvioACU(buffer)
                             Else
                                 Invio(NAK, MAC)
+                                b_MCS = False
                             End If
                         End If
                 End Select
@@ -405,47 +437,67 @@ Partial Public Class FrmRicezione
     ' -------------------------------------------------------
 
     ''' <summary>
-    ''' Analisi messaggi Down Converter — porting diretto da VB6
-    ''' (frmRicezione.frm, lblRVR_Change, Case GRF). Il protocollo reale usa
-    ''' CheckDC (framing a parentesi graffe "{...}", checksum a 1 carattere),
-    ''' non STX/ETX: la versione precedente di questa Sub presupponeva un
-    ''' framing STX/ETX del tutto inventato (nessun riscontro nel VB6), che
-    ''' non avrebbe mai interpretato le vere risposte del Down Converter, e
-    ''' non chiamava mai PresentaDown — il parser reale, già presente in
-    ''' frmDownConverter.vb ma mai raggiunto.
+    ''' Analisi messaggi Down Converter — porting da VB6 C10 (ProtDC +
+    ''' lblRVR_Change Case 4). Frame: "{" + indirizzo + tipo (2 caratteri)
+    ''' + dati + "}" + 1 carattere di checksum. Tipi di risposta di C10
+    ''' (schema a 2 caratteri, come BTS1): TA/TB attenuatori, SB stato,
+    ''' QT alimentazione (tutti a FrmDownConverter.PresentaDown), FE
+    ''' frequenza in Hz su 9 cifre. Messaggi brevi: errori a/b/g.
+    ''' Il checksum non viene verificato: nel VB6 VerDatiDC confronta il
+    ''' numero con il carattere "}" e, sotto On Error Resume Next, risulta
+    ''' sempre vero — comportamento mantenuto.
     ''' </summary>
     Private Sub AnalisiGRF(Ind As Integer, ByRef buffer As String)
         Try
-            If buffer.Length > 5 Then
-                ' Status a un solo carattere (Mid$(Buffer,3,1) in VB6 — "A"
-                ' stato compatto, "F" sola frequenza, "Q" tensione
-                ' alimentazione): non "TA"/"TB"/"SB"/"QT" (2 caratteri),
-                ' quello è lo schema di BTS1, non di FOC6.
-                Dim status2 As String = buffer.Substring(2, 1)
-                Select Case status2
-                    Case "A", "F", "Q"
-                        FrmDownConverter.PresentaDown(buffer)
-                End Select
+            Do
+                Dim inizio As Integer = buffer.IndexOf("{"c)
+                If inizio < 0 Then
+                    buffer = ""
+                    Exit Do
+                End If
+                Dim fine As Integer = buffer.IndexOf("}"c, inizio)
+                ' serve anche il carattere di checksum dopo "}"
+                If fine < 0 OrElse fine + 1 >= buffer.Length Then
+                    buffer = buffer.Substring(inizio)
+                    Exit Do
+                End If
+                Dim frame As String = buffer.Substring(inizio, fine - inizio + 2)
+                buffer = buffer.Substring(fine + 2)
+                ElaboraRispostaDC(frame)
                 Port_Control(GRF).Port_State = PCS_OK
+                Port_Control(GRF).CKS_Error = 0
+                TmrTimeoutMSG(GRF).Enabled = False
                 ImpostaIndicatoreCanale(LblConfCNL4in, PCS_OK)
-            ElseIf buffer.Length > 2 Then
-                Dim status1 As String = buffer.Substring(2, 1)
-                Select Case status1
-                    Case "a" : MainForm.MessaggioStatus = "DC Syntax Error"
-                    Case "b" : MainForm.MessaggioStatus = "DC Out of range"
-                    Case "g" : MainForm.MessaggioStatus = "DC General Error"
-                End Select
-                If tmrAlarm IsNot Nothing Then tmrAlarm.Enabled = True
-            End If
+            Loop
         Catch ex As Exception
             WriteError(0, "AnalisiGRF: " & ex.Message)
+            buffer = ""
         End Try
-        ' VB6 elabora l'intero buffer accumulato come un unico messaggio
-        ' (nessun framing a più messaggi come ACU/ETX) e lo svuota di volta
-        ' in volta sull'invio del comando successivo (SendSocketBufferDC);
-        ' qui lo svuotiamo subito dopo l'elaborazione per coerenza.
-        buffer = ""
         Port_Control(Ind).Buffer = buffer
+    End Sub
+
+    Private Sub ElaboraRispostaDC(frame As String)
+        If frame.Length > 5 Then
+            Select Case Mid$(frame, 3, 2)
+                Case "TA", "TB", "SB", "QT"
+                    FrmDownConverter.PresentaDown(frame)
+                Case "FE"
+                    Dim freq As String = Mid$(frame, 5, 9)
+                    If IsNumeric(freq) AndAlso Val(freq) <> 0 Then
+                        f_FrqBeacon = CSng(Val(freq) / 100000)          ' Hz*100 -> MHz
+                        g_Frequenza = Format$(f_FrqBeacon, "###00.0#")
+                        If f_FrqBeacon > 0 Then TxtFrqBeacon.Text = Format$(f_FrqBeacon, "#0000.000")   '29/10/2022
+                    End If
+            End Select
+        Else
+            Select Case Mid$(frame, 3, 1)
+                Case "a" : MainForm.MessaggioStatus = "DC Syntax Error"
+                Case "b" : MainForm.MessaggioStatus = "DC Out of range"
+                Case "g" : MainForm.MessaggioStatus = "DC General Error"
+                Case Else : Return
+            End Select
+            MainForm.TmrMsg.Enabled = True
+        End If
     End Sub
 
     ' -------------------------------------------------------
