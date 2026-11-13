@@ -1004,61 +1004,46 @@ Partial Public Class FrmMain
                             elSim = 45.0 + 2.0 * Math.Cos(tSec / 3.0)
                         End If
                     End If
-                    Dim sAz As String = CInt(azSim * 1000).ToString("000000")   ' pos 19-24
-                    Dim sEl As String = CInt(elSim * 1000).ToString("00000")    ' pos 25-29
-                    ' Livello beacon (Lev2, pos 31-33): SEMPRE da
-                    ' d_SimBeaconLevel (AvanzaSimulazioneBeacon, Ricezione.vb),
-                    ' invertendo la formula di Gestione.vb (s_Lev =
-                    ' (s_Lev2 + 2) * Pendenza1 + Valore0) così il livello che
-                    ' arriva da questo messaggio ACU simulato, il BCN Level
-                    ' mostrato a schermo e il bit di lock (b_Lock, basato sullo
-                    ' stesso d_SimBeaconLevel) sono sempre la STESSA fonte.
-                    ' Prima, fuori da un Acquire attivo (i_Spiral=0), c'era una
-                    ' vecchia oscillazione sinusoidale scollegata (55±15,
-                    ' indipendente da d_SimBeaconLevel/i_LockThr): mostrava un
-                    ' BCN Level plausibile ma un LOCK calcolato su un valore
-                    ' completamente diverso, mai allineati (segnalato: beacon
-                    ' -58 con soglia -70 ma indicatore UNLOC).
-                    Dim lev2Sim As Integer
-                    If Pendenza1 <> 0 Then
-                        lev2Sim = CInt((d_SimBeaconLevel - Valore0) / Pendenza1 - 2)
-                    Else
-                        lev2Sim = 0
-                    End If
-                    Dim sLev2 As String = (If(lev2Sim >= 0, "+", "-")) & Math.Abs(lev2Sim).ToString("00")
-                    ' Campi di contesto (pos 7-18, 30, 34-39, 40, 41-70, 71-72)
-                    ' presi dallo stesso buffer di riferimento usato per BTS1
-                    ' (stesso formato, vedi commento sopra).
-                    Dim vBytes1Remote As String = Chr(&H64)     ' pos 7: "d" — vBytes(1), include BIT6=Remote
-                    Dim vBytes2_12 As String = "@@@@CO@@@EG"    ' pos 8-18: vBytes(2..12)
-                    ' pos 30 (Rx alarms, vBytes(13)): AggiornaBeaconLock legge
-                    ' BIT2 di questo byte per decidere LOCK/UNLOCK (bit=0 ->
-                    ' LOCK, bit=1 -> UNLOCK). "@" fisso (bit sempre a 0)
-                    ' forzava sempre "LOCK" indipendentemente dalla
-                    ' simulazione: il lock va impostato così, non scrivendo
-                    ' LblLock.Text a parte (che va in conflitto con questo
-                    ' percorso, l'unico reale anche con hardware vero).
-                    ' Legge direttamente b_Lock (unica fonte di verità,
-                    ' ricalcolato dal vivo ad ogni chiamata di
-                    ' AvanzaSimulazioneBeacon, anche fuori da un Acquire
-                    ' attivo) invece di ripetere qui il confronto
-                    ' livello/soglia una seconda volta: evita che le due
-                    ' valutazioni divergano.
-                    Dim rxAlarms As String = If(Not b_Lock, Chr(&H40 Or BIT2), "@")
+                    ' Frame simulato nel formato ACU di C10 (= FOC6/C03/K09 VB6,
+                    ' NON BTS1): stesse posizioni lette da Gestione.ValoreCampoMAC.
+                    Dim sAz As String = CInt(azSim * 1000).ToString("000000")   ' pos 33-38
+                    Dim sEl As String = CInt(elSim * 1000).ToString("00000")    ' pos 39-43
+                    ' Livello beacon: SEMPRE da d_SimBeaconLevel
+                    ' (AvanzaSimulazioneBeacon, Ricezione.vb) invertendo la
+                    ' formula del parser C10: s_Lev = (V - 10) * Pendenza + Valore0,
+                    ' con V = CalcoloVolt(3 byte). Livello mostrato, BCN Level
+                    ' e bit di lock restano così la stessa fonte.
+                    Dim vLev As Double = If(Pendenza <> 0, (d_SimBeaconLevel - Valore0) / Pendenza + 10, 10)
+                    Dim nowAcu As Date = NowUTC()
+                    Dim modo As String = Chr(&H40 Or BIT6)                      ' pos 20: Stand-by, REMOTE
+                    Dim attiviA0 As String = Chr(&H40 Or BIT1 Or BIT2 Or BIT3 Or BIT4)   ' nessun fault/limite (bit attivi a 0)
+                    Dim emergenza As String = Chr(&H40 Or BIT3 Or BIT4)         ' pos 26: nessun emergency stop
+                    Dim drive As String = Chr(&H40 Or BIT1 Or BIT3 Or BIT4)     ' pos 27: drive/freni ok
+                    Dim lnaPol As String = Chr(&H40 Or BIT1 Or BIT3)            ' pos 30: LNA 1, polarizzatore in posizione
+                    ' pos 31: lock = bit4 (letto da AggiornaBeaconLock), bit1 = 0 -> lineare
+                    Dim lockByte As String = Chr(&H40 Or If(b_Lock, BIT4, 0))
+                    Dim rxByte As String = Chr(&H40 Or BIT1 Or BIT3)            ' pos 48: RX ok, segnale ok
                     Dim messaggio As String =
-                        "00000" &       ' pos 1-5: indirizzo
-                        "*" &           ' pos 6: marcatore campo
-                        vBytes1Remote & ' pos 7: vBytes(1), REM/LOC (BIT6=Remote)
-                        vBytes2_12 &    ' pos 8-18
-                        sAz &           ' pos 19-24: Azimuth
-                        sEl &           ' pos 25-29: Elevazione
-                        rxAlarms &      ' pos 30: RX alarms (bit2 = lock)
-                        sLev2 & "-01" & "-01" &                     ' pos 31-39: Lev2 (dinamico), LevAz, LevEl
-                        "@" &           ' pos 40: memory alarms
-                        "-06" & "-03" & "-02" & "-01" & "+00" & "+00" & "+00" & "+00" & ' pos 41-64: correnti motori
-                        "+00" & "-00" &                             ' pos 65-70: AzTS, ElTS
-                        "0" &           ' pos 71: slew direction
-                        "Q"             ' pos 72: s_Appoggio (backup/switches)
+                        "00000" &                                   ' pos 1-5
+                        "*" &                                       ' pos 6
+                        "@" &                                       ' pos 7: bit1=0 -> ora da orologio ACU
+                        nowAcu.DayOfYear.ToString("000") &          ' pos 8-10: giorno giuliano
+                        nowAcu.ToString("HHmmssfff") &              ' pos 11-19
+                        modo &                                      ' pos 20
+                        "Q" & "A" &                                 ' pos 21-22: backup, switches
+                        "@" &                                       ' pos 23: SW prelimit
+                        attiviA0 & attiviA0 &                       ' pos 24-25: fault, HW limit
+                        emergenza & drive &                         ' pos 26-27
+                        "@" & "@" &                                 ' pos 28-29: pin
+                        lnaPol & lockByte &                         ' pos 30-31
+                        "@" &                                       ' pos 32: memorie
+                        sAz & sEl &                                 ' pos 33-43
+                        "+000" &                                    ' pos 44-47: polarizzazione
+                        rxByte &                                    ' pos 48
+                        CodificaVolt(vLev) &                        ' pos 49-51: livello somma
+                        CodificaVolt(10) & CodificaVolt(10) &       ' pos 52-57: errori Az/El = 0
+                        CodificaVolt(10) & CodificaVolt(10) &       ' pos 58-63: velocità = 0
+                        "@" & "@" & "@"                             ' pos 64-66
                     Dim frameSimulato As String = messaggio & "00" & Chr(3)    ' + checksum fittizio + ETX
                     Port_Control(ACU).Buffer &= frameSimulato
                     frmRicezioneInstance.AnalisiOrdini(ACU, Port_Control(ACU).Buffer)
@@ -1113,4 +1098,14 @@ Partial Public Class FrmMain
             WriteError(0, "Orologio " & ex.Message)
         End Try
     End Sub
+
+    ''' <summary>
+    ''' Inverso di CalcoloVolt (simulazione ACU C10): tensione 0..20 V nei
+    ''' 3 byte del protocollo (nibble basso di ciascun carattere, |0x40).
+    ''' </summary>
+    Private Shared Function CodificaVolt(volt As Double) As String
+        Dim n As Integer = CInt(Math.Round(volt / Conv_Volt))
+        n = Math.Max(0, Math.Min(4095, n))
+        Return Chr(&H40 Or (n And &HF)) & Chr(&H40 Or ((n >> 4) And &HF)) & Chr(&H40 Or ((n >> 8) And &HF))
+    End Function
 End Class

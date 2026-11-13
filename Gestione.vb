@@ -409,706 +409,381 @@ Module Gestione
         End Select
     End Function
 
+    ''' <summary>
+    ''' Analisi della risposta ACU — porting diretto di ValoreCampoMAC dal
+    ''' VB6 di C10 (Prog0347-FOCC10\Gestione.bas). Il protocollo ACU di C10
+    ''' è lo stesso di FOC6/C03/K09 (VB6), NON quello di BTS1: il .NET di
+    ''' FOC6 da cui è partito questo progetto usava per errore il parser
+    ''' BTS1 (campi in posizioni diverse). Formato della risposta "*":
+    '''   8-10 giorno giuliano, 11-19 ora hhmmssmmm, 7 bit1 = ora da IRIG
+    '''   20 modo operativo/REM-LOC, 21 backup autotrack, 22 switches
+    '''   23 SW prelimit, 24 major/minor fault, 25 HW prelimit/limit
+    '''   26 emergency, 27 drive/freni, 28 pin El/pol fault, 29 pin Az
+    '''   30 LNA e polarizzazione, 31 hand crank/low angle, 32 memorie
+    '''   33-38 Az, 39-43 El, 44-47 Pol, 48 RX alarms
+    '''   49-51 livello somma, 52-54/55-57 errori Az/El, 58-63 velocità
+    '''   64 direzione motori, 65 assi abilitati, 66 stato step track
+    ''' I livelli sono codificati in 3 byte (CalcoloVolt).
+    ''' </summary>
     Public Function ValoreCampoMAC(Messaggio As String) As Boolean
-        ' restituisce il valore del campo del messaggio
-        ' nel caso di valore non corretto restituisce null
-        '19/01/2017 Modificato l'analisi del messaggio per adeguarlo alla BTS1
-        '13/04/2018 Nella preparazione del messaggio PTIC per l'Intelsat sulla BTS1 non ci sono i segnale di major e minor fault e di emergency stop
-        Dim pos As Integer
-        Dim rs3 As Object, d_Date As Date
-        Dim i_AzDeg As String, i_ElDeg As String, MyWeekDay As Integer
-        '   Dim yy As String, mm As String, gg As String, ora As String, Min As String, sec As String, mSec As String
-        Dim t_Ciclo As SYSTEMTIME
-        On Error GoTo analisi
+        Dim d_Date As Date
+        Dim yy As String = "", mm As String = "", gg As String = ""
+        Dim irig_hour As Integer, irig_min As Integer, irig_sec As Integer, irig_millsec As Integer
+        Dim julian_epoch1 As Double, irig_Acu As Double
+        Dim i_AzDeg As String, i_ElDeg As String
+        s_MsgAcu = ""
         ValoreCampoMAC = True
-        CampoOp = Mid$(Messaggio, 6, 1)
-        ' leggo i campi solo per lo status
-        If CampoOp = "?" Or CampoOp = "#" Then
-            '       If frmParametri.Visible Then
-            s_Parametri = Messaggio
-            ' frmParametri.ValoreParametri not migrated
-            '      End If
-            Exit Function
-        ElseIf CampoOp = ">" Then
-            '        If frmMemoryTrack.Visible Then
-            s_Parametri = Messaggio
-            FrmMemoryTrack.ValoreMemory(s_Parametri)
-            '        End If
-            Exit Function
-        ElseIf CampoOp = "<" Then
-            '        If frmMemoryTrack.Visible Then
-            s_Parametri = Messaggio
-            FrmTabSat.ValoreSat(s_Parametri)
-            '        End If
-            Exit Function
-        ElseIf b_Parametri Then
-            Exit Function
-        End If
-        If CampoOp = "*" Then
-            s_Az = 0                         ' Valore Azimuth
-            s_El = 0                         ' Valore Elevazione
-            s_Lev = 0                        ' Livello somma (beacon)
-            s_Lev2 = 0
-            s_LevAz = 0                      ' Livello errore azimuth
-            s_LevEl = 0                      ' Livello errore elevazione
-            s_Mod = 0                   ' Modo operativo
-            s_AzTS = 0
-            s_ElTS = 0
-            s_Appoggio = 0
-            'Aggiunti il 16/01/2017
-            s_AZTrkCur1 = ""
-            s_ELTrkCur1 = ""
-            s_AZSlewCur1 = ""
-            s_ELSlewCur1 = ""
-            s_AZTrkCur2 = ""
-            s_ELTrkCur2 = ""
-            s_AZSlewCur2 = ""
-            s_ELSlewCur2 = ""
-            '
-            i_Alarm = False
-            s_StatusPTIC(1) = 1         'ptic control
-            s_StatusPTIC(4) = 0
-            s_StatusPTIC(14) = &HF      'tutti abilitati
-            '16/01/2017 Modificate la parole inerenti i vari segnali per adattarli alla BTS1
-            vBytes(1) = Asc(Mid$(Messaggio, 7, 1))                  ' Modo operativo, REM/LOC, alarm code
-            vBytes(2) = Asc(Mid$(Messaggio, 8, 1))                  ' Drive Status
-            vBytes(3) = Asc(Mid$(Messaggio, 9, 1))                  ' SW prelimiti
-            vBytes(4) = Asc(Mid$(Messaggio, 10, 1))                ' H/W prelimit
-            vBytes(5) = Asc(Mid$(Messaggio, 11, 1))                'H/W limit
-            vBytes(6) = Asc(Mid$(Messaggio, 12, 1))               ' Axis enable
-            vBytes(7) = Asc(Mid$(Messaggio, 13, 1))               ' tracking motor enable
-            vBytes(8) = Asc(Mid$(Messaggio, 14, 1))                ' Slew motor enable
-            vBytes(9) = Asc(Mid$(Messaggio, 15, 1))               ' tracking motor alarm
-            vBytes(10) = Asc(Mid$(Messaggio, 16, 1))                ' Slew motor alarm
-            vBytes(11) = Asc(Mid$(Messaggio, 17, 1))                ' Drive, Brackes Az El
-            vBytes(12) = Asc(Mid$(Messaggio, 18, 1))                ' Stow pin status
-            vBytes(13) = Asc(Mid$(Messaggio, 30, 1))               ' Rx alarms
-            vBytes(14) = Asc(Mid$(Messaggio, 40, 1))               ' Memory alarms
-            vBytes(15) = Asc(Mid$(Messaggio, 71, 1))               ' Slew motors direction command
-
-
-            s_Az = Mid$(Messaggio, 19, 6)                          ' Valore Azimuth
-            s_El = Mid$(Messaggio, 25, 5)                          ' Valore Elevazione
-            s_Lev2 = Mid$(Messaggio, 31, 3)                         ' Livello somma (beacon)
-            s_LevAz = Mid$(Messaggio, 34, 3)                       ' Livello errore azimuth
-            s_LevEl = Mid$(Messaggio, 37, 3)                       ' Livello errore elevazione
-            s_Mod = Asc(Mid$(Messaggio, 7, 1))                    ' Modo operativo
-            s_AzTS = Mid$(Messaggio, 65, 3)                         'AZ Tracking speed command
-            s_ElTS = Mid$(Messaggio, 68, 3)                          'EL Tracking speed command
-            s_AZTrkCur1 = Mid$(Messaggio, 41, 3)                'Az Trk motor 1 current
-            s_AZTrkCur2 = Mid$(Messaggio, 44, 3)               'Az Trk motor 2 current
-            s_ELTrkCur1 = Mid$(Messaggio, 47, 3)               'El Trk motor 1 current
-            s_ELTrkCur2 = Mid$(Messaggio, 50, 3)               'El Trk motor 2 current
-            s_AZSlewCur1 = Mid$(Messaggio, 53, 3)               'Az Slew motor 1 current
-            s_AZSlewCur2 = Mid$(Messaggio, 56, 3)               'Az Slew motor 2 current
-            s_ELSlewCur1 = Mid$(Messaggio, 59, 3)               'El Slew motor 1 current
-            s_ELSlewCur2 = Mid$(Messaggio, 62, 3)               'El Slew motor 2 current
-            s_Appoggio = Asc(Mid$(Messaggio, 72, 1))                   'Autotrack back-up e Pre exit selection
-            i = (s_Appoggio And &H7)
-            If i = 0 Then
-                i_BackupAuto = "S"                          'Stand-by
-            ElseIf i = 1 Then
-                i_BackupAuto = "P"                          'Preset
-            ElseIf i = 2 Then
-                i_BackupAuto = "Q"                          'Automatic Acquire
-            ElseIf i = 3 Then
-                i_BackupAuto = "M"                          'Memory Track
-            ElseIf i = 4 Then
-                i_BackupAuto = "V"                          'Rate Memory
-            End If
-            i = (s_Appoggio And &H18)
-            If i = 0 Then
-                i_Switches = "A"                               'Autotrack
-            ElseIf i = 8 Then
-                i_Switches = "T"                               'Step Track
-            ElseIf i = 16 Then
-                i_Switches = "P"                               'Preset
-            End If
-            Select Case (s_Mod And &HF)
-                Case 0
-                    s_StatusPTIC(2) = 0
-                Case 1
-                    If i_Status = OP_AUGMENTED And i_ProgTrack = 2 Then
-                        s_StatusPTIC(2) = 12
-                        s_StatusPTIC(4) = 4
-                    ElseIf i_Status = OP_AUGMENTED And i_ProgTrack = 1 Then
-                        s_StatusPTIC(2) = 9
-                        s_StatusPTIC(4) = 8
-                    ElseIf i_Status = OP_PROGRAMTRACK Then
-                        s_StatusPTIC(2) = 9
-                        s_StatusPTIC(4) = 8
-                    Else
-                        s_StatusPTIC(2) = 4
-                    End If
-                Case 2
-                Case 3
-                Case 4
-                    If i_Status = OP_AUGMENTED And i_ProgTrack = 2 Then
-                        s_StatusPTIC(2) = 12
-                    ElseIf i_Status = OP_AUGMENTED And i_ProgTrack = 1 Then
-                        s_StatusPTIC(2) = 9
-                    Else
-                        s_StatusPTIC(2) = 2
-                    End If
-                    s_StatusPTIC(4) = 1
-                Case 5
-                    s_StatusPTIC(2) = 5
-                    s_StatusPTIC(4) = 2
-                Case 6
-                    s_StatusPTIC(2) = 7
-                Case 7
-                    s_StatusPTIC(2) = 8
-                Case 8
-                Case 9
-                Case 10
-                Case 11
-                Case 12
-                Case 13
-                Case 14
-                Case 15
-            End Select
-            '                irig_hour = Val(Mid$(Messaggio, 11, 2))
-            '                irig_min = Val(Mid$(Messaggio, 13, 2))
-            '                julian_epoch1 = Julian_Date_of_Year(year(Now)) + Val(Mid$(Messaggio, 8, 3)) + Fraction_of_Day(irig_hour, irig_min, irig_sec, 0)
-            '                d_Date = Calendar_Date(julian_epoch1, 0)
-            '               4/11/2024 corretto perchè la bts1 non ha orologio
-            '                d_Date = Format$(NowUTC(), "dd/mm/yy hh:mm:ss")
-            '                If Val(Mid$(d_Date, 4, 2)) = 12 And Val(Mid$(Now() - CDate(Format$(i_Off / (24), "yyyy\-mm\-dd hh\:nn\:ss")), 4, 2)) = 1 Then
-            '                    yy = Mid$(year(Now()) - 1, 3, 2)
-            '                Else
-            '                    yy = Mid$(year(Now()), 3, 2)
-            '                End If
-            '                mm = Mid$(d_Date, 4, 2)
-            '                gg = Mid$(d_Date, 1, 2)
-            '                MyWeekDay = Weekday(d_Date)
-            '                GetSystemTime t_Ciclo
-            '                With t_Ciclo
-            '                    .wYear = year(d_Date)
-            ''                    .wMonth = month(d_Date)
-            ''                    .wDayOfWeek = MyWeekDay
-            ''                    gg = .wDay
-            '                    ora = .wHour
-            '                    Min = .wMinute
-            '                    sec = .wSecond
-            '                    mSec = .wMilliseconds
-            '                End With
-            '' Fine correzione
-            'M&C ACU
-            If (vBytes(1) And BIT6) = BIT6 Then
-                s_ACULR = "R"
-                If ((vBytes(1) And BIT6) <> (vBytesold(1) And BIT6)) Then
-                    If (vBytes(1) And BIT6) = BIT6 Then
-                        ScriviAlarm("ACU REM", 0)
-                    Else
-                        ScriviAlarm("ACU LOC", 0)
-                    End If
+        Try
+            CampoOp = Mid$(Messaggio, 6, 1)
+            If b_MCS Then
+                ' Risposte a richieste arrivate dall'MCS: si inoltrano all'MCS
+                If CampoOp = "?" OrElse CampoOp = "#" OrElse CampoOp = ">" OrElse CampoOp = "<" OrElse CampoOp = "@" Then
+                    Invio(Messaggio, MAC)
+                    b_MCS = False
+                    Exit Function
                 End If
             Else
-                s_ACULR = "L"
+                If CampoOp = "?" OrElse CampoOp = "#" Then
+                    s_Parametri = Messaggio
+                    FrmParametri.ValoreParametri(s_Parametri)
+                    Exit Function
+                ElseIf CampoOp = ">" Then
+                    s_Parametri = Messaggio
+                    FrmMemoryTrack.ValoreMemory(s_Parametri)
+                    Exit Function
+                ElseIf CampoOp = "<" Then
+                    s_Parametri = Messaggio
+                    FrmTabSat.ValoreSat(s_Parametri)
+                    Exit Function
+                ElseIf b_Parametri Then
+                    Exit Function
+                End If
             End If
 
-            'Elevation drive status
-            If (vBytes(2) And BIT1) = BIT1 Then
-                If ((vBytes(2) And BIT1) <> (vBytesold(2) And BIT1)) Then
-                    ScriviAlarm("Elevation Drive Local", 0)
+            If CampoOp = "*" Then
+                ' Controllo che l'orologio ACU avanzi (11/11/2024)
+                irig_sec = CInt(Val(Mid$(Messaggio, 15, 2)))
+                irig_millsec = CInt(Val(Mid$(Messaggio, 17, 3)))
+                irig_Acu = Val(Mid$(Messaggio, 15, 5))
+                If irig_Acu = ACUOldMilSec Then
+                    errTime += 1
+                    If errTime = 3 Then
+                        FrmMain.stpData.Text = ""
+                        FrmRicezione.LblConfCNL1in.BackColor = Color.Red
+                        TagDato = ""
+                        BuffStatus = ""
+                        ScriviAlarm("Time ACU not valid", 1)
+                        errTime = 0
+                    End If
                 Else
-                    ScriviAlarm("Elevation Drive Rem", 0)
+                    errTime = 0
                 End If
-            End If
-            'Azimuth drive status
-            If (vBytes(2) And BIT2) = BIT2 Then
-                '            i_Alarm = True
-                If ((vBytes(2) And BIT2) <> (vBytesold(2) And BIT2)) Then
-                    ScriviAlarm("Azimuth Drive Local", 0)
+                ACUOldMilSec = irig_Acu
+
+                s_Az = 0 : s_El = 0 : s_POL = 0 : s_Lev = 0 : s_LevAz = 0 : s_LevEl = 0
+                s_Mod = 0 : s_AzTS = 0 : s_ElTS = 0 : s_Appoggio = "" : s_Appoggio1 = ""
+                i_Pol = 0
+                i_Alarm = False
+                s_StatusPTIC(1) = 1         'ptic control
+                s_StatusPTIC(4) = 0
+                s_StatusPTIC(14) = &HF      'tutti abilitati
+
+                vBytes(1) = Asc(Mid$(Messaggio, 20, 1))     ' Modo operativo, REM/LOC, alarm code
+                vBytes(2) = Asc(Mid$(Messaggio, 23, 1))     ' SW prelimiti
+                vBytes(3) = Asc(Mid$(Messaggio, 25, 1))     ' H/W prelimit, H/W limit
+                vBytes(4) = Asc(Mid$(Messaggio, 24, 1))     ' Major Minor Fault
+                vBytes(5) = Asc(Mid$(Messaggio, 27, 1))     ' Drive, Brackes Az El
+                vBytes(6) = Asc(Mid$(Messaggio, 26, 1))     ' Emergency Stop
+                vBytes(7) = Asc(Mid$(Messaggio, 29, 1))     ' Az Stow pin, El Extended
+                vBytes(8) = Asc(Mid$(Messaggio, 28, 1))     ' El Stow Pin, Pol Limit e Fault
+                vBytes(9) = Asc(Mid$(Messaggio, 31, 1))     ' Az El Hand-crank interlock, Low angle
+                vBytes(10) = Asc(Mid$(Messaggio, 30, 1))    ' LNA e polarizzazione
+                vBytes(11) = Asc(Mid$(Messaggio, 32, 1))    ' Memory alarms
+                vBytes(12) = Asc(Mid$(Messaggio, 48, 1))    ' Rx alarms
+                vBytes(13) = Asc(Mid$(Messaggio, 64, 1))    ' AC motors direction commands
+                vBytes(14) = Asc(Mid$(Messaggio, 65, 1))    ' Axis enable
+                vBytes(15) = Asc(Mid$(Messaggio, 66, 1))    ' Step track status
+                s_Az = Mid$(Messaggio, 33, 6)               ' Azimuth
+                s_El = Mid$(Messaggio, 39, 5)               ' Elevazione
+                s_POL = Mid$(Messaggio, 44, 4)              ' Polarizzazione
+                s_Lev2 = Mid$(Messaggio, 49, 3)             ' Livello somma (beacon)
+                s_LevAz = Mid$(Messaggio, 52, 3)            ' Livello errore azimuth
+                s_LevEl = Mid$(Messaggio, 55, 3)            ' Livello errore elevazione
+                s_Mod = Asc(Mid$(Messaggio, 20, 1))         ' Modo operativo
+                s_AzTS = Mid$(Messaggio, 58, 3)
+                s_ElTS = Mid$(Messaggio, 61, 3)
+                s_Appoggio = Mid$(Messaggio, 21, 1)
+                s_Appoggio1 = Mid$(Messaggio, 22, 1)
+
+                ' Modo del polarizzatore: tipo da vBytes(9) bit1, "in
+                ' posizione" da vBytes(10) bit3, altrimenti Stand-by
+                i_Pol = CByte(vBytes(9) And BIT1)
+                If (vBytes(10) And BIT3) = BIT3 Then
+                    d_Pol = If(i_Pol = 0, "L", "C")
                 Else
-                    ScriviAlarm("Azimuth Drive Rem", 0)
+                    d_Pol = "S"
                 End If
-            End If
-            'UPSWL
-            If (vBytes(3) And BIT1) = BIT1 Then
-                '            i_Alarm = True
-                If ((vBytes(3) And BIT1) <> (vBytesold(3) And BIT1)) Then
-                    ScriviAlarm("Elevation Up SW Limit alarm", 1)
+
+                Select Case (s_Mod And &HF)
+                    Case 0
+                        s_StatusPTIC(2) = 0
+                    Case 1
+                        If i_Status = OP_AUGMENTED And i_ProgTrack = 2 Then
+                            s_StatusPTIC(2) = 12
+                            s_StatusPTIC(4) = 4
+                        ElseIf i_Status = OP_AUGMENTED And i_ProgTrack = 1 Then
+                            s_StatusPTIC(2) = 9
+                            s_StatusPTIC(4) = 8
+                        ElseIf i_Status = OP_PROGRAMTRACK Then
+                            s_StatusPTIC(2) = 9
+                            s_StatusPTIC(4) = 8
+                        Else
+                            s_StatusPTIC(2) = 4
+                        End If
+                    Case 4
+                        ' (VB6 C10: il secondo ramo ripete "i_ProgTrack = 2"
+                        ' e non viene mai preso: comportamento mantenuto)
+                        If i_Status = OP_AUGMENTED And i_ProgTrack = 2 Then
+                            s_StatusPTIC(2) = 12
+                        Else
+                            s_StatusPTIC(2) = 2
+                        End If
+                        s_StatusPTIC(4) = 1
+                    Case 5
+                        s_StatusPTIC(2) = 5
+                        s_StatusPTIC(4) = 2
+                    Case 6
+                        s_StatusPTIC(2) = 7
+                    Case 7
+                        s_StatusPTIC(2) = 8
+                End Select
+
+                ' Data/ora ACU: giorno giuliano (pos 8-10) + hhmm (11-14)
+                irig_hour = CInt(Val(Mid$(Messaggio, 11, 2)))
+                irig_min = CInt(Val(Mid$(Messaggio, 13, 2)))
+                julian_epoch1 = Julian_Date_of_Year(Year(Now)) + Val(Mid$(Messaggio, 8, 3)) + Fraction_of_Day(irig_hour, irig_min, irig_sec, 0)
+                d_Date = Calendar_Date(julian_epoch1, 0)
+                ' A cavallo d'anno (data ACU di dicembre, PC già a gennaio)
+                If d_Date.Month = 12 AndAlso Now.AddHours(-i_Offset).Month = 1 Then
+                    yy = (Year(Now) - 1).ToString().Substring(2, 2)
+                Else
+                    yy = Year(Now).ToString().Substring(2, 2)
                 End If
-            End If
-            'DWSWL
-            If (vBytes(3) And BIT2) = BIT2 Then
-                If ((vBytes(3) And BIT2) <> (vBytesold(3) And BIT2)) Then
-                    ScriviAlarm("Elevation Down SW Limit alarm", 1)
+                mm = d_Date.Month.ToString("00")
+                gg = d_Date.Day.ToString("00")
+                s_MsgAcu = d_Date.Day.ToString("00") & irig_hour.ToString("00") & irig_min.ToString("00") & irig_sec.ToString("00") & irig_millsec.ToString("000")
+                d_Date = New Date(d_Date.Year, d_Date.Month, d_Date.Day, irig_hour Mod 24, irig_min Mod 60, irig_sec Mod 60)
+                Dim d_DateTxt As String = d_Date.ToString("dd/MM/yy HH.mm.ss", Globalization.CultureInfo.InvariantCulture)
+                g_Irig = "A"
+                If (Asc(Mid$(Messaggio, 7, 1)) And BIT1) <> 0 Then
+                    g_Irig = "I"
+                    FrmMain.stpData.Text = d_DateTxt & " IRIG"
+                Else
+                    FrmMain.stpData.Text = d_DateTxt & " ACU"
+                End If
+                OraACU = d_Date
+                If Ptic = "A" Then
+                    TagDato = s_Az & "0" & s_El & Mid$(Messaggio, 11, 8)
+                Else
+                    TagDato = s_Az & "0" & s_El & yy & mm & gg & Mid$(Messaggio, 11, 8)
+                End If
+                If s_Appoggio <> "@" Then i_BackupAuto = s_Appoggio
+                i_Switches = s_Appoggio1
+
+                'M&C ACU
+                If (vBytes(1) And BIT6) = BIT6 Then
+                    s_ACULR = "R"
+                    If (vBytes(1) And BIT6) <> (vBytesold(1) And BIT6) Then ScriviAlarm("ACU REM", 0)
+                Else
+                    s_ACULR = "L"
+                    If (vBytes(1) And BIT6) <> (vBytesold(1) And BIT6) Then ScriviAlarm("ACU LOC", 0)
+                End If
+
+                ' Prelimiti software (vBytes(2))
+                AllarmeSeAttivo(2, BIT3, "Azimuth CW Software Prelimit alarm", 1)
+                AllarmeSeAttivo(2, BIT4, "Azimuth CCW Software Prelimit alarm", 1)
+                AllarmeSeAttivo(2, BIT1, "Elevation Up Software Prelimit alarm", 1)
+                AllarmeSeAttivo(2, BIT2, "Elevation Down Software Prelimit alarm", 1)
+                AllarmeSeAttivo(2, BIT6, "Polatization CW Software Prelimit alarm", 1)
+                AllarmeSeAttivo(2, BIT5, "Polarization CCW Software Prelimit alarm", 1)
+
+                ' Prelimiti/limiti hardware (vBytes(3), attivi a bit = 0)
+                If (vBytes(3) And BIT1) <> BIT1 Then
+                    s_StatusPTIC(9) = s_StatusPTIC(9) Or &H2
+                    If (vBytes(3) And BIT1) <> (vBytesold(3) And BIT1) Then ScriviAlarm("Azimuth Prelimit alarm", 1)
+                Else
+                    s_StatusPTIC(9) = s_StatusPTIC(9) And &HD
+                End If
+                If (vBytes(3) And BIT2) <> BIT2 Then
+                    s_StatusPTIC(7) = s_StatusPTIC(7) Or &H2
+                    If (vBytes(3) And BIT2) <> (vBytesold(3) And BIT2) Then ScriviAlarm("Elevation Prelimit alarm", 1)
+                Else
+                    s_StatusPTIC(7) = s_StatusPTIC(7) And &HD
+                End If
+                If (vBytes(3) And BIT3) <> BIT3 Then
+                    s_StatusPTIC(9) = s_StatusPTIC(9) Or &H1
                     i_Alarm = True
+                    If (vBytes(3) And BIT3) <> (vBytesold(3) And BIT3) Then ScriviAlarm("Azimuth Limit alarm", 1)
+                Else
+                    s_StatusPTIC(9) = s_StatusPTIC(9) And &HE
                 End If
-            End If
-            'CWSWL
-            If (vBytes(3) And BIT3) = BIT3 Then
-                If ((vBytes(3) And BIT3) <> (vBytesold(3) And BIT3)) Then
-                    ScriviAlarm("CW SW Limit alarm", 1)
+                If (vBytes(3) And BIT4) <> BIT4 Then
                     i_Alarm = True
+                    s_StatusPTIC(7) = s_StatusPTIC(7) Or &H1
+                    If (vBytes(3) And BIT4) <> (vBytesold(3) And BIT4) Then ScriviAlarm("Elevation Limit alarm", 1)
+                Else
+                    s_StatusPTIC(7) = s_StatusPTIC(7) And &HE
                 End If
-            End If
-            'CCWSWL
-            If (vBytes(3) And BIT4) = BIT4 Then
-                If ((vBytes(3) And BIT4) <> (vBytesold(3) And BIT4)) Then
-                    ScriviAlarm("CCW SW Limit alarm", 1)
+
+                ' Major/minor fault (vBytes(4), attivi a bit = 0)
+                If (vBytes(4) And BIT1) <> BIT1 Then
                     i_Alarm = True
+                    s_StatusPTIC(9) = s_StatusPTIC(9) Or &H8
+                    If (vBytes(4) And BIT1) <> (vBytesold(4) And BIT1) Then ScriviAlarm("Azimuth Major Fault", 1)
+                Else
+                    s_StatusPTIC(9) = s_StatusPTIC(9) And &H7
                 End If
-            End If
-            'ELUPPL
-            If (vBytes(4) And BIT1) <> BIT1 Then
-                '            i_Alarm = True
-                s_StatusPTIC(7) = s_StatusPTIC(7) Or &H2
-                If ((vBytes(4) And BIT1) <> (vBytesold(4) And BIT1)) Then
-                    ScriviAlarm("Elevation Up Prelimit alarm", 1)
-                End If
-            Else
-                s_StatusPTIC(7) = s_StatusPTIC(7) And &HD
-            End If
-            'ELDOWNPL
-            If (vBytes(4) And BIT2) <> BIT2 Then
-                '            i_Alarm = True
-                s_StatusPTIC(7) = s_StatusPTIC(7) Or &H2
-                If ((vBytes(4) And BIT2) <> (vBytesold(4) And BIT2)) Then
-                    ScriviAlarm("Elevation Down Prelimit alarm", 1)
-                End If
-            Else
-                s_StatusPTIC(7) = s_StatusPTIC(7) And &HD
-            End If
-            'AzCWPL
-            If (vBytes(4) And BIT3) <> BIT3 Then
-                '            i_Alarm = True
-                s_StatusPTIC(9) = s_StatusPTIC(9) Or &H2
-                If ((vBytes(4) And BIT3) <> (vBytesold(4) And BIT3)) Then
-                    ScriviAlarm("Azimuth CW Prelimit alarm", 1)
-                End If
-            Else
-                s_StatusPTIC(9) = s_StatusPTIC(9) And &HD
-            End If
-            'AzCCWPL
-            If (vBytes(4) And BIT4) <> BIT4 Then
-                '            i_Alarm = True
-                s_StatusPTIC(9) = s_StatusPTIC(9) Or &H2
-                If ((vBytes(4) And BIT4) <> (vBytesold(4) And BIT4)) Then
-                    ScriviAlarm("Azimuth CCW Prelimit alarm", 1)
-                End If
-            Else
-                s_StatusPTIC(9) = s_StatusPTIC(9) And &HD
-            End If
-            'Tracking CW prelimit
-            If (vBytes(4) And BIT5) <> BIT5 Then
-                '            i_Alarm = True
-                If ((vBytes(4) And BIT5) <> (vBytesold(4) And BIT5)) Then
-                    ScriviAlarm("Tracking CW Prelimit alarm", 1)
-                End If
-            End If
-            'Tracking CCW prelimit
-            If (vBytes(4) And BIT6) <> BIT6 Then
-                '            i_Alarm = True
-                If ((vBytes(4) And BIT6) <> (vBytesold(4) And BIT6)) Then
-                    ScriviAlarm("Tracking CCW Prelimit alarm", 1)
-                End If
-            End If
-            'UPHWL
-            If (vBytes(5) And BIT1) = BIT1 Then
-                s_StatusPTIC(7) = s_StatusPTIC(7) Or &H1
-                If ((vBytes(5) And BIT1) <> (vBytesold(5) And BIT1)) Then
-                    ScriviAlarm("Elevation Up HW Limit alarm", 1)
+                If (vBytes(4) And BIT2) <> BIT2 Then
                     i_Alarm = True
+                    s_StatusPTIC(7) = s_StatusPTIC(7) Or &H8
+                    If (vBytes(4) And BIT2) <> (vBytesold(4) And BIT2) Then ScriviAlarm("Elevation Major Fault", 1)
+                Else
+                    s_StatusPTIC(7) = s_StatusPTIC(7) And &H7
                 End If
-            Else
-                s_StatusPTIC(7) = s_StatusPTIC(7) And &HE
-            End If
-            'DWHWL
-            If (vBytes(5) And BIT2) = BIT2 Then
-                s_StatusPTIC(7) = s_StatusPTIC(7) Or &H1
-                If ((vBytes(5) And BIT2) <> (vBytesold(5) And BIT2)) Then
-                    ScriviAlarm("Elevation Down HW Limit alarm", 1)
+                If (vBytes(4) And BIT3) <> BIT3 Then
+                    s_StatusPTIC(9) = s_StatusPTIC(9) Or &H4
+                    If (vBytes(4) And BIT3) <> (vBytesold(4) And BIT3) Then ScriviAlarm("Azimuth Minor Fault", 1)
+                Else
+                    s_StatusPTIC(9) = s_StatusPTIC(9) And &HB
+                End If
+                If (vBytes(4) And BIT4) <> BIT4 Then
+                    s_StatusPTIC(7) = s_StatusPTIC(7) Or &H4
+                    If (vBytes(4) And BIT4) <> (vBytesold(4) And BIT4) Then ScriviAlarm("Elevation Minor Fault", 1)
+                Else
+                    s_StatusPTIC(7) = s_StatusPTIC(7) And &HB
+                End If
+
+                ' Drive / PCU / freni (vBytes(5))
+                If (vBytes(5) And BIT1) <> BIT1 AndAlso (vBytes(5) And BIT1) <> (vBytesold(5) And BIT1) Then ScriviAlarm("Drive ON", 0)
+                AllarmeSeAttivo(5, BIT2, "PCU Control ON", 1)
+                If (vBytes(5) And BIT3) <> BIT3 Then
+                    s_StatusPTIC(8) = s_StatusPTIC(8) Or &H1
+                Else
+                    s_StatusPTIC(8) = s_StatusPTIC(8) And &HE
+                End If
+                If (vBytes(5) And BIT4) <> BIT4 Then
+                    s_StatusPTIC(10) = s_StatusPTIC(10) Or &H1
+                Else
+                    s_StatusPTIC(10) = s_StatusPTIC(10) And &HE
+                End If
+
+                ' Emergency stop (vBytes(6), attivi a bit = 0)
+                If (vBytes(6) And BIT3) <> BIT3 Then
                     i_Alarm = True
+                    s_StatusPTIC(5) = s_StatusPTIC(5) Or &H1
+                    If (vBytes(6) And BIT3) <> (vBytesold(6) And BIT3) Then ScriviAlarm("Emergency Stop In", 1)
+                Else
+                    s_StatusPTIC(5) = s_StatusPTIC(5) And &HE
                 End If
-            Else
-                s_StatusPTIC(7) = s_StatusPTIC(7) And &HE
-            End If
-            'CWHWL
-            If (vBytes(5) And BIT3) = BIT3 Then
-                s_StatusPTIC(9) = s_StatusPTIC(9) Or &H1
-                If ((vBytes(5) And BIT3) <> (vBytesold(5) And BIT3)) Then
-                    ScriviAlarm("Azimuth CW HW Limit alarm", 1)
+                If (vBytes(6) And BIT4) <> BIT4 Then
                     i_Alarm = True
+                    If (vBytes(6) And BIT4) <> (vBytesold(6) And BIT4) Then ScriviAlarm("Emergency Stop Out", 1)
                 End If
-            Else
-                s_StatusPTIC(9) = s_StatusPTIC(9) And &HE
-            End If
-            'CCWHWL
-            If (vBytes(5) And BIT4) = BIT4 Then
-                s_StatusPTIC(9) = s_StatusPTIC(9) Or &H1
-                If ((vBytes(5) And BIT4) <> (vBytesold(5) And BIT4)) Then
-                    ScriviAlarm("Azimuth CCW HW Limit alarm", 1)
-                    i_Alarm = True
-                End If
-            Else
-                s_StatusPTIC(9) = s_StatusPTIC(9) And &HE
-            End If
 
-            'Elevation tracking brakes
-            If ((vBytes(5) And BIT3) <> BIT3) Then
-                s_StatusPTIC(8) = s_StatusPTIC(8) Or &H1
-            Else
-                s_StatusPTIC(8) = s_StatusPTIC(8) And &HE
-            End If
-            'Azimuth tracking brakes
-            If ((vBytes(5) And BIT4) <> BIT4) Then
-                s_StatusPTIC(10) = s_StatusPTIC(10) Or &H1
-            Else
-                s_StatusPTIC(10) = s_StatusPTIC(10) And &HE
-            End If
+                ' Pin di elevazione (vBytes(7) bit4, vBytes(8) bit1/bit2)
+                If (vBytes(7) And BIT4) = BIT4 Then
+                    s_StatusPTIC(8) = s_StatusPTIC(8) Or &H4
+                    If (vBytes(7) And BIT4) <> (vBytesold(7) And BIT4) Then ScriviAlarm("Elevation Pin Extended", 0)
+                Else
+                    s_StatusPTIC(8) = s_StatusPTIC(8) And &HB
+                End If
+                If (vBytes(8) And BIT1) = BIT1 Then
+                    s_StatusPTIC(8) = s_StatusPTIC(8) Or &H8
+                    If (vBytes(8) And BIT1) <> (vBytesold(8) And BIT1) Then ScriviAlarm("Elevation Pin retracted", 0)
+                Else
+                    s_StatusPTIC(8) = s_StatusPTIC(8) And &H7
+                End If
+                If (vBytes(8) And BIT2) = BIT2 Then
+                    s_StatusPTIC(8) = s_StatusPTIC(8) Or &H2
+                    If (vBytes(8) And BIT2) <> (vBytesold(8) And BIT2) Then ScriviAlarm("Elevation Pin Aligned", 0)
+                Else
+                    s_StatusPTIC(8) = s_StatusPTIC(8) And &HD
+                End If
 
-            'Elevation axis enable
-            If (vBytes(6) And BIT1) = BIT1 Then
-                If ((vBytes(6) And BIT1) <> (vBytesold(6) And BIT1)) Then
-                    ScriviAlarm("Elevation Axis Enable", 0)
-                End If
-            Else
-                If ((vBytes(6) And BIT1) <> (vBytesold(6) And BIT1)) Then
-                    ScriviAlarm("Elevation Axis Disable", 0)
-                End If
-            End If
-            'Azimuth axis enable
-            If (vBytes(6) And BIT2) = BIT2 Then
-                If ((vBytes(6) And BIT2) <> (vBytesold(6) And BIT2)) Then
-                    ScriviAlarm("Azimuth Axis Enable", 0)
-                End If
-            Else
-                If ((vBytes(6) And BIT2) <> (vBytesold(6) And BIT2)) Then
-                    ScriviAlarm("Azimuth Axis Disable", 0)
-                End If
-            End If
+                ' Allarmi memoria (vBytes(11))
+                AllarmeSeAttivo(11, BIT1, "Memory Parameters alarm", 0)
+                AllarmeSeAttivo(11, BIT2, "Memory track alarm", 0)
+                AllarmeSeAttivo(11, BIT4, "Memory satellite data alarm", 0)
+                AllarmeSeAttivo(11, BIT3, "Memory stow unstow alarm", 0)
 
-            'Elevation Motor 1 enable
-            If (vBytes(7) And BIT1) = BIT1 Then
-                If ((vBytes(7) And BIT1) <> (vBytesold(7) And BIT1)) Then
-                    ScriviAlarm("Elevation TRK Motor 1 Enable", 0)
+                ' Ricevitore (vBytes(12))
+                If (vBytes(12) And BIT1) <> BIT1 AndAlso (vBytes(12) And BIT1) <> (vBytesold(12) And BIT1) Then
+                    ScriviAlarm("Rx alarm", If(i_LockBell = 1, 1, 0))
                 End If
-            Else
-                If ((vBytes(6) And BIT2) <> (vBytesold(6) And BIT2)) Then
-                    ScriviAlarm("Elevation TRK Motor 1 Disable", 0)
+                If (vBytes(12) And BIT2) <> (vBytesold(12) And BIT2) Then
+                    ScriviAlarm("Monopulse UnLock", 0)
                 End If
-            End If
-            'Elevation Motor 2 enable
-            If (vBytes(7) And BIT2) = BIT2 Then
-                If ((vBytes(7) And BIT2) <> (vBytesold(7) And BIT2)) Then
-                    ScriviAlarm("Elevation Trk Motor 2 Enable", 0)
-                End If
-            Else
-                If ((vBytes(7) And BIT2) <> (vBytesold(7) And BIT2)) Then
-                    ScriviAlarm("Elevation TRK Motor 2 Disable", 0)
-                End If
-            End If
 
-            'Azimuth Motor 1 enable
-            If (vBytes(7) And BIT3) = BIT3 Then
-                If ((vBytes(7) And BIT3) <> (vBytesold(7) And BIT3)) Then
-                    ScriviAlarm("Azimuth TRK Motor 1 Enable", 0)
+                For i = 1 To 15
+                    vBytesold(i) = vBytes(i)
+                Next i
+                FrmRicezione.AggiornaAllarmiMemoria()
+
+                ' Livelli e velocità: 3 byte codificati (CalcoloVolt), ±10 V
+                If IsNumeric(s_AzTS) Then s_AzTS = Mid$(s_AzTS, 1, 1) + Format$(CDbl(Mid$(s_AzTS, 2, 2)), "0")
+                If IsNumeric(s_ElTS) Then s_ElTS = Mid$(s_ElTS, 1, 1) + Format$(CDbl(Mid$(s_ElTS, 2, 2)), "0")
+                s_LevAz = Format$(CalcoloVolt(s_LevAz) - 10, "0.0#")
+                s_LevEl = Format$(CalcoloVolt(s_LevEl) - 10, "0.0#")
+                s_Lev = Format$((CalcoloVolt(s_Lev2) - 10) * Pendenza + Valore0, "##0.0#")
+                s_AzTS = Format$(10 - CalcoloVolt(s_AzTS), "0.0#")
+                s_ElTS = Format$(10 - CalcoloVolt(s_ElTS), "0.0#")
+                i_AzDeg = Format$(Math.Abs(Val(s_LevAz) * 1000), "00000")
+                i_ElDeg = Format$(Math.Abs(Val(s_LevEl) * 1000), "00000")
+                i_AzDeg = If(Val(s_LevAz) > 0, "+", "-") & i_AzDeg
+                i_ElDeg = If(Val(s_LevEl) > 0, "+", "-") & i_ElDeg
+                TagError = i_AzDeg & i_ElDeg & Mid$(Messaggio, 11, 8)
+                If i_Alarm Then
+                    If i_Status <> OP_STANDBY Then FrmRicezione.CmdSTBY_Click(Nothing, EventArgs.Empty)       '04/02/2026
                 End If
-            Else
-                If ((vBytes(7) And BIT3) <> (vBytesold(7) And BIT3)) Then
-                    ScriviAlarm("Azimuth TRK Motor 1 Disable", 0)
-                End If
-            End If
-            'Azimuth Motor 2 enable
-            If (vBytes(7) And BIT4) = BIT4 Then
-                If ((vBytes(7) And BIT4) <> (vBytesold(7) And BIT4)) Then
-                    ScriviAlarm("Azimuth TRK Motor 2 Enable", 0)
-                End If
-            Else
-                If ((vBytes(7) And BIT4) <> (vBytesold(7) And BIT4)) Then
-                    ScriviAlarm("Azimuth TRK Motor 2 Disable", 0)
+
+            ElseIf CampoOp = "@" Then
+                ' Configurazione ACU: programma, nome, firmware. Il form
+                ' .NET non ha i campi dedicati del VB6 (txtNumProg/
+                ' txtNomeAcu/txtVersione): si conservano e si mostrano
+                ' nella riga messaggi della configurazione, se aperta.
+                s_AcuNumProg = Mid$(Messaggio, 7, 4)
+                s_AcuNome = Mid$(Messaggio, 11, 6)
+                s_AcuVersione = Val(Mid$(Messaggio, 17, 2)) & "." & Val(Mid$(Messaggio, 19, 2))
+                If FrmConfigurazione.Visible Then
+                    FrmConfigurazione.LblMSG.Text = "Prog. Nr. " & s_AcuNumProg & "   ACU " & s_AcuNome & "   Firmware " & s_AcuVersione
                 End If
             End If
 
-            'Elevation Slew Motor 1 enable
-            If (vBytes(8) And BIT1) = BIT1 Then
-                If ((vBytes(8) And BIT1) <> (vBytesold(8) And BIT1)) Then
-                    ScriviAlarm("Elevation Slew Motor 1 Enable", 0)
-                End If
-            Else
-                If ((vBytes(8) And BIT1) <> (vBytesold(8) And BIT1)) Then
-                    ScriviAlarm("Elevation Slew Motor 1 Disable", 0)
+            ' Proiezione (aggiunta del porting .NET, comune a BTS1)
+            If i_Status = OP_PROIEZ Then
+                If IsNumeric(s_Az) And IsNumeric(s_El) Then
+                    If Countpts() > NumProMax Then Removepts(0)
+                    Addpts(NowUTC().ToString("dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture), CDbl(s_Az), CDbl(s_El))
                 End If
             End If
-            'Elevation Slew Motor 2 enable
-            If (vBytes(8) And BIT2) = BIT2 Then
-                If ((vBytes(8) And BIT2) <> (vBytesold(8) And BIT2)) Then
-                    ScriviAlarm("Elevation Slew Motor 2 Enable", 0)
-                End If
-            Else
-                If ((vBytes(8) And BIT2) <> (vBytesold(8) And BIT2)) Then
-                    ScriviAlarm("Elevation Slew Motor 2 Disable", 0)
-                End If
-            End If
-
-            'Azimuth Slew Motor 1 enable
-            If (vBytes(8) And BIT3) = BIT3 Then
-                If ((vBytes(8) And BIT3) <> (vBytesold(8) And BIT3)) Then
-                    ScriviAlarm("Azimuth Slew Motor 1 Enable", 0)
-                End If
-            Else
-                If ((vBytes(8) And BIT3) <> (vBytesold(8) And BIT3)) Then
-                    ScriviAlarm("Azimuth Slew Motor 1 Disable", 0)
-                End If
-            End If
-            'Azimuth Slew Motor 2 enable
-            If (vBytes(8) And BIT4) = BIT4 Then
-                If ((vBytes(8) And BIT4) <> (vBytesold(8) And BIT4)) Then
-                    ScriviAlarm("Azimuth Slew Motor 21 Enable", 0)
-                End If
-            Else
-                If ((vBytes(8) And BIT4) <> (vBytesold(8) And BIT4)) Then
-                    ScriviAlarm("Azimuth Slew Motor 2 Disable", 0)
-                End If
-            End If
-
-            'Elevation TRK Motor 1 alarm
-            If (vBytes(9) And BIT1) = BIT1 Then
-                If ((vBytes(9) And BIT1) <> (vBytesold(9) And BIT1)) Then
-                    ScriviAlarm("Elevation TRK Motor 1 alarm", 1)
-                    i_Alarm = True
-                End If
-            End If
-            'Elevation TRK Motor 2 alarm
-            If (vBytes(9) And BIT2) = BIT2 Then
-                If ((vBytes(9) And BIT2) <> (vBytesold(9) And BIT2)) Then
-                    ScriviAlarm("Elevation TRK Motor 2 alarm", 1)
-                    i_Alarm = True
-                End If
-            End If
-            'Azimuth TRK Motor 1 alarm
-            If (vBytes(9) And BIT3) = BIT3 Then
-                If ((vBytes(9) And BIT3) <> (vBytesold(9) And BIT3)) Then
-                    ScriviAlarm("Azimuth TRK Motor 1 alarm", 1)
-                    i_Alarm = True
-                End If
-            End If
-            'Azimuth TRK Motor 2 alarm
-            If (vBytes(9) And BIT4) = BIT4 Then
-                If ((vBytes(9) And BIT4) <> (vBytesold(9) And BIT4)) Then
-                    ScriviAlarm("Azimuth TRK Motor 2 alarm", 1)
-                    i_Alarm = True
-                End If
-            End If
-
-            'Elevation Slew Motor 1 alarm
-            If (vBytes(10) And BIT1) = BIT1 Then
-                If ((vBytes(10) And BIT1) <> (vBytesold(10) And BIT1)) Then
-                    ScriviAlarm("Elevation Slew Motor 1 alarm", 1)
-                    i_Alarm = True
-                End If
-            End If
-            'Elevation Slew Motor 2 alarm
-            If (vBytes(10) And BIT2) = BIT2 Then
-                If ((vBytes(10) And BIT2) <> (vBytesold(10) And BIT2)) Then
-                    ScriviAlarm("Elevation Slew Motor 2 alarm", 1)
-                    i_Alarm = True
-                End If
-            End If
-            'Azimuth Slew Motor 1 alarm
-            If (vBytes(10) And BIT3) = BIT3 Then
-                If ((vBytes(10) And BIT3) <> (vBytesold(10) And BIT3)) Then
-                    ScriviAlarm("Azimuth Slew Motor 1 alarm", 1)
-                    i_Alarm = True
-                End If
-            End If
-            'Azimuth Slew Motor 2 alarm
-            If (vBytes(10) And BIT4) = BIT4 Then
-                If ((vBytes(10) And BIT4) <> (vBytesold(10) And BIT4)) Then
-                    ScriviAlarm("Azimuth Slew Motor 2 alarm", 1)
-                    i_Alarm = True
-                End If
-            End If
-            'Elevation Pin exended
-            '        If (vBytes(7) And BIT4) = BIT4 Then
-            '            s_StatusPTIC(8) = s_StatusPTIC(8) Or &H4
-            '            If ((vBytes(7) And BIT4) <> (vBytesold(7) And BIT4)) Then
-            '                ScriviAlarm "Elevation Pin Extended", 0
-            '            End If
-            '        Else
-            '            s_StatusPTIC(8) = s_StatusPTIC(8) And &HB
-            '        End If
-
-            'Elevation Pin retracted
-            '        If (vBytes(8) And BIT1) = BIT1 Then
-            '             s_StatusPTIC(8) = s_StatusPTIC(8) Or &H8
-            '            If ((vBytes(8) And BIT1) <> (vBytesold(8) And BIT1)) Then
-            '                ScriviAlarm "Elevation Pin retracted", 0
-            '            End If
-            '        Else
-            '            s_StatusPTIC(8) = s_StatusPTIC(8) And &H7
-            '        End If
-
-            'Elevation Pin Aligned
-            '        If (vBytes(8) And BIT2) = BIT2 Then
-            '            s_StatusPTIC(8) = s_StatusPTIC(8) Or &H2
-            '            If ((vBytes(8) And BIT2) <> (vBytesold(8) And BIT2)) Then
-            '                ScriviAlarm "Elevation Pin Aligned", 0
-            '            End If
-            '        Else
-            '            s_StatusPTIC(8) = s_StatusPTIC(8) And &HD
-            '        End If
-
-
-
-            'Azimuth Pin exended
-            '        If (vBytes(12) And BIT3) = BIT3 Then
-            '            If ((vBytes(12) And BIT3) <> (vBytesold(12) And BIT3)) Then
-            '                ScriviAlarm "Azimuth Pin Extended", 0
-            '            End If
-            '        End If
-            'Azimuth Pin retracted
-            '        If (vBytes(12) And BIT4) = BIT4 Then
-            '            If ((vBytes(12) And BIT4) <> (vBytesold(12) And BIT4)) Then
-            '                ScriviAlarm "Azimuth Pin Retracted", 0
-            '            End If
-            '        End If
-            'Stow pins motors alarm
-            '         If (vBytes(12) And BIT4) = BIT5 Then
-            '            If ((vBytes(12) And BIT5) <> (vBytesold(12) And BIT5)) Then
-            '                ScriviAlarm "Stow Pins Motors alarm", 1
-            '                i_Alarm = True
-            '            End If
-            '        End If
-
-            'RX
-            If (vBytes(13) And BIT1) <> BIT1 Then
-                If ((vBytes(13) And BIT1) <> (vBytesold(13) And BIT1)) Then
-                    If i_LockBell = 1 Then
-                        ScriviAlarm("Rx alarm", 1)
-                    Else
-                        ScriviAlarm("Rx alarm", 0)
-                    End If
-                End If
-            End If
-            'Monopulse enabled
-            If (vBytes(13) And BIT2) <> (vBytesold(13) And BIT2) Then
-                ScriviAlarm("Monopulse Lock", 0)
-            End If
-
-            'LOWSIG
-            If (vBytes(13) And BIT3) = BIT3 Then
-                If ((vBytes(13) And BIT3) <> (vBytesold(13) And BIT3)) Then
-                    ScriviAlarm("Low Signal", 0) '
-                End If
-            End If
-            'HIGH ALARM
-            If (vBytes(13) And BIT5) = BIT5 Then
-                If ((vBytes(13) And BIT5) <> (vBytesold(13) And BIT5)) Then
-                    ScriviAlarm("High alarm", 1)
-                End If
-            End If
-
-
-            'Parameters
-            If (vBytes(14) And BIT1) = BIT1 _
-        And ((vBytes(14) And BIT1) <> (vBytesold(14) And BIT1)) Then
-                ScriviAlarm("Memory Parameters alarm", 0)
-            End If
-            'Memory track memory
-            If (vBytes(14) And BIT2) = BIT2 _
-        And ((vBytes(14) And BIT2) <> (vBytesold(14) And BIT2)) Then
-                ScriviAlarm("Memory track alarm", 0)
-            End If
-            'Satellite Data
-            If (vBytes(14) And BIT4) = BIT4 _
-        And ((vBytes(14) And BIT4) <> (vBytesold(14) And BIT4)) Then
-                ScriviAlarm("Memory satellite data alarm", 0)
-            End If
-            'Stow/Unstow
-            If (vBytes(14) And BIT5) = BIT5 _
-        And ((vBytes(14) And BIT5) <> (vBytesold(14) And BIT5)) Then
-                ScriviAlarm("Memory stow unstow alarm", 0)
-            End If
-
-            'Cmd UP
-            '        LblCmd = ""
-            '        If ((vBytes(15) And BIT1) = BIT1) Then
-            '            LblCmd.Text = "UP"
-            '        End If
-            'Cmd DW
-            '        If ((vBytes(15) And BIT2) = BIT2) Then
-            '            LblCmd.Text = "DOWN"
-            '        End If
-            'Cmd CW
-            '        If ((vBytes(15) And BIT1) = BIT1) Then
-            '            LblCmd.Text = "CW"
-            '        End If
-            'Cmd CCW
-            '        If ((vBytes(15) And BIT2) = BIT2) Then
-            '            LblCmd.Text = "CCW"
-            '        End If
-
-            For i = 1 To 15
-                vBytesold(i) = vBytes(i)
-            Next i
-            FrmRicezione.AggiornaAllarmiMemoria()
-            If IsNumeric(s_AzTS) Then s_AzTS = Mid$(s_AzTS, 1, 1) + Format$(CDbl(Mid$(s_AzTS, 2, 2)), "#00")
-            If IsNumeric(s_ElTS) Then s_ElTS = Mid$(s_ElTS, 1, 1) + Format$(CDbl(Mid$(s_ElTS, 2, 2)), "#00")
-            'Valori delle correnti dei motori
-            If IsNumeric(s_AZTrkCur1) Then s_AZTrkCur1 = Mid$(s_AZTrkCur1, 1, 1) + Format$(CDbl(Mid$(s_AZTrkCur1, 2, 2)), "#00")
-            If IsNumeric(s_AZTrkCur2) Then s_AZTrkCur2 = Mid$(s_AZTrkCur2, 1, 1) + Format$(CDbl(Mid$(s_AZTrkCur2, 2, 2)), "#00")
-            If IsNumeric(s_ELTrkCur1) Then s_ELTrkCur1 = Mid$(s_ELTrkCur1, 1, 1) + Format$(CDbl(Mid$(s_ELTrkCur1, 2, 2)), "#00")
-            If IsNumeric(s_ELTrkCur2) Then s_ELTrkCur2 = Mid$(s_ELTrkCur2, 1, 1) + Format$(CDbl(Mid$(s_ELTrkCur2, 2, 2)), "#00")
-            If IsNumeric(s_AZSlewCur1) Then s_AZSlewCur1 = Mid$(s_AZSlewCur1, 1, 1) + Format$(CDbl(Mid$(s_AZSlewCur1, 2, 2)), "#00")
-            If IsNumeric(s_AZSlewCur2) Then s_AZSlewCur2 = Mid$(s_AZSlewCur2, 1, 1) + Format$(CDbl(Mid$(s_AZSlewCur2, 2, 2)), "#00")
-            If IsNumeric(s_ELSlewCur1) Then s_ELSlewCur1 = Mid$(s_ELSlewCur1, 1, 1) + Format$(CDbl(Mid$(s_ELSlewCur1, 2, 2)), "#00")
-            If IsNumeric(s_ELSlewCur2) Then s_ELSlewCur2 = Mid$(s_ELSlewCur2, 1, 1) + Format$(CDbl(Mid$(s_ELSlewCur2, 2, 2)), "#00")
-
-            '        s_LevAz = Format$(CalcoloVolt(s_LevAz) - 10, "0.0#")
-            s_LevAz = Mid$(s_LevAz, 1, 1) + Format$(CDbl(Mid$(s_LevAz, 2, 2)) / 10, "#0.0")
-            s_LevAz1 = s_LevAz
-            '        s_LevEl = Format$(CalcoloVolt(s_LevEl) - 10, "0.0#")
-            s_LevEl = Mid$(s_LevEl, 1, 1) + Format$(CDbl(Mid$(s_LevEl, 2, 2)) / 10, "#0.0")
-            s_LevEl1 = s_LevEl
-            ValVolt = Mid$(s_Lev2, 1, 1) + Format$(CDbl(Mid$(s_Lev2, 2, 2)) / 10, "#0.0")
-            '        ValVolt = Format$((CalcoloVolt(s_Lev2) - 10), "##0.0#")
-            ' Aggiunto il 26/05/2016 per tener conto delle differenti pendenze nel calcolo del beacon tra ACU e Ricevitore
-            '        s_Lev = Format$((CalcoloVolt(s_Lev2) - 15) * Pendenza1 + Valore0, "##0.0#")
-            s_Lev = Format$((s_Lev2 + 2) * Pendenza1 + Valore0, "##0.0#")
-            '        s_Lev1 = s_Lev
-            '        s_Lev = Format$((s_Lev2 - 15) * Pendenza1 + Valore0, "##0.0#")
-            '        s_AzTS = Format$(10 - s_AzTS, "0.0#")
-            '        s_ElTS = Format$(10 - s_ElTS, "0.0#")
-            i_AzDeg = Format$(Math.Abs(s_LevAz * 1000), "00000")
-            i_ElDeg = Format$(Math.Abs(s_LevEl * 1000), "00000")
-            If s_LevAz > 0 Then
-                i_AzDeg = "+" & i_AzDeg
-            Else
-                i_AzDeg = "-" & i_AzDeg
-            End If
-            If s_LevEl > 0 Then
-                i_ElDeg = "+" & i_ElDeg
-            Else
-                i_ElDeg = "-" & i_ElDeg
-            End If
-            TagError = i_AzDeg & i_ElDeg & Mid$(Messaggio, 11, 8)
-            If i_Alarm Then
-                If i_Status <> OP_STANDBY Then FrmRicezione.CmdSTBY_Click(Nothing, EventArgs.Empty)       '04/02/2026
-            End If
-        End If
-        'Se in modo Proiezione riempi la tabella dei dati
-        If i_Status = OP_PROIEZ Then
-            If IsNumeric(s_Az) And IsNumeric(s_El) Then
-                ' Removepts(1) (non 0) lasciava per sempre il primissimo
-                ' campione raccolto da quando si è entrati in Proiezione:
-                ' la finestra non era una vera coda FIFO sugli ultimi
-                ' NumProMax punti, ne teneva uno vecchio "ancorato" insieme
-                ' ai più recenti.
-                If Countpts() > NumProMax Then Removepts(0)
-                Addpts(NowUTC().ToString("dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture), CDbl(s_Az), CDbl(s_El))
-            End If
-        End If
-        Exit Function
-analisi:
-        FrmMain.stpMessaggio.Text = "Buffer error nr" & Err.Number
-        FrmMain.TmrMsg.Enabled = True
-        Resume Next
-
+        Catch ex As Exception
+            FrmMain.stpMessaggio.Text = "Buffer error: " & ex.Message
+            FrmMain.TmrMsg.Enabled = True
+            WriteError(0, "ValoreCampoMAC: " & ex.Message)
+        End Try
     End Function
+
+    ''' <summary>Allarme sul fronte di salita di un bit attivo a 1 di vBytes(idx).</summary>
+    Private Sub AllarmeSeAttivo(idx As Integer, bit As Integer, testo As String, livello As Integer)
+        If (vBytes(idx) And bit) = bit AndAlso (vBytes(idx) And bit) <> (vBytesold(idx) And bit) Then
+            ScriviAlarm(testo, livello)
+        End If
+    End Sub
+
+    ' Dati della risposta "@" (configurazione ACU)
+    Public s_AcuNumProg As String = ""
+    Public s_AcuNome As String = ""
+    Public s_AcuVersione As String = ""
 
 
     Public Function RefreshTLE() As Boolean

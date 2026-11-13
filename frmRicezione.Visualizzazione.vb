@@ -144,10 +144,10 @@ Partial Public Class FrmRicezione
         If LblLev_ctrl IsNot Nothing Then LblLev_ctrl.BackColor = COL_OK
         If LblLev_ctrl IsNot Nothing AndAlso IsNumeric(s_Lev1) Then LblLev_ctrl.Text = s_Lev1
 
-        ' LockRic ricalcolato a ogni ciclo dal bit reale ACU (vBytesold(13)
-        ' BIT2) — era solo letto (mai scritto) prima di questa modifica,
+        ' LockRic ricalcolato a ogni ciclo dal bit reale ACU (C10: vBytesold(9)
+        ' BIT4) — era solo letto (mai scritto) prima di questa modifica,
         ' quindi restava sempre vuoto.
-        If (vBytesold(13) And BIT2) <> BIT2 Then
+        If (vBytesold(9) And BIT4) = BIT4 Then          ' C10: lock = byte 9 bit4 (BTS1: byte 13 bit2 a 0)
             LockRic = "LOCK"
             s_StatusPTIC(3) = s_StatusPTIC(3) Or &H2
         Else
@@ -204,7 +204,7 @@ Partial Public Class FrmRicezione
         If LblLock IsNot Nothing Then
             If LblLock.Text = "LOCK" AndAlso Not b_Lock AndAlso IsNumeric(s_Lev) AndAlso Val(s_Lev) >= i_LockThr Then b_Lock = True
             If LblLock.Text = "LOCK" AndAlso Not b_Lock AndAlso IsNumeric(s_Lev1) AndAlso Val(s_Lev1) >= i_LockThr Then b_Lock = True
-            LblLock.BackColor = If((vBytesold(13) And BIT2) <> BIT2, COL_OK, COL_FAIL)
+            LblLock.BackColor = If((vBytesold(9) And BIT4) = BIT4, COL_OK, COL_FAIL)       ' C10: byte 9 bit4
         End If
     End Sub
 
@@ -362,14 +362,14 @@ Partial Public Class FrmRicezione
 
     ''' <summary>
     ''' Aggiorna gli indicatori Memory/Param, Data, Sat.Data, Stow/Unstow
-    ''' in base ai bit del byte di stato vBytesold(14) (vedi Gestione.vb).
+    ''' in base ai bit del byte di stato vBytesold(11) (C10) (vedi Gestione.vb).
     ''' Rosso = allarme attivo, Verde = ok.
     ''' </summary>
     Public Sub AggiornaAllarmiMemoria()
-        LblMemParamInd.BackColor = If((vBytesold(14) And BIT1) = BIT1, COL_FAIL, COL_OK)
-        LblMemDataInd.BackColor = If((vBytesold(14) And BIT2) = BIT2, COL_FAIL, COL_OK)
-        LblSatDataInd.BackColor = If((vBytesold(14) And BIT4) = BIT4, COL_FAIL, COL_OK)
-        LblStowUnstowInd.BackColor = If((vBytesold(14) And BIT5) = BIT5, COL_FAIL, COL_OK)
+        LblMemParamInd.BackColor = If((vBytesold(11) And BIT1) = BIT1, COL_FAIL, COL_OK)
+        LblMemDataInd.BackColor = If((vBytesold(11) And BIT2) = BIT2, COL_FAIL, COL_OK)
+        LblSatDataInd.BackColor = If((vBytesold(11) And BIT4) = BIT4, COL_FAIL, COL_OK)
+        LblStowUnstowInd.BackColor = If((vBytesold(11) And BIT3) = BIT3, COL_FAIL, COL_OK)
     End Sub
 
     ' -------------------------------------------------------
