@@ -16,9 +16,9 @@ Imports System.Windows.Forms
 '   - polling periodico del polarizzatore (CmdPol, ogni i_InterPol s)
 '   - richiesta di stato ACU solo se la precedente ha avuto risposta
 '     (Not b_Ricezione(ACU)), come nel VB6 di C10
-'   - controllo orario ACU con soglia 10 s e controllo della data
-'     (allarme "Time ACU different"); g_Irig non viene mai impostato
-'     nel VB6, quindi la sincronizzazione automatica non è portata
+'   - controllo orario ACU con soglia 10 s e controllo della data;
+'     con g_Irig = "A" (ora dall'orologio ACU, impostato dal parser)
+'     riallinea l'ACU con CmdTime/CmdDate, altrimenti allarme
 '   - con b_Parametri attivo il timeout ACU via LAN è 900 ms
 ' ============================================================
 
@@ -745,7 +745,16 @@ Partial Public Class FrmMain
                 If IsDate(OraACU) Then
                     Dim OraPc As Date = Now.AddHours(-i_OffsetOre)
                     Dim diffSec As Double = Math.Abs(DateDiff(DateInterval.Second, OraPc, OraACU))
-                    If diffSec > 10 And Not b_Parametri Then       ' C10: 10 s (FOC6: 3 s)
+                    ' C10: g_Irig = "A" (impostato dal parser ACU quando l'ora
+                    ' viene dall'orologio ACU, non da IRIG) -> l'ora/la data
+                    ' dell'ACU si riallineano al PC con CmdTime/CmdDate.
+                    If diffSec > 10 And Not b_Parametri And g_Irig = "A" Then
+                        Attesa(0.2)
+                        CmdTime()
+                    ElseIf OraPc.Date <> OraACU.Date And Not b_Parametri And g_Irig = "A" Then
+                        Attesa(0.2)
+                        CmdDate()
+                    ElseIf diffSec > 10 And Not b_Parametri Then       ' C10: 10 s (FOC6: 3 s)
                         If Cont3 > 1800 Then
                             ScriviAlarm("Time ACU different", 1)
                             Cont3 = 0
@@ -756,7 +765,7 @@ Partial Public Class FrmMain
                         Cont3 = 0
                     End If
                     ' Controllo della data ACU (VB6: DatePc <> DateAcu, contatore Cont4)
-                    If OraPc.Date <> OraACU.Date And Not b_Parametri Then
+                    If OraPc.Date <> OraACU.Date And Not b_Parametri And g_Irig <> "A" Then
                         If Cont4 > 1800 Then
                             ScriviAlarm("Time ACU different", 1)
                             Cont4 = 0
