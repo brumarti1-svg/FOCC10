@@ -452,11 +452,9 @@ Partial Public Class FrmRicezione
             LblLock.ForeColor = If(b_Lock, Color.Black, Color.White)
         End If
 
-        ' Polarizzazione
-        If LblPol IsNot Nothing AndAlso txtPol IsNot Nothing Then
-            LblPol.Text = "POL:"
-            ' txtPol.Text giÃ  aggiornato dal modulo ricevitore
-        End If
+        ' Polarizzazione: in C10 LblPol mostra RHCP/LHCP dallo stato ACU
+        ' (AggiornaPolLnaDaACU) e non va sovrascritta con "POL:": il confronto
+        ' prima/dopo segnalerebbe un cambio a ogni ciclo (g_NewLna).
 
         ' Errore di polarizzazione
         If LblPol1 IsNot Nothing AndAlso txtPolErr IsNot Nothing Then
