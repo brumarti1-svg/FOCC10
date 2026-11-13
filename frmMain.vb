@@ -606,7 +606,7 @@ Partial Public Class FrmMain
                 If Ind = ACU AndAlso b_Parametri Then
                     timeout = 900       ' VB6: lettura parametri ACU in corso
                 ElseIf IsNumeric(Port_Control(Ind).Time_out) Then
-                    timeout = CInt(Port_Control(Ind).Time_out) * 1000
+                    timeout = CInt(Val(Port_Control(Ind).Time_out) * 1000)   ' prima CInt(0.4) = 0
                 End If
                 frmRicezioneInstance.SetTimeoutInterval(Ind, timeout)
             End If
@@ -696,7 +696,7 @@ Partial Public Class FrmMain
             Dim DateRep As String = OraAtt.ToString("_dd")
             Dim MyMonth As String = MonthName(OraAtt.Month)
 
-            stpData.Text = DatePc & "  " & OraAtt.ToString("HH:mm:ss")
+            ' Pannello "data" = ora ACU, scritto solo dal parser (VB6): non più riscritto qui con l'ora PC a ogni tick.
 
             ' Cambio giorno — rotazione file log
             If OraAtt < OraAgg Then
