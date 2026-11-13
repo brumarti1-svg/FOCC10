@@ -111,164 +111,120 @@ Partial Public Class FrmRicezione
         AddHandler LblSatellite.SelectedIndexChanged, AddressOf LblSatellite_SelectedIndexChanged
     End Sub
 
+    ''' <summary>
+    ''' Timeout di un canale — porting di tmrTimeoutMSG_Timer dal VB6 di C10.
+    ''' Tutto indicizzato per canale. Seriale: la porta viene riaperta a
+    ''' ogni timeout (PortReset). ACU: b_Ricezione torna False (necessario
+    ''' per la ripresa del polling di stato), dopo 4 timeout spia di stop,
+    ''' b_Parametri, TagDato e data ACU azzerati. GRF/PCU: spia di stop e
+    ''' messaggio dopo 4 timeout consecutivi. MCS e INTELSAT: subito.
+    ''' Differenza voluta dal VB6: un canale LAN (ACU/GRF) dopo 4 timeout
+    ''' viene riconnesso (LanResetAsync); il VB6 di C10 non lo faceva e una
+    ''' LAN caduta non si sarebbe più ripresa.
+    ''' </summary>
     Private Sub TmrTimeoutMSG_Tick(sender As Object, e As EventArgs)
         Try
             Dim tmr As Timer = TryCast(sender, Timer)
             If tmr Is Nothing OrElse TmrTimeoutMSG Is Nothing Then Exit Sub
-            Dim Index As Integer = -1
-            For i As Integer = 0 To TmrTimeoutMSG.Length - 1
-                If TmrTimeoutMSG(i) Is tmr Then
-                    Index = i
-                    Exit For
-                End If
-            Next
-            If Index < 0 Then Exit Sub
+            Dim Index As Integer = Array.IndexOf(TmrTimeoutMSG, tmr)
+            If Index < 1 OrElse Index > NumCom Then Exit Sub
 
-            Dim Port As Integer = Canali(Index).Port_IN
-            If Port = 0 Then Exit Sub
+            Dim spie As Label() = {Nothing, LblConfCNL1in, LblConfCNL2in, LblConfCNL3in, LblConfCNL4in, LblConfCNL5in, LblConfCNL6in}
+            Dim seriale As Boolean = Port_Control(Index).Socket <> "S"
 
-            Dim s_Device As String = ""
-            If Port_Control(Index).Socket <> "S" Then
-                If Port_Control(Port).Port_State = PCS_NOT_OP Then
-                    Select Case Index
-                        Case ACU
-                            LblConfCNL1in.BackColor = Color.Red
-                            LblConfCNL1in.ForeColor = Color.Black
-                        Case MAC
-                            LblConfCNL2in.BackColor = Color.Red
-                            LblConfCNL2in.ForeColor = Color.Black
-                        Case GRF
-                            LblConfCNL4in.BackColor = Color.Red
-                            LblConfCNL4in.ForeColor = Color.Black
-                        Case INTELSAT
-                            LblConfCNL5in.BackColor = Color.Red
-                            LblConfCNL5in.ForeColor = Color.Black
-                        Case PCU
-                            LblConfCNL6in.BackColor = Color.Red
-                            LblConfCNL6in.ForeColor = Color.Black
-                        Case LNA
-                            LblConfCNL7in.BackColor = Color.Red
-                            LblConfCNL7in.ForeColor = Color.Black
-                        Case SCU
-                            LblConfCNL8in.BackColor = Color.Red
-                            LblConfCNL8in.ForeColor = Color.Black
-                    End Select
-                    TmrTimeoutMSG(Index).Enabled = True
-                    Exit Sub
+            If Port_Control(Index).Port_State = PCS_NOT_OP Then
+                If Index <> RX Then
+                    spie(Index).BackColor = PCS_STOP_COL
+                    spie(Index).ForeColor = Color.Black
                 End If
+                TmrTimeoutMSG(Index).Enabled = True
+                Exit Sub
             End If
 
-            ' Pulisco i campi del port_control e chiudo/riapro la porta
-            Port_Control(Port).Buffer = ""
-            Port_Control(Port).Rec_State = PCR_WAIT
+            Port_Control(Index).Buffer = ""
             Port_Control(Index).Rec_State = PCR_WAIT
-            Port_Control(Port).Port_State = PCS_STOP
+            If seriale Then FrmMain.PortReset(Index)
             Port_Control(Index).Port_State = PCS_STOP
             TmrTimeoutMSG(Index).Enabled = False
 
+            Dim s_Device As String = ""
             Select Case Index
                 Case ACU
-                    If Not b_int(ACU) Then
-                        SEND = NAK
-                        Invio(SEND, MAC)
-                    End If
+                    b_Ricezione(ACU) = False
                     If Not b_Parametri Then
                         OraACU = CDate("00:00:00")
-                        i_Cont = 1
-                        Port_Control(Port).Rec_State = PCR_STANDBY
+                        i_Cont = 0
+                        Port_Control(Index).Rec_State = PCR_STANDBY
                     End If
-                    BuffStatus = ""
-                    TagDato = ""
-                    If Port_Control(Port).CKS_Error > 3 Then
-                        If LblConfCNL1in.BackColor <> Color.Red Then
-                            LblConfCNL1in.BackColor = Color.Red
+                    If Port_Control(Index).CKS_Error > 3 Then
+                        If LblConfCNL1in.BackColor <> PCS_STOP_COL Then
+                            LblConfCNL1in.BackColor = PCS_STOP_COL
                             LblConfCNL1in.ForeColor = Color.Black
                             s_Device = " ACU "
                         End If
-                        Port_Control(Port).CKS_Error = 0
-                        If Port_Control(Index).Socket <> "S" Then
-                            FrmMain.PortReset(Index)
-                        Else
-                            FrmMain.LanResetAsync(Index)
-                        End If
+                        b_Parametri = False
+                        TagDato = ""
+                        FrmMain.stpData.Text = ""
+                        Port_Control(Index).CKS_Error = 0
+                        If Not seriale Then FrmMain.LanResetAsync(Index)
                     Else
-                        Port_Control(Port).CKS_Error += 1
+                        Port_Control(Index).CKS_Error += 1
                     End If
 
                 Case MAC
+                    FrmMain.LanResetAsync(MAC)
                     TmrTimeoutMSG(MAC).Enabled = True
-                    If LblConfCNL2in.BackColor <> Color.Red Then
-                        LblConfCNL2in.BackColor = Color.Red
+                    If LblConfCNL2in.BackColor <> PCS_STOP_COL Then
+                        LblConfCNL2in.BackColor = PCS_STOP_COL
                         LblConfCNL2in.ForeColor = Color.Black
-                        s_Device = " MCS"
-                    End If
-                    If Port_Control(Index).Socket <> "S" Then
-                        FrmMain.PortReset(Index)
-                    Else
-                        FrmMain.LanResetAsync(Index)
+                        s_Device = " MCS "
                     End If
 
                 Case RX
-                    LblConfCNL3in.BackColor = Color.Red
+                    LblConfCNL3in.BackColor = PCS_STOP_COL
 
                 Case GRF
-                    If Port_Control(Index).CKS_Error > 2 Then
-                        If LblConfCNL4in.BackColor <> Color.Red Then
-                            LblConfCNL4in.BackColor = Color.Red
+                    If Port_Control(Index).CKS_Error > 3 Then
+                        If LblConfCNL4in.BackColor <> PCS_STOP_COL Then
+                            LblConfCNL4in.BackColor = PCS_STOP_COL
                             LblConfCNL4in.ForeColor = Color.Black
                             s_Device = " D/C "
                         End If
                         Port_Control(Index).CKS_Error = 0
-                        If Port_Control(Index).Socket <> "S" Then
-                            FrmMain.PortReset(Index)
-                        Else
-                            FrmMain.LanResetAsync(Index)
-                        End If
+                        If Not seriale Then FrmMain.LanResetAsync(Index)
                     Else
                         Port_Control(Index).CKS_Error += 1
                     End If
 
                 Case INTELSAT
-                    If LblConfCNL5in.BackColor <> Color.Red Then
-                        LblConfCNL5in.BackColor = Color.Red
+                    If LblConfCNL5in.BackColor <> PCS_STOP_COL Then
+                        LblConfCNL5in.BackColor = PCS_STOP_COL
                         LblConfCNL5in.ForeColor = Color.Black
                         s_Device = " INTELSAT "
                     End If
                     TmrTimeoutMSG(INTELSAT).Enabled = True
 
                 Case PCU
-                    If LblConfCNL6in.BackColor <> Color.Red Then
-                        LblConfCNL6in.BackColor = Color.Red
-                        LblConfCNL6in.ForeColor = Color.Black
-                        s_Device = " Polarization "
+                    If Port_Control(Index).CKS_Error > 3 Then
+                        If LblConfCNL6in.BackColor <> PCS_STOP_COL Then
+                            LblConfCNL6in.BackColor = PCS_STOP_COL
+                            LblConfCNL6in.ForeColor = Color.Black
+                            s_Device = " Polarization "
+                        End If
+                        Port_Control(Index).CKS_Error = 0
+                    Else
+                        Port_Control(Index).CKS_Error += 1
                     End If
-
-                Case LNA
-                    ' Porting diretto da VB6 (frmRicezione.frm riga 6186): il
-                    ' messaggio "Time out" per LNA è commentato anche nell'originale,
-                    ' si aggiorna solo il colore del canale.
-                    If LblConfCNL7in.BackColor <> Color.Red Then
-                        LblConfCNL7in.BackColor = Color.Red
-                        LblConfCNL7in.ForeColor = Color.Black
-                    End If
-                    Port_Control(Index).CKS_Error = 0
-
-                Case SCU
-                    ' Porting diretto da VB6 (frmRicezione.frm riga 6195): come LNA,
-                    ' nessun messaggio "Time out", solo colore canale.
-                    If LblConfCNL8in.BackColor <> Color.Red Then
-                        LblConfCNL8in.BackColor = Color.Red
-                        LblConfCNL8in.ForeColor = Color.Black
-                    End If
-                    Port_Control(Index).CKS_Error = 0
             End Select
 
             If s_Device <> "" Then
                 MainForm.MessaggioStatus = "Time out " & s_Device
                 ScriviAlarm("Time out " & s_Device, 1)
                 AggiornaGriglia()
+                MainForm.TmrMsg.Enabled = True
             End If
-        Catch
+        Catch ex As Exception
+            WriteError(0, "TmrTimeoutMSG_Tick: " & ex.Message)
         End Try
     End Sub
 
