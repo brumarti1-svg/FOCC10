@@ -114,6 +114,32 @@ Module Gestione
     End Function
 
 
+    ''' <summary>
+    ''' Scrittura su porta seriale del canale Ind — porting del ramo
+    ''' seriale di Invio nel VB6 di C10 (Gestione.bas): se la porta è
+    ''' chiusa prova a riaprirla con PortReset, altrimenti segnala
+    ''' "Serial Port nr. N not connected". ComPort() è indicizzato per
+    ''' canale, come frmRicezione.ComPort(Ind) nel VB6. Usata anche da
+    ''' InvioACU (libreria comune) tramite InvioSerialeHook.
+    ''' </summary>
+    Public Function ScriviSeriale(Ind As Integer, s_send As String) As Boolean
+        Try
+            If ComPort(Ind) Is Nothing OrElse Not ComPort(Ind).IsOpen Then
+                FrmMain.PortReset(Ind)
+            End If
+            If ComPort(Ind) IsNot Nothing AndAlso ComPort(Ind).IsOpen Then
+                ComPort(Ind).Write(s_send)
+                Port_Control(Ind).Rec_State = PCR_WAIT
+                Return True
+            End If
+            FrmMain.stpMessaggio.Text = "Serial Port nr. " & Ind & " not connected"
+            FrmMain.TmrMsg.Enabled = True
+        Catch ex As Exception
+            WriteError(0, "ScriviSeriale(canale=" & Ind & "): " & ex.Message)
+        End Try
+        Return False
+    End Function
+
     Public Function Invio(s_send As String, Ind As Integer) As Boolean
         Dim Port As Integer, i_lun As Integer
         Try
@@ -122,9 +148,7 @@ Module Gestione
             If s_send = "" Then Exit Function
 
             If Port_Control(Ind).Socket <> "S" Then
-                ' ComPort serial port not migrated - use socket path only
-                FrmMain.stpMessaggio.Text = "Serial Port nr. " & Ind & " not connected"
-                FrmMain.TmrMsg.Enabled = True
+                ScriviSeriale(Ind, s_send)
             Else
                 Select Case Ind
                     Case ACU

@@ -323,6 +323,19 @@ Partial Public Class FrmRicezione
         Invio(Send_GRF, GRF)
     End Sub
 
+    ''' <summary>C10: richiesta della frequenza al Down Converter ("FE?").</summary>
+    Public Sub CmdGRF()
+        b_int(GRF) = True : b_Ricezione(GRF) = True
+        Send_GRF = CheckDC("{" & Chr(AddressDC) & "FE?}") & vbCr & vbLf
+        Invio(Send_GRF, GRF)
+    End Sub
+
+    ''' <summary>C10: richiesta di stato al polarizzatore (seriale PCU).</summary>
+    Public Sub CmdPol()
+        b_int(PCU) = True : b_Ricezione(PCU) = True
+        Invio(ChrW(2) & "07!24" & ChrW(3), PCU)     ' STX "07!24" ETX
+    End Sub
+
     Public Sub CmdSCU()
         b_int(SCU) = True : b_Ricezione(SCU) = True
         Dim SendScu As String = "{" & Chr(AddressSCU) & "?STS}5" & vbCr & vbLf
@@ -357,8 +370,9 @@ Partial Public Class FrmRicezione
         If Not b_frequency Then Return
         If LblConfCNL4in.BackColor <> COL_OK OrElse Not IsNumeric(CmbBcnFreq.Text) Then Return
         If TxtFrqBeacon.Text <> CmbBcnFreq.Text Then
-            Dim dFrqBeacon As Double = Val(CmbBcnFreq.Text) * 1000
-            Send_GRF = "{" & Chr(AddressDC) & "F" & Format$(dFrqBeacon, "00000000") & "}"
+            ' C10: frequenza in Hz con il comando "FE" e CheckDC (FOC6: kHz, "F").
+            Dim dFrqBeacon As Double = Val(CmbBcnFreq.Text) * 100000
+            Send_GRF = CheckDC("{" & Chr(AddressDC) & "FE" & Format$(dFrqBeacon, "0000000000") & "}")
             b_Ricezione(GRF) = False
             Invio(Send_GRF, GRF)
             TxtFrqBeacon.Text = ""
@@ -651,9 +665,10 @@ RicActive:
                     Dim par As String = LeggiFileIni(Sezione, "Par")
                     Dim bits As String = LeggiFileIni(Sezione, "BitDati")
                     Dim stopBits As String = LeggiFileIni(Sezione, "BitStop")
-                    Port_Control(portNum).Port_settings = vel & "," & par & "," & bits & "," & stopBits
-                    Port_Control(portNum).Time_out = CDbl(Val(LeggiFileIni(Sezione, "TimeOut")))
-                    Port_Control(Ind).Time_out = Port_Control(portNum).Time_out
+                    ' C10: indicizzato per canale come nel VB6
+                    ' (Port_Control(Ind).Port_settings), non per numero COM.
+                    Port_Control(Ind).Port_settings = vel & "," & par & "," & bits & "," & stopBits
+                    Port_Control(Ind).Time_out = CDbl(Val(LeggiFileIni(Sezione, "TimeOut")))
                 Else
                     ' Configurazione LAN
                     Port_Control(Ind).IPAdress = LeggiFileIni(Sezione, "Ind_IP")

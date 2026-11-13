@@ -39,11 +39,9 @@ Partial Public Class FrmRicezione
                     Case GRF : SocketManager.SendDC(Ind, comando)
                 End Select
             Else
-                ' Invio seriale
-                Dim portNum As Integer = Canali(Ind).Port_IN
-                If ComPort(portNum) IsNot Nothing AndAlso ComPort(portNum).IsOpen Then
-                    ComPort(portNum).Write(comando)
-                End If
+                ' Invio seriale (C10: ComPort indicizzato per canale, vedi
+                ' Gestione.ScriviSeriale — prima si usava il numero COM).
+                ScriviSeriale(Ind, comando)
             End If
         Catch ex As Exception
             WriteError(0, "Invio(canale=" & Ind & "): " & ex.Message)
@@ -62,8 +60,10 @@ Partial Public Class FrmRicezione
     Public Sub SerialDataReceived(sender As Object, e As SerialDataReceivedEventArgs)
         Try
             Dim sp As SerialPort = CType(sender, SerialPort)
-            Dim portNum As Integer = CInt(sp.PortName.Replace("COM", ""))
-            Dim Ind As Integer = CanaleDaPorta(portNum)
+            ' Canale = indice in ComPort() dell'oggetto che ha ricevuto
+            ' (in C10 più canali possono dichiarare lo stesso COM nell'ini).
+            Dim Ind As Integer = Array.IndexOf(ComPort, sp)
+            If Ind < 1 Then Ind = CanaleDaPorta(CInt(sp.PortName.Replace("COM", "")))
             If Ind < 1 Then Return
             Dim testo As String = sp.ReadExisting()
             Port_Control(Ind).Buffer &= testo

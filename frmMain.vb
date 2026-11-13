@@ -4,17 +4,22 @@ Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 
 ' ============================================================
-' frmMain.vb — convertito da Prog0357-FOC6\frmMain.frm (VB6)
-' Telespazio FOC6 — DYNATRON
-' Traccia strutturale: BTS1\frmMain.vb (stessa origine VB6).
-' Differenze genuine rispetto a BTS1 isolate dal VB6 originale:
-'   - 8 canali (ACU/MAC/RX/GRF/INTELSAT/PCU/LNA/SCU), non 4
-'   - interrogazione periodica LNA/SCU e sequenza Stato/Volt del
-'     Down Converter (b_down/Contv)
-'   - sincronizzazione orario con sorgente IRIG (g_Irig)
-' L'interrogazione SNMP (PCU, frmManager) è dormiente anche nel
-' VB6 originale (righe commentate) — non portata, sarà oggetto di
-' un passaggio dedicato insieme a frmManager.
+' frmMain.vb — convertito da Prog0347-FOCC10\frmMain.frm (VB6)
+' Telespazio FOC-C10 — DYNATRON
+' Base: il porting .NET di FOC6 (avvio non bloccante, SocketManager,
+' simulazione ACU). Differenze di C10 applicate rispetto a FOC6:
+'   - 6 canali: niente LNA/SCU (porte, socket, polling, spie)
+'   - porta seriale in errore: spia rossa (PCS_FAIL_COL) e allarme
+'     anche per PCU; allarme GRF "GRF Com Error"
+'   - polling Down Converter: frequenza (CmdGRF "FE?") e attenuazioni
+'     A/B (FrmDownConverter.CmdATA/CmdATB) invece di stato/tensioni
+'   - polling periodico del polarizzatore (CmdPol, ogni i_InterPol s)
+'   - richiesta di stato ACU solo se la precedente ha avuto risposta
+'     (Not b_Ricezione(ACU)), come nel VB6 di C10
+'   - controllo orario ACU con soglia 10 s e controllo della data
+'     (allarme "Time ACU different"); g_Irig non viene mai impostato
+'     nel VB6, quindi la sincronizzazione automatica non è portata
+'   - con b_Parametri attivo il timeout ACU via LAN è 900 ms
 ' ============================================================
 
 Partial Public Class FrmMain
@@ -30,6 +35,7 @@ Partial Public Class FrmMain
     Private ultimoControlloDisco As DateTime = DateTime.MinValue
     Private OraAtt As Date
     Private Cont3 As Integer
+    Private Cont4 As Integer        ' C10: contatore allarme data ACU diversa
     Private Contfreq As Integer
     ' Nome dell'ultimo satellite per cui è stata inizializzata la
     ' propagazione orbitale usata dal messaggio ACU simulato (vedi
@@ -101,6 +107,9 @@ Partial Public Class FrmMain
 
     Private Sub FrmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         MainForm = Me
+        ' C10: ACU (e PCU/INTELSAT) su seriale — InvioACU della libreria
+        ' comune scrive sulla porta tramite questo aggancio.
+        InvioSerialeHook = AddressOf ScriviSeriale
         ' STARTUP_TIMING: stessa strumentazione temporanea già usata su
         ' BTS1 per trovare il vero collo di bottiglia dell'avvio (da
         ' rimuovere una volta trovato) — qui non c'era mai stata, quindi
@@ -403,7 +412,7 @@ Partial Public Class FrmMain
             ComPort(Ind) = New IO.Ports.SerialPort()
         End If
         ComPort(Ind).PortName = "COM" & Canali(Ind).Port_IN
-        Dim settings() As String = Port_Control(Port).Port_settings.Split(","c)
+        Dim settings() As String = Port_Control(Ind).Port_settings.Split(","c)
         If settings.Length = 4 Then
             ComPort(Ind).BaudRate = CInt(settings(0))
             ComPort(Ind).Parity = FrmRicezione.ParseParity(settings(1))
@@ -411,39 +420,37 @@ Partial Public Class FrmMain
             ComPort(Ind).StopBits = FrmRicezione.ParseStopBits(settings(3))
         End If
         ComPort(Ind).Encoding = System.Text.Encoding.GetEncoding(28591)
-        Port_Control(Port).Buffer = ""
+        Port_Control(Ind).Buffer = ""
 
         RemoveHandler ComPort(Ind).DataReceived, AddressOf frmRicezioneInstance.SerialDataReceived
         AddHandler ComPort(Ind).DataReceived, AddressOf frmRicezioneInstance.SerialDataReceived
 
         Try
             ComPort(Ind).Open()
-            Port_Control(Port).Port_State = PCS_NORMAL
+            Port_Control(Ind).Port_State = PCS_NORMAL
             If Ind = ACU Then
                 Port_Control(Ind).Rec_State = PCR_STANDBY
             Else
                 Port_Control(Ind).Rec_State = PCR_WAIT
             End If
         Catch ex As Exception
-            Port_Control(Port).Port_State = PCS_FAIL
+            Port_Control(Ind).Port_State = PCS_FAIL
+            ' C10: spia rossa (VB6 PCS_FAIL_COL = vbRed), non il colore di stop di FOC6.
             Select Case Ind
                 Case CNL_1_IN
-                    frmRicezioneInstance.SetLabelColor("LblConfCNL1in", PCS_STOP_COL)
+                    frmRicezioneInstance.SetLabelColor("LblConfCNL1in", Color.Red)
                 Case CNL_2_IN
-                    frmRicezioneInstance.SetLabelColor("LblConfCNL2in", PCS_STOP_COL)
+                    frmRicezioneInstance.SetLabelColor("LblConfCNL2in", Color.Red)
                 Case RX
-                    frmRicezioneInstance.SetLabelColor("LblConfCNL3in", PCS_STOP_COL)
+                    frmRicezioneInstance.SetLabelColor("LblConfCNL3in", Color.Red)
                 Case GRF
-                    frmRicezioneInstance.SetLabelColor("LblConfCNL4in", PCS_STOP_COL)
-                    ScriviAlarm("D/C Com Error", 1)
+                    frmRicezioneInstance.SetLabelColor("LblConfCNL4in", Color.Red)
+                    ScriviAlarm("GRF Com Error", 1)
                 Case INTELSAT
-                    frmRicezioneInstance.SetLabelColor("LblConfCNL5in", PCS_STOP_COL)
+                    frmRicezioneInstance.SetLabelColor("LblConfCNL5in", Color.Red)
                 Case PCU
+                    frmRicezioneInstance.SetLabelColor("LblConfCNL6in", Color.Red)
                     ScriviAlarm("PCU Com Error", 1)
-                Case LNA
-                    frmRicezioneInstance.SetLabelColor("LblConfCNL7in", PCS_STOP_COL)
-                Case SCU
-                    frmRicezioneInstance.SetLabelColor("LblConfCNL8in", PCS_STOP_COL)
             End Select
         End Try
 
@@ -589,14 +596,16 @@ Partial Public Class FrmMain
                     End If
                     g_IPDC = Port_Control(Ind).IPAdress
 
-                Case INTELSAT, PCU, LNA, SCU
-                    WriteError(0, "LanReset: canale " & Ind & " (INTELSAT/PCU/LNA/SCU) non ancora implementato")
+                ' INTELSAT (5) e PCU (6): nel VB6 di C10 LanReset non fa
+                ' nulla per questi canali (sono seriali).
 
             End Select
 
             If Ind = CNL_1_IN Or Ind = CNL_2_IN Or Ind = GRF Then
                 Dim timeout As Integer = 30000
-                If IsNumeric(Port_Control(Ind).Time_out) Then
+                If Ind = ACU AndAlso b_Parametri Then
+                    timeout = 900       ' VB6: lettura parametri ACU in corso
+                ElseIf IsNumeric(Port_Control(Ind).Time_out) Then
                     timeout = CInt(Port_Control(Ind).Time_out) * 1000
                 End If
                 frmRicezioneInstance.SetTimeoutInterval(Ind, timeout)
@@ -736,7 +745,7 @@ Partial Public Class FrmMain
                 If IsDate(OraACU) Then
                     Dim OraPc As Date = Now.AddHours(-i_OffsetOre)
                     Dim diffSec As Double = Math.Abs(DateDiff(DateInterval.Second, OraPc, OraACU))
-                    If diffSec > 3 And Not b_Parametri Then
+                    If diffSec > 10 And Not b_Parametri Then       ' C10: 10 s (FOC6: 3 s)
                         If Cont3 > 1800 Then
                             ScriviAlarm("Time ACU different", 1)
                             Cont3 = 0
@@ -745,6 +754,17 @@ Partial Public Class FrmMain
                         End If
                     Else
                         Cont3 = 0
+                    End If
+                    ' Controllo della data ACU (VB6: DatePc <> DateAcu, contatore Cont4)
+                    If OraPc.Date <> OraACU.Date And Not b_Parametri Then
+                        If Cont4 > 1800 Then
+                            ScriviAlarm("Time ACU different", 1)
+                            Cont4 = 0
+                        Else
+                            Cont4 += 1
+                        End If
+                    Else
+                        Cont4 = 0
                     End If
                 End If
             End If
@@ -772,11 +792,16 @@ Partial Public Class FrmMain
                             Dim dataCalc As Date = Now.AddHours(-i_OffsetOre).AddSeconds(DeltaTime)
                             d_DataInizioProg = ""
                             stpProgram.Text = d_DataInizioProg
-                            MilSecC = MilSec
-                            Calcolo_Coordinate(dataCalc, Now.Millisecond)
-                            b_Ricezione(ACU) = False
-                            b_int(ACU) = True
-                            Port_Control(Port).Rec_State = PCR_WAIT
+                            ' C10 (VB6): su seriale non si invia mentre una
+                            ' risposta ACU è in ricezione.
+                            Dim seriale As Boolean = Port_Control(ACU).Socket <> "Y" AndAlso Port_Control(ACU).Socket <> "S"
+                            If Not seriale OrElse Port_Control(ACU).Rec_State <> PCR_RECEIVE Then
+                                MilSecC = MilSec
+                                b_Ricezione(ACU) = False
+                                b_int(ACU) = True
+                                Calcolo_Coordinate(dataCalc, Now.Millisecond)
+                                If seriale Then Port_Control(ACU).Rec_State = PCR_WAIT
+                            End If
                         End If
                     End If
 
@@ -788,11 +813,14 @@ Partial Public Class FrmMain
                         MilSecA1 = MilSec - MilSecA
                     End If
                     If MilSecA1 >= i_Inter * 1000 Then
-                        If Not b_Parametri Then
-                            MilSecA = MilSec
+                        ' C10: nuova richiesta di stato solo se la precedente
+                        ' ha avuto risposta (evita interrogazioni sovrapposte).
+                        If Not b_Parametri AndAlso Not b_Ricezione(ACU) Then
                             b_Ricezione(ACU) = True
                             b_int(ACU) = True
                             InvioACU(Chr(STX) & "07*2F" & Chr(ETX))
+                            Port_Control(ACU).Rec_State = PCR_WAIT
+                            MilSecA = MilSec
                         End If
                     End If
             End Select
@@ -802,9 +830,9 @@ Partial Public Class FrmMain
                 If i_Cont > 1 Then i_Cont = 0
             End If
 
-            ' Interrogazione generatore di frequenza / Down Converter:
-            ' se b_down, segue la sequenza Stato/Volt-A/Volt-B (Contv) del
-            ' VB6 originale invece della semplice richiesta GRF di BTS1.
+            ' Interrogazione generatore di frequenza / Down Converter (C10):
+            ' richiesta frequenza; con la finestra D/C aperta (b_down) anche
+            ' le attenuazioni A e B a rotazione (Contv).
             Dim MilSecF1 As Long
             If MilSec < MilSecF Then
                 MilSecF1 = MilSec + MilOra - MilSecF
@@ -818,16 +846,16 @@ Partial Public Class FrmMain
                 If b_down Then
                     Select Case Contv
                         Case 0
-                            frmRicezioneInstance.CmdSTA()
+                            frmRicezioneInstance.CmdGRF()
                         Case 1
-                            frmRicezioneInstance.CmdVLT("A")
+                            FrmDownConverter.CmdATA()
                         Case 2
-                            frmRicezioneInstance.CmdVLT("B")
+                            FrmDownConverter.CmdATB()
                     End Select
                     Contv += 1
                     If Contv > 2 Then Contv = 0
                 Else
-                    FrmRicezione.InviaGRF()
+                    frmRicezioneInstance.CmdGRF()
                 End If
                 If frmRicezioneInstance IsNot Nothing Then
                     frmRicezioneInstance.TmrTimeoutMSG(GRF).Enabled = False
@@ -835,23 +863,21 @@ Partial Public Class FrmMain
                 End If
             End If
 
-            ' Interrogazione Polarizzatore Feed (PCU/SNMP): dormiente anche
-            ' nel VB6 originale (frmManager.CompileMibs/StartManager/
-            ' DoGetRequest sono commentate) — non portata qui, farà parte
-            ' del passaggio dedicato a frmManager/SharpSnmpLib.
-
-            ' Riabilitazione periodica LNA/SCU se non interrogati da M&C
-            If b_LNA Then
-                b_LNA = False
-                frmRicezioneInstance.CmdLNA()
-                frmRicezioneInstance.TmrTimeoutMSG(LNA).Enabled = False
-                frmRicezioneInstance.TmrTimeoutMSG(LNA).Enabled = True
+            ' Interrogazione polarizzatore (C10, seriale PCU): ogni i_InterPol s.
+            Dim MilSecP1 As Long
+            If MilSec < MilSecP Then
+                MilSecP1 = CLng(MilSec + MilOra - MilSecP)
+            Else
+                MilSecP1 = CLng(MilSec - MilSecP)
             End If
-            If b_SCU Then
-                b_SCU = False
-                frmRicezioneInstance.CmdSCU()
-                frmRicezioneInstance.TmrTimeoutMSG(SCU).Enabled = False
-                frmRicezioneInstance.TmrTimeoutMSG(SCU).Enabled = True
+            If MilSecP1 >= i_InterPol * 1000 Then
+                MilSecP = MilSec
+                b_Ricezione(PCU) = True
+                b_int(PCU) = True
+                If frmRicezioneInstance IsNot Nothing Then
+                    frmRicezioneInstance.CmdPol()
+                    frmRicezioneInstance.TmrTimeoutMSG(PCU).Enabled = True
+                End If
             End If
 
             Dim MilSecL1 As Long
