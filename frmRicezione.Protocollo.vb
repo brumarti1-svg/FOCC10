@@ -199,13 +199,6 @@ Partial Public Class FrmRicezione
     ' -------------------------------------------------------
 
     ''' <summary>
-    ''' Estrae i messaggi ACU dal buffer e li passa a ValoreCampoMAC (la
-    ''' routine di analisi reale, porting diretto dal VB6 Gestione.bas).
-    ''' Protocollo reale: testo a campi fissi terminato da ETX; gli ultimi 2
-    ''' caratteri prima di ETX sono un checksum (stesso "Left$(Buffer,
-    ''' Len(Buffer)-3)" del VB6, che tronca checksum+ETX = 3 caratteri).
-    ''' </summary>
-    ''' <summary>
     ''' VerDatiMAC (VB6 C10): la lunghezza dichiarata (pos 2-5) deve
     ''' coincidere con quella del frame e il checksum (XOR di tutti i
     ''' caratteri da STX all'ultimo dato, in esadecimale) con quello ricevuto.
@@ -220,8 +213,49 @@ Partial Public Class FrmRicezione
         Return (cks And &HFF) = CInt(Val("&H" & Mid$(frame, frame.Length - 2, 2)))
     End Function
 
+    ''' <summary>
+    ''' ACK/NAK singoli dall'ACU (VB6 ProtMAC, Case 6/21): confermano o
+    ''' rifiutano l'ultimo comando. Liberano la richiesta in corso (i_Cont
+    ''' 2 -> 1, canale in standby); con ACK e nessuna risposta attesa la
+    ''' spia ACU torna verde. Se il comando era un ordine MCS (b_int(ACU)
+    ''' = False) ACK/NAK vengono inoltrati all'MCS. Senza questa gestione,
+    ''' dopo un ordine MCS i_Cont restava 2 e il polling si fermava. I
+    ''' caratteri 6/21 non compaiono mai dentro un frame (dati e checksum
+    ''' sono ASCII stampabili), quindi vengono tolti dal buffer.
+    ''' </summary>
+    Private Sub GestisciAckNakACU(ByRef buffer As String)
+        If buffer.IndexOf(ACK) < 0 AndAlso buffer.IndexOf(NAK) < 0 Then Return
+        For Each c As Char In buffer
+            If c = ACK Then
+                Port_Control(ACU).CKS_Error = 0
+                If Not b_Ricezione(ACU) Then
+                    If i_Cont = 2 Then i_Cont = 1
+                    Port_Control(ACU).Rec_State = PCR_STANDBY
+                    Port_Control(ACU).Port_State = PCS_OK
+                    ImpostaIndicatoreCanale(LblConfCNL1in, PCS_OK)
+                    TmrTimeoutMSG(ACU).Enabled = False
+                Else
+                    Port_Control(ACU).Rec_State = PCR_RECEIVE
+                End If
+                If Not b_int(ACU) Then Invio(ACK, MAC)
+            ElseIf c = NAK Then
+                b_Ricezione(ACU) = False
+                Port_Control(ACU).Rec_State = PCR_STANDBY
+                If i_Cont = 2 Then i_Cont = 1
+                If Not b_int(ACU) Then Invio(NAK, MAC)
+                TmrTimeoutMSG(ACU).Enabled = False
+            End If
+        Next
+        buffer = buffer.Replace(CStr(ACK), "").Replace(CStr(NAK), "")
+    End Sub
+
+    ''' <summary>
+    ''' Estrae i frame ACU dal buffer, li verifica (VerDatiMAC) e li passa a
+    ''' ValoreCampoMAC (porting dal VB6 di C10).
+    ''' </summary>
     Private Sub AnalisiACUReale(Ind As Integer, ByRef buffer As String)
         Try
+            GestisciAckNakACU(buffer)
             Do While buffer.Contains(ETX)
                 Dim posEtx As Integer = buffer.IndexOf(ETX)
                 ' C10 (VB6 frmRicezione/VerDatiMAC): frame = STX + lunghezza
@@ -245,6 +279,13 @@ Partial Public Class FrmRicezione
                 Port_Control(ACU).CKS_Error = 0
                 b_Ricezione(ACU) = False
                 ScriviLOG1(Mid$(frame, 6, frame.Length - 8), 1)
+                ' Ultimo stato ACU completo, rilanciato all'MCS sulla sua
+                ' richiesta "*" (VB6: BuffStatus = Buffer). Prima non veniva
+                ' mai valorizzato e l'MCS riceveva sempre NAK.
+                If Mid$(frame, 6, 1) = "*" Then BuffStatus = frame
+                ' VB6: con un ordine MCS in corso il parser riceve il frame
+                ' completo (checksum + ETX), che inoltra così com'è all'MCS.
+                If b_MCS Then messaggio = frame
 
                 If messaggio.Length > 0 Then
                     ValoreCampoMAC(messaggio)
@@ -387,12 +428,15 @@ Partial Public Class FrmRicezione
                                 daInviare = CheckSum(daInviare)
                             End If
                             Invio(daInviare, Ind)
+                            BuffStatus = ""
                         Else
+                            ' VB6: NAK e riapertura del canale ACU (prima
+                            ' veniva riaperto il canale MCS)
                             Invio(NAK, Ind)
-                            If Port_Control(Ind).Socket <> "S" Then
-                                FrmMain.PortReset(Ind)
+                            If Port_Control(ACU).Socket <> "S" Then
+                                FrmMain.PortReset(ACU)
                             Else
-                                FrmMain.LanResetAsync(Ind)
+                                FrmMain.LanResetAsync(ACU)
                             End If
                         End If
 
