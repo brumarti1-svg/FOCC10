@@ -110,6 +110,8 @@ Partial Public Class FrmMain
         ' C10: ACU (e PCU/INTELSAT) su seriale — InvioACU della libreria
         ' comune scrive sulla porta tramite questo aggancio.
         InvioSerialeHook = AddressOf ScriviSeriale
+        ' Voci delle barre di menu con bordo fisso, in tutti i form.
+        MenuConBordo.ApplicaATutti()
         ' Simulazione ACU: esiste solo nella configurazione di build
         ' "Simulazione" (sviluppo senza hardware). Nella versione operativa
         ' (Debug/Release) il codice non viene compilato e il flag resta False,
