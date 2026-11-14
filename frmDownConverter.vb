@@ -21,7 +21,6 @@ Public Class FrmDownConverter
     End Sub
 
     Private Sub frmDownConverter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        MenuConBordo.Applica(MnuDown)
         LblFreq.Text = ""
         LblAtt1.Text = ""
         LblAtt2.Text = ""
