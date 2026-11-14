@@ -1795,12 +1795,14 @@ ErrLoad2:
     Private Sub MnuMainPolar_Click(sender As Object, e As EventArgs) Handles MnuTraceOrbit.Click
         g_GrafPol = False
         FrmPolare.Show()
+        FrmPolare.Activate()   ' se era già aperta: in primo piano, Activated rilegge g_GrafPol
     End Sub
 
     ' --- Menu Ephemeris Orbit > Polar (grafico polare storico da archivio) ---
     Private Sub MnuOrbitPolar_Click(sender As Object, e As EventArgs) Handles MnuOrbitPolar.Click
         g_GrafPol = True
         FrmPolare.Show()
+        FrmPolare.Activate()   ' se era già aperta: in primo piano, Activated rilegge g_GrafPol
     End Sub
 
     ' --- Menu Ephemeris Orbit > Cartesian Axis (grafico storico Azimuth/Elevazione) ---
