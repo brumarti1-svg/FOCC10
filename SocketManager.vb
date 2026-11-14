@@ -102,7 +102,8 @@ Public Module SocketManager
 
     Public Function IsConnected(ind As Integer) As Boolean
         Try
-            Return _main(ind) IsNot Nothing AndAlso _main(ind).Connected
+            Dim c As Net.Sockets.TcpClient = _main(ind)   ' vedi IsRXConnected
+            Return c IsNot Nothing AndAlso c.Client IsNot Nothing AndAlso c.Connected
         Catch
             Return False
         End Try
@@ -212,7 +213,8 @@ Public Module SocketManager
 
     Public Function IsMacConnected(ind As Integer) As Boolean
         Try
-            Return _mac(ind) IsNot Nothing AndAlso _mac(ind).Connected
+            Dim c As Net.Sockets.TcpClient = _mac(ind)   ' vedi IsRXConnected
+            Return c IsNot Nothing AndAlso c.Client IsNot Nothing AndAlso c.Connected
         Catch
             Return False
         End Try
@@ -317,7 +319,11 @@ Public Module SocketManager
 
     Public Function IsRXConnected(ind As Integer) As Boolean
         Try
-            Return _rx(ind) IsNot Nothing AndAlso _rx(ind).Connected
+            ' Copia locale: _rx(ind) può essere azzerato da ConnectRX su un altro
+            ' thread. Dopo Close() TcpClient.Client è Nothing e .Connected lancia
+            ' NullReferenceException (intercettata, ma fermava il debugger).
+            Dim c As Net.Sockets.TcpClient = _rx(ind)
+            Return c IsNot Nothing AndAlso c.Client IsNot Nothing AndAlso c.Connected
         Catch
             Return False
         End Try
@@ -442,7 +448,8 @@ Public Module SocketManager
 
     Public Function IsDCConnected(ind As Integer) As Boolean
         Try
-            Return _dc(ind) IsNot Nothing AndAlso _dc(ind).Connected
+            Dim c As Net.Sockets.TcpClient = _dc(ind)   ' vedi IsRXConnected
+            Return c IsNot Nothing AndAlso c.Client IsNot Nothing AndAlso c.Connected
         Catch
             Return False
         End Try
