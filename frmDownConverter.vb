@@ -59,8 +59,10 @@ Public Class FrmDownConverter
     Private Sub TxtAtt1_KeyUp(sender As Object, e As KeyEventArgs) Handles TxtAtt1.KeyUp
         Dim Valore As String
         If e.KeyCode = Keys.Return Then
-            If CDbl(TxtAtt1.Text) >= 0 And CDbl(TxtAtt1.Text) <= 30 Then
-                Valore = Format$(CDbl(TxtAtt1.Text) * 10, "000")
+            ' Prima CDbl(.Text): eccezione con campo vuoto o non numerico.
+            Dim v As Double
+            If LeggiDecimale(TxtAtt1.Text, v) AndAlso v >= 0 AndAlso v <= 30 Then
+                Valore = Format$(v * 10, "000")
                 b_int(GRF) = True
                 b_Ricezione(GRF) = True
                 Send_GRF = CheckDC("{" & Chr(AddressDC) & "TA" & Valore & "}")
@@ -73,8 +75,10 @@ Public Class FrmDownConverter
     Private Sub TxtAtt2_KeyUp(sender As Object, e As KeyEventArgs) Handles TxtAtt2.KeyUp
         Dim Valore As String
         If e.KeyCode = Keys.Return Then
-            If CDbl(TxtAtt2.Text) >= 0 And CDbl(TxtAtt2.Text) <= 30 Then
-                Valore = Format$(CDbl(TxtAtt2.Text) * 10, "000")
+            ' Prima CDbl(.Text): eccezione con campo vuoto o non numerico.
+            Dim v As Double
+            If LeggiDecimale(TxtAtt2.Text, v) AndAlso v >= 0 AndAlso v <= 30 Then
+                Valore = Format$(v * 10, "000")
                 b_int(GRF) = True
                 b_Ricezione(GRF) = True
                 Send_GRF = CheckDC("{" & Chr(AddressDC) & "TB" & Valore & "}")
