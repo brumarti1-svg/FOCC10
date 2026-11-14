@@ -45,6 +45,9 @@ Partial Class FrmDownConverter
         Me.MnuDown.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuClose})
         Me.MnuDown.Location = New System.Drawing.Point(0, 0)
         Me.MnuDown.Name = "MnuDown"
+        ' Barra di menu piatta in stile Windows classico, come nel VB6:
+        ' con il renderer predefinito "Exit" sembrava un pulsante.
+        Me.MnuDown.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.MnuDown.Size = New System.Drawing.Size(342, 24)
         Me.MnuDown.TabIndex = 1
         '
