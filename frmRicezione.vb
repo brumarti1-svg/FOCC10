@@ -128,6 +128,14 @@ Partial Public Class FrmRicezione
             If tmr Is Nothing OrElse TmrTimeoutMSG Is Nothing Then Exit Sub
             Dim Index As Integer = Array.IndexOf(TmrTimeoutMSG, tmr)
             If Index < 1 OrElse Index > NumCom Then Exit Sub
+#If SIMULAZIONE Then
+            ' ACU simulata: i frame li inietta FrmMain.TmrOrologio_Tick circa ogni
+            ' 0.5-0.7 s, più del TimeOut di [Canale1] (0.2 s su C10, 0.4 su FOC6,
+            ' tarato sulla risposta dell'ACU vera al polling). Il timeout scattava
+            ' tra un frame e l'altro e rimetteva il canale in STOP/FAIL: Spiral
+            ' Acquire segnalava "ACU non in linea" ogni pochi secondi.
+            If Index = ACU Then Exit Sub
+#End If
 
             Dim spie As Label() = {Nothing, LblConfCNL1in, LblConfCNL2in, LblConfCNL3in, LblConfCNL4in, LblConfCNL5in, LblConfCNL6in}
             Dim seriale As Boolean = Port_Control(Index).Socket <> "S"
