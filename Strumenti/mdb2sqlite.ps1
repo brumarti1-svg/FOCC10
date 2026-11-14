@@ -1,7 +1,7 @@
-# Converte un Orbite.mdb (Access/Jet) in Orbite.db (SQLite) con lo schema
+﻿# Converte un Orbite.mdb (Access/Jet) in Orbite.db (SQLite) con lo schema
 # di un Orbite.db di riferimento (es. quello di FOC6). Non serve Access.
 # Va eseguito con PowerShell a 32 bit, perché i driver Jet/ACE sono a 32 bit:
-#   %WINDIR%SysWOW64WindowsPowerShell1.0powershell.exe -ExecutionPolicy Bypass -File mdb2sqlite.ps1 `
+#   %WINDIR%\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File mdb2sqlite.ps1 `
 #     -Mdb <Orbite.mdb> -SchemaDb <Orbite.db di riferimento> -OutDb <nuovo Orbite.db> -BinDir <cartella con System.Data.SQLite.dll>
 # Formati: date gg/mm/aaaa hh:mm[:ss], ore hh:mm, numeri REAL, Fasi.Ultima 0/1,
 # altri booleani True/False, Satelliti.Verso = FALSO (colonna assente negli mdb).
