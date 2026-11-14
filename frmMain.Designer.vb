@@ -104,7 +104,7 @@ Partial Class FrmMain
         Me.Controls.Add(Me.StbMain1)
         Me.IsMdiContainer = True
         Me.Name = "FrmMain"
-        Me.Text = "Interfaccia Grafica FOC-6"
+        Me.Text = "Interfaccia Grafica C-10"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.StbMain1.ResumeLayout(False)
         Me.StbMain1.PerformLayout()
