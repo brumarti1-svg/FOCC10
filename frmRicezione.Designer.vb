@@ -287,7 +287,7 @@ Partial Public Class FrmRicezione
         Me.MenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1339, 28)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1339, 52)
         Me.MenuStrip1.TabIndex = 0
         '
         'MnuFile
@@ -300,26 +300,26 @@ Partial Public Class FrmRicezione
         'MnuConfiguration
         '
         Me.MnuConfiguration.Name = "MnuConfiguration"
-        Me.MnuConfiguration.Size = New System.Drawing.Size(183, 26)
+        Me.MnuConfiguration.Size = New System.Drawing.Size(224, 26)
         Me.MnuConfiguration.Text = "Configuration"
         '
         'MnuPrint
         '
         Me.MnuPrint.Enabled = False
         Me.MnuPrint.Name = "MnuPrint"
-        Me.MnuPrint.Size = New System.Drawing.Size(183, 26)
+        Me.MnuPrint.Size = New System.Drawing.Size(224, 26)
         Me.MnuPrint.Text = "Print"
         '
         'MnuBell
         '
         Me.MnuBell.Name = "MnuBell"
-        Me.MnuBell.Size = New System.Drawing.Size(183, 26)
+        Me.MnuBell.Size = New System.Drawing.Size(224, 26)
         Me.MnuBell.Text = "Bell"
         '
         'MnuExit
         '
         Me.MnuExit.Name = "MnuExit"
-        Me.MnuExit.Size = New System.Drawing.Size(183, 26)
+        Me.MnuExit.Size = New System.Drawing.Size(224, 26)
         Me.MnuExit.Text = "Exit"
         '
         'MnuACU
@@ -582,7 +582,6 @@ Partial Public Class FrmRicezione
         Me.MnuParameterACU.Name = "MnuParameterACU"
         Me.MnuParameterACU.Size = New System.Drawing.Size(123, 24)
         Me.MnuParameterACU.Text = "Parameter ACU"
-        Me.MnuParameterACU.Visible = False
         '
         'MnuParameterArchive
         '
@@ -651,9 +650,9 @@ Partial Public Class FrmRicezione
         'MenuStrip2
         '
         Me.MenuStrip2.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.MenuStrip2.Location = New System.Drawing.Point(0, 28)
+        Me.MenuStrip2.Location = New System.Drawing.Point(0, 52)
         Me.MenuStrip2.Name = "MenuStrip2"
-        Me.MenuStrip2.Size = New System.Drawing.Size(1339, 28)
+        Me.MenuStrip2.Size = New System.Drawing.Size(1339, 24)
         Me.MenuStrip2.TabIndex = 1
         '
         'pnlHeaders
@@ -1433,10 +1432,6 @@ Partial Public Class FrmRicezione
         Me.LblConfCNL6in.Text = "POL"
         Me.LblConfCNL6in.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        '
-        '
-        '
-        '
         'Manager1
         '
         Me.Manager1.Location = New System.Drawing.Point(731, 713)
@@ -1445,8 +1440,6 @@ Partial Public Class FrmRicezione
         Me.Manager1.TabIndex = 58
         Me.Manager1.TabStop = False
         Me.Manager1.Visible = False
-        '
-        '
         '
         'CmdSum
         '
@@ -1494,7 +1487,7 @@ Partial Public Class FrmRicezione
         Me.LblWarning.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblWarning.Location = New System.Drawing.Point(550, 568)
         Me.LblWarning.Name = "LblWarning"
-        Me.LblWarning.Size = New System.Drawing.Size(212, 27)
+        Me.LblWarning.Size = New System.Drawing.Size(390, 27)
         Me.LblWarning.TabIndex = 27
         Me.LblWarning.Visible = False
         '
