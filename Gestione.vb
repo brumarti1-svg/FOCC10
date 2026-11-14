@@ -171,6 +171,16 @@ Module Gestione
     ''' </summary>
     Public Function ScriviSeriale(Ind As Integer, s_send As String) As Boolean
         Try
+#If SIMULAZIONE Then
+            ' Simulazione: senza porta ACU reale il comando va all'ACU simulata
+            ' (frame iniettati da FrmMain.TmrOrologio_Tick). Prima PortReset
+            ' falliva e rimetteva il canale in PCS_FAIL a ogni comando: lo Spiral
+            ' Acquire si fermava con "ACU non in linea" a ogni passo.
+            If Ind = ACU AndAlso (ComPort(Ind) Is Nothing OrElse Not ComPort(Ind).IsOpen) Then
+                Port_Control(Ind).Rec_State = PCR_WAIT
+                Return True
+            End If
+#End If
             If ComPort(Ind) Is Nothing OrElse Not ComPort(Ind).IsOpen Then
                 FrmMain.PortReset(Ind)
             End If
