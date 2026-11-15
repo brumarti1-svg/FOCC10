@@ -219,6 +219,7 @@ Partial Class FrmLog
         '
         'TmrAggiorna
         '
+        Me.TmrAggiorna.Enabled = True
         Me.TmrAggiorna.Interval = 1000
         '
         'TmrAlarm
