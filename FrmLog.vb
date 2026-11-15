@@ -37,6 +37,11 @@ Partial Public Class FrmLog
     End Sub
 
     Private Sub FrmLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Soglie Auto Track e offset massimo (Form_Load del VB6).
+        TxtSogliaAuto.Text = CStr(g_ThrAuto)
+        TxtThrAz.Text = CStr(g_ThrAz)
+        TxtThrEl.Text = CStr(g_ThrEl)
+        TxtOffsetMax.Text = CStr(Max_Offset)
         AggiornaGriglia()
     End Sub
 

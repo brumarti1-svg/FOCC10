@@ -140,10 +140,10 @@ Partial Public Class FrmRicezione
         ' Sum.Alarm — porting diretto da VB6 (frmRicezione.frm:6571), mai
         ' collegato in .NET: restava sempre col colore di default del
         ' Designer (giallo), indipendentemente dallo stato reale.
-        ' CmdSum (il bottone che apre FrmLog) ha sostituito l'indicatore
-        ' passivo LblSumAlarm_ctrl (ora nascosto): è lui a colorarsi.
-        If CmdSum IsNot Nothing Then
-            CmdSum.BackColor = If((vBytesold(1) And BIT5) = BIT5, COL_FAIL, COL_OK)
+        ' Come nel VB6 si colora l'indicatore LblSumAlarm_ctrl (lblSumAlarm);
+        ' CmdSum resta un normale bottone grigio che apre FrmLog.
+        If LblSumAlarm_ctrl IsNot Nothing Then
+            LblSumAlarm_ctrl.BackColor = If((vBytesold(1) And BIT5) = BIT5, COL_FAIL, COL_OK)
         End If
 
         ' Back-up Auto Track (riquadri in basso a destra).

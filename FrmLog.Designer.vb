@@ -1004,7 +1004,6 @@ Partial Class FrmLog
         Me.LblAzStow.Name = "LblAzStow"
         Me.LblAzStow.Size = New System.Drawing.Size(75, 18)
         Me.LblAzStow.TabIndex = 36
-        Me.LblAzStow.Visible = False
         '
         'LblAzAligned
         '
@@ -1013,7 +1012,6 @@ Partial Class FrmLog
         Me.LblAzAligned.Name = "LblAzAligned"
         Me.LblAzAligned.Size = New System.Drawing.Size(63, 18)
         Me.LblAzAligned.TabIndex = 37
-        Me.LblAzAligned.Visible = False
         '
         'LblElStow
         '
@@ -1022,7 +1020,6 @@ Partial Class FrmLog
         Me.LblElStow.Name = "LblElStow"
         Me.LblElStow.Size = New System.Drawing.Size(75, 18)
         Me.LblElStow.TabIndex = 38
-        Me.LblElStow.Visible = False
         '
         'LblElAligned
         '
@@ -1031,7 +1028,6 @@ Partial Class FrmLog
         Me.LblElAligned.Name = "LblElAligned"
         Me.LblElAligned.Size = New System.Drawing.Size(63, 18)
         Me.LblElAligned.TabIndex = 39
-        Me.LblElAligned.Visible = False
         '
         'LblElHand
         '
@@ -1040,7 +1036,6 @@ Partial Class FrmLog
         Me.LblElHand.Name = "LblElHand"
         Me.LblElHand.Size = New System.Drawing.Size(40, 18)
         Me.LblElHand.TabIndex = 40
-        Me.LblElHand.Visible = False
         '
         'PnlPol
         '
@@ -1782,6 +1777,7 @@ Partial Class FrmLog
         Me.TxtFrequency.BackColor = System.Drawing.SystemColors.Control
         Me.TxtFrequency.Location = New System.Drawing.Point(938, 557)
         Me.TxtFrequency.Name = "TxtFrequency"
+        Me.TxtFrequency.Visible = False
         Me.TxtFrequency.ReadOnly = True
         Me.TxtFrequency.Size = New System.Drawing.Size(80, 22)
         Me.TxtFrequency.TabIndex = 32
@@ -1791,6 +1787,7 @@ Partial Class FrmLog
         Me.TxtPowerOut.BackColor = System.Drawing.SystemColors.Control
         Me.TxtPowerOut.Location = New System.Drawing.Point(938, 616)
         Me.TxtPowerOut.Name = "TxtPowerOut"
+        Me.TxtPowerOut.Visible = False
         Me.TxtPowerOut.ReadOnly = True
         Me.TxtPowerOut.Size = New System.Drawing.Size(80, 22)
         Me.TxtPowerOut.TabIndex = 33
@@ -1888,6 +1885,7 @@ Partial Class FrmLog
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(841, 563)
         Me.Label4.Name = "Label4"
+        Me.Label4.Visible = False
         Me.Label4.Size = New System.Drawing.Size(92, 16)
         Me.Label4.TabIndex = 42
         Me.Label4.Text = "Frequency out"
@@ -1897,6 +1895,7 @@ Partial Class FrmLog
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(841, 615)
         Me.Label5.Name = "Label5"
+        Me.Label5.Visible = False
         Me.Label5.Size = New System.Drawing.Size(68, 16)
         Me.Label5.TabIndex = 43
         Me.Label5.Text = "Power Out"
