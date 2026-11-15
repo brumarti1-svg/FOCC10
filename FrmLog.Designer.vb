@@ -1904,6 +1904,7 @@ Partial Class FrmLog
         '
         Me.Label6.Location = New System.Drawing.Point(1020, 561)
         Me.Label6.Name = "Label6"
+        Me.Label6.Visible = False
         Me.Label6.Size = New System.Drawing.Size(42, 16)
         Me.Label6.TabIndex = 44
         Me.Label6.Text = "MHz"
@@ -1912,6 +1913,7 @@ Partial Class FrmLog
         '
         Me.Label7.Location = New System.Drawing.Point(1024, 619)
         Me.Label7.Name = "Label7"
+        Me.Label7.Visible = False
         Me.Label7.Size = New System.Drawing.Size(38, 16)
         Me.Label7.TabIndex = 45
         Me.Label7.Text = "dBm"
