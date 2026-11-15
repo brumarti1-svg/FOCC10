@@ -1270,7 +1270,7 @@ ExitProgTrack:
             If Port_Control(ACU).Port_State <> PCS_OK Then
                 ' Prima il tick veniva saltato in silenzio: la ricerca
                 ' restava ferma senza alcuna indicazione per l'operatore.
-                SegnalaAcquireNonPossibile("ACU non in linea (nessuna telemetria valida ricevuta)")
+                SegnalaAcquireNonPossibile("ACU offline (no valid telemetry received)")
             ElseIf Port_Control(ACU).Rec_State <> PCR_RECEIVE Then
                 ' (Rec_State = PCR_RECEIVE: messaggio in arrivo, si rinvia
                 ' al tick successivo - non è una condizione d'errore.)
