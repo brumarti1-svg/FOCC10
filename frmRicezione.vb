@@ -1625,6 +1625,7 @@ Proiez:
             CmbBcnFreq.Text = Format(Val(g_Frequenza), "#0000.000")
         End If
         InvioRic()
+        g_SatelliteCaricato = s_Satellite   ' caricamento completato: Trace Orbit riparte da zero
         PredisponiAcquisizione()
         TxtOrdini.Focus()
 
@@ -1673,6 +1674,7 @@ ErrLoad2:
                 Algoritmo = 4
                 b_Calcola = True
                 ScriviFileIni("Default", "Satellite", s_Satellite)
+                g_SatelliteCaricato = s_Satellite
                 LblSatellite.BackColor = Color.LightGreen
                 rs_Sel.Close()
                 Return True
