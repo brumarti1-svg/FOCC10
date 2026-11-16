@@ -118,6 +118,7 @@ Partial Class FrmDownConverter
         Me.LblAtt1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAtt1.Font = New System.Drawing.Font("Arial", 12.0!)
         Me.LblAtt1.Location = New System.Drawing.Point(180, 51)
+        Me.LblAtt1.BackColor = System.Drawing.Color.Yellow
         Me.LblAtt1.Name = "LblAtt1"
         Me.LblAtt1.Size = New System.Drawing.Size(90, 25)
         Me.LblAtt1.TabIndex = 11
@@ -128,6 +129,7 @@ Partial Class FrmDownConverter
         Me.LblFreq.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblFreq.Font = New System.Drawing.Font("Arial", 12.0!)
         Me.LblFreq.Location = New System.Drawing.Point(180, 17)
+        Me.LblFreq.BackColor = System.Drawing.Color.Yellow
         Me.LblFreq.Name = "LblFreq"
         Me.LblFreq.Size = New System.Drawing.Size(90, 25)
         Me.LblFreq.TabIndex = 12
@@ -165,6 +167,7 @@ Partial Class FrmDownConverter
         Me.LblAtt2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAtt2.Font = New System.Drawing.Font("Arial", 12.0!)
         Me.LblAtt2.Location = New System.Drawing.Point(180, 89)
+        Me.LblAtt2.BackColor = System.Drawing.Color.Yellow
         Me.LblAtt2.Name = "LblAtt2"
         Me.LblAtt2.Size = New System.Drawing.Size(90, 25)
         Me.LblAtt2.TabIndex = 16

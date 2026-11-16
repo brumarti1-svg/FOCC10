@@ -232,7 +232,7 @@ Partial Class FrmLog
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuFile, Me.MnuACU, Me.MnuGraphic, Me.MnuAntenna, Me.MnuSatelliteMenu, Me.MnuEphemeris, Me.MnuParameterTable, Me.MnuParameterACU, Me.MnuParameterArchive, Me.MnuPhase, Me.MnuInfo})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1339, 30)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1339, 28)
         Me.MenuStrip1.TabIndex = 0
         '
         'MnuFile
@@ -519,7 +519,7 @@ Partial Class FrmLog
         '
         'TxtMode
         '
-        Me.TxtMode.BackColor = System.Drawing.Color.Cyan
+        Me.TxtMode.BackColor = System.Drawing.Color.Yellow
         Me.TxtMode.Location = New System.Drawing.Point(151, 83)
         Me.TxtMode.Name = "TxtMode"
         Me.TxtMode.ReadOnly = True
@@ -538,7 +538,7 @@ Partial Class FrmLog
         '
         'LblCommand
         '
-        Me.LblCommand.BackColor = System.Drawing.SystemColors.Control
+        Me.LblCommand.BackColor = System.Drawing.Color.Yellow
         Me.LblCommand.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblCommand.Location = New System.Drawing.Point(576, 90)
         Me.LblCommand.Name = "LblCommand"
@@ -558,7 +558,7 @@ Partial Class FrmLog
         '
         'LblSatellite
         '
-        Me.LblSatellite.BackColor = System.Drawing.Color.White
+        Me.LblSatellite.BackColor = System.Drawing.Color.Yellow
         Me.LblSatellite.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblSatellite.Font = New System.Drawing.Font("Arial", 10.2!, System.Drawing.FontStyle.Bold)
         Me.LblSatellite.ForeColor = System.Drawing.Color.Green
@@ -580,7 +580,7 @@ Partial Class FrmLog
         '
         'LblSumAlarm
         '
-        Me.LblSumAlarm.BackColor = System.Drawing.Color.Red
+        Me.LblSumAlarm.BackColor = System.Drawing.Color.Yellow
         Me.LblSumAlarm.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblSumAlarm.Location = New System.Drawing.Point(1222, 34)
         Me.LblSumAlarm.Name = "LblSumAlarm"
@@ -748,37 +748,41 @@ Partial Class FrmLog
         '
         'TxtAz
         '
-        Me.TxtAz.BackColor = System.Drawing.Color.Cyan
+        Me.TxtAz.BackColor = System.Drawing.Color.Yellow
         Me.TxtAz.Location = New System.Drawing.Point(65, 26)
         Me.TxtAz.Name = "TxtAz"
+        Me.TxtAz.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtAz.ReadOnly = True
         Me.TxtAz.Size = New System.Drawing.Size(82, 22)
         Me.TxtAz.TabIndex = 11
         '
         'LblAzimuth
         '
-        Me.LblAzimuth.BackColor = System.Drawing.Color.Cyan
+        Me.LblAzimuth.BackColor = System.Drawing.Color.Yellow
         Me.LblAzimuth.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAzimuth.Location = New System.Drawing.Point(153, 26)
         Me.LblAzimuth.Name = "LblAzimuth"
+        Me.LblAzimuth.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.LblAzimuth.Size = New System.Drawing.Size(90, 22)
         Me.LblAzimuth.TabIndex = 12
         '
         'LblAzError
         '
-        Me.LblAzError.BackColor = System.Drawing.Color.Cyan
+        Me.LblAzError.BackColor = System.Drawing.Color.Yellow
         Me.LblAzError.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAzError.Location = New System.Drawing.Point(248, 26)
         Me.LblAzError.Name = "LblAzError"
+        Me.LblAzError.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.LblAzError.Size = New System.Drawing.Size(73, 22)
         Me.LblAzError.TabIndex = 13
         '
         'LblAzSpeed
         '
-        Me.LblAzSpeed.BackColor = System.Drawing.Color.Cyan
+        Me.LblAzSpeed.BackColor = System.Drawing.Color.Yellow
         Me.LblAzSpeed.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAzSpeed.Location = New System.Drawing.Point(326, 26)
         Me.LblAzSpeed.Name = "LblAzSpeed"
+        Me.LblAzSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.LblAzSpeed.Size = New System.Drawing.Size(49, 22)
         Me.LblAzSpeed.TabIndex = 14
         '
@@ -792,7 +796,7 @@ Partial Class FrmLog
         '
         'LblAllarme1
         '
-        Me.LblAllarme1.BackColor = System.Drawing.Color.LimeGreen
+        Me.LblAllarme1.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme1.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme1.Location = New System.Drawing.Point(456, 23)
@@ -803,7 +807,7 @@ Partial Class FrmLog
         '
         'LblAllarme2
         '
-        Me.LblAllarme2.BackColor = System.Drawing.Color.LimeGreen
+        Me.LblAllarme2.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme2.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme2.Location = New System.Drawing.Point(511, 23)
@@ -814,7 +818,7 @@ Partial Class FrmLog
         '
         'LblAllarme3
         '
-        Me.LblAllarme3.BackColor = System.Drawing.Color.LimeGreen
+        Me.LblAllarme3.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme3.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme3.Location = New System.Drawing.Point(612, 23)
@@ -826,7 +830,7 @@ Partial Class FrmLog
         '
         'LblAllarme4
         '
-        Me.LblAllarme4.BackColor = System.Drawing.Color.LimeGreen
+        Me.LblAllarme4.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme4.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme4.Location = New System.Drawing.Point(653, 23)
@@ -838,7 +842,7 @@ Partial Class FrmLog
         '
         'LblAzTBrk
         '
-        Me.LblAzTBrk.BackColor = System.Drawing.Color.Cyan
+        Me.LblAzTBrk.BackColor = System.Drawing.Color.Yellow
         Me.LblAzTBrk.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAzTBrk.Location = New System.Drawing.Point(975, 29)
         Me.LblAzTBrk.Name = "LblAzTBrk"
@@ -847,7 +851,7 @@ Partial Class FrmLog
         '
         'LblAzMaFault
         '
-        Me.LblAzMaFault.BackColor = System.Drawing.Color.Red
+        Me.LblAzMaFault.BackColor = System.Drawing.Color.Yellow
         Me.LblAzMaFault.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAzMaFault.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAzMaFault.Location = New System.Drawing.Point(1071, 29)
@@ -858,7 +862,7 @@ Partial Class FrmLog
         '
         'LblAzMiFault
         '
-        Me.LblAzMiFault.BackColor = System.Drawing.Color.Red
+        Me.LblAzMiFault.BackColor = System.Drawing.Color.Yellow
         Me.LblAzMiFault.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAzMiFault.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAzMiFault.Location = New System.Drawing.Point(1133, 29)
@@ -878,37 +882,41 @@ Partial Class FrmLog
         '
         'TxtEl
         '
-        Me.TxtEl.BackColor = System.Drawing.Color.Cyan
+        Me.TxtEl.BackColor = System.Drawing.Color.Yellow
         Me.TxtEl.Location = New System.Drawing.Point(65, 62)
         Me.TxtEl.Name = "TxtEl"
+        Me.TxtEl.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtEl.ReadOnly = True
         Me.TxtEl.Size = New System.Drawing.Size(82, 22)
         Me.TxtEl.TabIndex = 24
         '
         'LblElevazione
         '
-        Me.LblElevazione.BackColor = System.Drawing.Color.Cyan
+        Me.LblElevazione.BackColor = System.Drawing.Color.Yellow
         Me.LblElevazione.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblElevazione.Location = New System.Drawing.Point(153, 62)
         Me.LblElevazione.Name = "LblElevazione"
+        Me.LblElevazione.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.LblElevazione.Size = New System.Drawing.Size(90, 22)
         Me.LblElevazione.TabIndex = 25
         '
         'LblElError
         '
-        Me.LblElError.BackColor = System.Drawing.Color.Cyan
+        Me.LblElError.BackColor = System.Drawing.Color.Yellow
         Me.LblElError.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblElError.Location = New System.Drawing.Point(248, 62)
         Me.LblElError.Name = "LblElError"
+        Me.LblElError.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.LblElError.Size = New System.Drawing.Size(73, 22)
         Me.LblElError.TabIndex = 26
         '
         'LblElSpeed
         '
-        Me.LblElSpeed.BackColor = System.Drawing.Color.Cyan
+        Me.LblElSpeed.BackColor = System.Drawing.Color.Yellow
         Me.LblElSpeed.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblElSpeed.Location = New System.Drawing.Point(326, 62)
         Me.LblElSpeed.Name = "LblElSpeed"
+        Me.LblElSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.LblElSpeed.Size = New System.Drawing.Size(49, 22)
         Me.LblElSpeed.TabIndex = 27
         '
@@ -922,7 +930,7 @@ Partial Class FrmLog
         '
         'LblAllarme5
         '
-        Me.LblAllarme5.BackColor = System.Drawing.Color.LimeGreen
+        Me.LblAllarme5.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme5.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme5.Location = New System.Drawing.Point(456, 59)
@@ -933,7 +941,7 @@ Partial Class FrmLog
         '
         'LblAllarme6
         '
-        Me.LblAllarme6.BackColor = System.Drawing.Color.LimeGreen
+        Me.LblAllarme6.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme6.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme6.Location = New System.Drawing.Point(511, 59)
@@ -944,7 +952,7 @@ Partial Class FrmLog
         '
         'LblAllarme7
         '
-        Me.LblAllarme7.BackColor = System.Drawing.Color.LimeGreen
+        Me.LblAllarme7.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme7.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme7.Location = New System.Drawing.Point(612, 59)
@@ -956,7 +964,7 @@ Partial Class FrmLog
         '
         'LblAllarme8
         '
-        Me.LblAllarme8.BackColor = System.Drawing.Color.LimeGreen
+        Me.LblAllarme8.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme8.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme8.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme8.Location = New System.Drawing.Point(653, 59)
@@ -968,7 +976,7 @@ Partial Class FrmLog
         '
         'LblElTBrk
         '
-        Me.LblElTBrk.BackColor = System.Drawing.Color.Cyan
+        Me.LblElTBrk.BackColor = System.Drawing.Color.Yellow
         Me.LblElTBrk.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblElTBrk.Location = New System.Drawing.Point(975, 65)
         Me.LblElTBrk.Name = "LblElTBrk"
@@ -977,7 +985,7 @@ Partial Class FrmLog
         '
         'LblElMaFault
         '
-        Me.LblElMaFault.BackColor = System.Drawing.Color.Red
+        Me.LblElMaFault.BackColor = System.Drawing.Color.Yellow
         Me.LblElMaFault.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblElMaFault.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblElMaFault.Location = New System.Drawing.Point(1071, 65)
@@ -988,7 +996,7 @@ Partial Class FrmLog
         '
         'LblElMiFault
         '
-        Me.LblElMiFault.BackColor = System.Drawing.Color.Red
+        Me.LblElMiFault.BackColor = System.Drawing.Color.Yellow
         Me.LblElMiFault.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblElMiFault.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblElMiFault.Location = New System.Drawing.Point(1133, 65)
@@ -999,7 +1007,7 @@ Partial Class FrmLog
         '
         'LblAzStow
         '
-        Me.LblAzStow.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblAzStow.BackColor = System.Drawing.Color.Yellow
         Me.LblAzStow.Location = New System.Drawing.Point(755, 24)
         Me.LblAzStow.Name = "LblAzStow"
         Me.LblAzStow.Size = New System.Drawing.Size(75, 18)
@@ -1007,7 +1015,7 @@ Partial Class FrmLog
         '
         'LblAzAligned
         '
-        Me.LblAzAligned.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblAzAligned.BackColor = System.Drawing.Color.Yellow
         Me.LblAzAligned.Location = New System.Drawing.Point(836, 23)
         Me.LblAzAligned.Name = "LblAzAligned"
         Me.LblAzAligned.Size = New System.Drawing.Size(63, 18)
@@ -1015,7 +1023,7 @@ Partial Class FrmLog
         '
         'LblElStow
         '
-        Me.LblElStow.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblElStow.BackColor = System.Drawing.Color.Yellow
         Me.LblElStow.Location = New System.Drawing.Point(755, 61)
         Me.LblElStow.Name = "LblElStow"
         Me.LblElStow.Size = New System.Drawing.Size(75, 18)
@@ -1023,7 +1031,7 @@ Partial Class FrmLog
         '
         'LblElAligned
         '
-        Me.LblElAligned.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblElAligned.BackColor = System.Drawing.Color.Yellow
         Me.LblElAligned.Location = New System.Drawing.Point(836, 61)
         Me.LblElAligned.Name = "LblElAligned"
         Me.LblElAligned.Size = New System.Drawing.Size(63, 18)
@@ -1031,7 +1039,7 @@ Partial Class FrmLog
         '
         'LblElHand
         '
-        Me.LblElHand.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblElHand.BackColor = System.Drawing.Color.Yellow
         Me.LblElHand.Location = New System.Drawing.Point(1194, 29)
         Me.LblElHand.Name = "LblElHand"
         Me.LblElHand.Size = New System.Drawing.Size(40, 18)
@@ -1079,16 +1087,17 @@ Partial Class FrmLog
         '
         'TxtPol
         '
-        Me.TxtPol.BackColor = System.Drawing.Color.Cyan
+        Me.TxtPol.BackColor = System.Drawing.Color.Yellow
         Me.TxtPol.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TxtPol.Location = New System.Drawing.Point(90, 9)
         Me.TxtPol.Name = "TxtPol"
+        Me.TxtPol.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.TxtPol.Size = New System.Drawing.Size(73, 27)
         Me.TxtPol.TabIndex = 1
         '
         'LblPol
         '
-        Me.LblPol.BackColor = System.Drawing.Color.Cyan
+        Me.LblPol.BackColor = System.Drawing.Color.Yellow
         Me.LblPol.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblPol.Location = New System.Drawing.Point(172, 9)
         Me.LblPol.Name = "LblPol"
@@ -1097,7 +1106,7 @@ Partial Class FrmLog
         '
         'LblPol1
         '
-        Me.LblPol1.BackColor = System.Drawing.Color.Cyan
+        Me.LblPol1.BackColor = System.Drawing.Color.Yellow
         Me.LblPol1.Location = New System.Drawing.Point(270, 11)
         Me.LblPol1.Name = "LblPol1"
         Me.LblPol1.ReadOnly = True
@@ -1114,7 +1123,7 @@ Partial Class FrmLog
         '
         'LblLNA
         '
-        Me.LblLNA.BackColor = System.Drawing.Color.Cyan
+        Me.LblLNA.BackColor = System.Drawing.Color.Yellow
         Me.LblLNA.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblLNA.Location = New System.Drawing.Point(395, 11)
         Me.LblLNA.Name = "LblLNA"
@@ -1123,9 +1132,10 @@ Partial Class FrmLog
         '
         'TxtPolErr
         '
-        Me.TxtPolErr.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TxtPolErr.BackColor = System.Drawing.Color.Yellow
         Me.TxtPolErr.Location = New System.Drawing.Point(505, 11)
         Me.TxtPolErr.Name = "TxtPolErr"
+        Me.TxtPolErr.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtPolErr.ReadOnly = True
         Me.TxtPolErr.Size = New System.Drawing.Size(54, 22)
         Me.TxtPolErr.TabIndex = 6
@@ -1134,6 +1144,7 @@ Partial Class FrmLog
         'LblPolFault
         '
         Me.LblPolFault.Location = New System.Drawing.Point(776, 12)
+        Me.LblPolFault.BackColor = System.Drawing.Color.Yellow
         Me.LblPolFault.Name = "LblPolFault"
         Me.LblPolFault.Size = New System.Drawing.Size(44, 20)
         Me.LblPolFault.TabIndex = 7
@@ -1142,7 +1153,7 @@ Partial Class FrmLog
         '
         'LblAllarme16
         '
-        Me.LblAllarme16.BackColor = System.Drawing.Color.Red
+        Me.LblAllarme16.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme16.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme16.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme16.Location = New System.Drawing.Point(570, 12)
@@ -1154,7 +1165,7 @@ Partial Class FrmLog
         '
         'LblAllarme17
         '
-        Me.LblAllarme17.BackColor = System.Drawing.Color.Red
+        Me.LblAllarme17.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme17.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme17.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme17.Location = New System.Drawing.Point(662, 12)
@@ -1167,7 +1178,7 @@ Partial Class FrmLog
         '
         'LblAllarme18
         '
-        Me.LblAllarme18.BackColor = System.Drawing.Color.Red
+        Me.LblAllarme18.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme18.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme18.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme18.Location = New System.Drawing.Point(622, 12)
@@ -1231,7 +1242,7 @@ Partial Class FrmLog
         '
         'TxtACU
         '
-        Me.TxtACU.BackColor = System.Drawing.Color.Cyan
+        Me.TxtACU.BackColor = System.Drawing.Color.Yellow
         Me.TxtACU.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TxtACU.Location = New System.Drawing.Point(50, 18)
         Me.TxtACU.Name = "TxtACU"
@@ -1249,10 +1260,11 @@ Partial Class FrmLog
         '
         'TxtLev
         '
-        Me.TxtLev.BackColor = System.Drawing.Color.Cyan
+        Me.TxtLev.BackColor = System.Drawing.Color.Yellow
         Me.TxtLev.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TxtLev.Location = New System.Drawing.Point(144, 18)
         Me.TxtLev.Name = "TxtLev"
+        Me.TxtLev.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.TxtLev.Size = New System.Drawing.Size(51, 22)
         Me.TxtLev.TabIndex = 3
         '
@@ -1274,9 +1286,10 @@ Partial Class FrmLog
         '
         'TxtAzEr
         '
-        Me.TxtAzEr.BackColor = System.Drawing.Color.Cyan
+        Me.TxtAzEr.BackColor = System.Drawing.Color.Yellow
         Me.TxtAzEr.Location = New System.Drawing.Point(262, 18)
         Me.TxtAzEr.Name = "TxtAzEr"
+        Me.TxtAzEr.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtAzEr.ReadOnly = True
         Me.TxtAzEr.Size = New System.Drawing.Size(39, 22)
         Me.TxtAzEr.TabIndex = 6
@@ -1299,9 +1312,10 @@ Partial Class FrmLog
         '
         'TxtElEr
         '
-        Me.TxtElEr.BackColor = System.Drawing.Color.Cyan
+        Me.TxtElEr.BackColor = System.Drawing.Color.Yellow
         Me.TxtElEr.Location = New System.Drawing.Point(370, 18)
         Me.TxtElEr.Name = "TxtElEr"
+        Me.TxtElEr.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtElEr.ReadOnly = True
         Me.TxtElEr.Size = New System.Drawing.Size(39, 22)
         Me.TxtElEr.TabIndex = 9
@@ -1324,7 +1338,7 @@ Partial Class FrmLog
         '
         'LblLock
         '
-        Me.LblLock.BackColor = System.Drawing.Color.Red
+        Me.LblLock.BackColor = System.Drawing.Color.Yellow
         Me.LblLock.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblLock.Location = New System.Drawing.Point(523, 18)
         Me.LblLock.Name = "LblLock"
@@ -1342,16 +1356,17 @@ Partial Class FrmLog
         '
         'LblLev
         '
-        Me.LblLev.BackColor = System.Drawing.Color.Cyan
+        Me.LblLev.BackColor = System.Drawing.Color.Yellow
         Me.LblLev.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblLev.Location = New System.Drawing.Point(709, 18)
         Me.LblLev.Name = "LblLev"
+        Me.LblLev.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.LblLev.Size = New System.Drawing.Size(49, 22)
         Me.LblLev.TabIndex = 14
         '
         'LblAllarme11
         '
-        Me.LblAllarme11.BackColor = System.Drawing.Color.Red
+        Me.LblAllarme11.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme11.Location = New System.Drawing.Point(842, 20)
         Me.LblAllarme11.Name = "LblAllarme11"
@@ -1362,7 +1377,7 @@ Partial Class FrmLog
         '
         'LblAllarme10
         '
-        Me.LblAllarme10.BackColor = System.Drawing.Color.Red
+        Me.LblAllarme10.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme10.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme10.Location = New System.Drawing.Point(886, 20)
         Me.LblAllarme10.Name = "LblAllarme10"
@@ -1373,7 +1388,7 @@ Partial Class FrmLog
         '
         'LblAllarme9
         '
-        Me.LblAllarme9.BackColor = System.Drawing.Color.Red
+        Me.LblAllarme9.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme9.Location = New System.Drawing.Point(930, 20)
         Me.LblAllarme9.Name = "LblAllarme9"
@@ -1392,7 +1407,7 @@ Partial Class FrmLog
         '
         'LblEmergency
         '
-        Me.LblEmergency.BackColor = System.Drawing.Color.Red
+        Me.LblEmergency.BackColor = System.Drawing.Color.Yellow
         Me.LblEmergency.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblEmergency.ForeColor = System.Drawing.Color.White
         Me.LblEmergency.Location = New System.Drawing.Point(94, 55)
@@ -1404,7 +1419,7 @@ Partial Class FrmLog
         '
         'LblEmergency1
         '
-        Me.LblEmergency1.BackColor = System.Drawing.Color.Red
+        Me.LblEmergency1.BackColor = System.Drawing.Color.Yellow
         Me.LblEmergency1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblEmergency1.ForeColor = System.Drawing.Color.White
         Me.LblEmergency1.Location = New System.Drawing.Point(128, 55)
@@ -1424,7 +1439,7 @@ Partial Class FrmLog
         '
         'LblAzDR
         '
-        Me.LblAzDR.BackColor = System.Drawing.Color.Cyan
+        Me.LblAzDR.BackColor = System.Drawing.Color.Yellow
         Me.LblAzDR.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAzDR.Location = New System.Drawing.Point(210, 55)
         Me.LblAzDR.Name = "LblAzDR"
@@ -1433,7 +1448,7 @@ Partial Class FrmLog
         '
         'LblPCU
         '
-        Me.LblPCU.BackColor = System.Drawing.Color.Cyan
+        Me.LblPCU.BackColor = System.Drawing.Color.Yellow
         Me.LblPCU.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblPCU.Location = New System.Drawing.Point(270, 55)
         Me.LblPCU.Name = "LblPCU"
@@ -1451,7 +1466,7 @@ Partial Class FrmLog
         '
         'LblLowAngle
         '
-        Me.LblLowAngle.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblLowAngle.BackColor = System.Drawing.Color.Yellow
         Me.LblLowAngle.Location = New System.Drawing.Point(382, 55)
         Me.LblLowAngle.Name = "LblLowAngle"
         Me.LblLowAngle.Size = New System.Drawing.Size(44, 22)
@@ -1468,7 +1483,7 @@ Partial Class FrmLog
         '
         'LblAllarme12
         '
-        Me.LblAllarme12.BackColor = System.Drawing.Color.Red
+        Me.LblAllarme12.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme12.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme12.Location = New System.Drawing.Point(730, 55)
         Me.LblAllarme12.Name = "LblAllarme12"
@@ -1485,7 +1500,7 @@ Partial Class FrmLog
         '
         'LblAllarme13
         '
-        Me.LblAllarme13.BackColor = System.Drawing.Color.Red
+        Me.LblAllarme13.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme13.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme13.Location = New System.Drawing.Point(810, 55)
         Me.LblAllarme13.Name = "LblAllarme13"
@@ -1502,7 +1517,7 @@ Partial Class FrmLog
         '
         'LblAllarme14
         '
-        Me.LblAllarme14.BackColor = System.Drawing.Color.Red
+        Me.LblAllarme14.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme14.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme14.Location = New System.Drawing.Point(877, 55)
         Me.LblAllarme14.Name = "LblAllarme14"
@@ -1519,7 +1534,7 @@ Partial Class FrmLog
         '
         'LblAllarme15
         '
-        Me.LblAllarme15.BackColor = System.Drawing.Color.Red
+        Me.LblAllarme15.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme15.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme15.Location = New System.Drawing.Point(980, 55)
         Me.LblAllarme15.Name = "LblAllarme15"
@@ -1530,6 +1545,7 @@ Partial Class FrmLog
         '
         Me.LblWarning.ForeColor = System.Drawing.Color.Red
         Me.LblWarning.Location = New System.Drawing.Point(16, 116)
+        Me.LblWarning.BackColor = System.Drawing.Color.Yellow
         Me.LblWarning.Name = "LblWarning"
         Me.LblWarning.Size = New System.Drawing.Size(300, 20)
         Me.LblWarning.TabIndex = 34
@@ -1548,80 +1564,81 @@ Partial Class FrmLog
         Me.FrmComandi.Controls.Add(Me.LblStepTrack)
         Me.FrmComandi.Location = New System.Drawing.Point(17, 421)
         Me.FrmComandi.Name = "FrmComandi"
-        Me.FrmComandi.Size = New System.Drawing.Size(784, 96)
+        Me.FrmComandi.Size = New System.Drawing.Size(865, 96)
         Me.FrmComandi.TabIndex = 12
         Me.FrmComandi.TabStop = False
         Me.FrmComandi.Text = "Mode"
         '
         'CmdSTBY
         '
-        Me.CmdSTBY.Location = New System.Drawing.Point(21, 26)
+        Me.CmdSTBY.Location = New System.Drawing.Point(7, 26)
         Me.CmdSTBY.Name = "CmdSTBY"
-        Me.CmdSTBY.Size = New System.Drawing.Size(63, 64)
+        Me.CmdSTBY.Size = New System.Drawing.Size(95, 64)
         Me.CmdSTBY.TabIndex = 0
         Me.CmdSTBY.Text = "Stand By (F1)"
         '
         'CmdCmdPos
         '
-        Me.CmdCmdPos.Location = New System.Drawing.Point(108, 26)
+        Me.CmdCmdPos.Location = New System.Drawing.Point(107, 26)
         Me.CmdCmdPos.Name = "CmdCmdPos"
-        Me.CmdCmdPos.Size = New System.Drawing.Size(63, 64)
+        Me.CmdCmdPos.Size = New System.Drawing.Size(95, 64)
         Me.CmdCmdPos.TabIndex = 1
         Me.CmdCmdPos.Text = "Cmd Pos (F2)"
         '
         'CmdStepTrack
         '
-        Me.CmdStepTrack.Location = New System.Drawing.Point(195, 26)
+        Me.CmdStepTrack.Location = New System.Drawing.Point(207, 26)
         Me.CmdStepTrack.Name = "CmdStepTrack"
-        Me.CmdStepTrack.Size = New System.Drawing.Size(63, 64)
+        Me.CmdStepTrack.Size = New System.Drawing.Size(95, 64)
         Me.CmdStepTrack.TabIndex = 2
         Me.CmdStepTrack.Text = "Step Track (F3)"
         '
         'CmdAutoTrack
         '
-        Me.CmdAutoTrack.Location = New System.Drawing.Point(350, 26)
+        Me.CmdAutoTrack.Location = New System.Drawing.Point(356, 26)
         Me.CmdAutoTrack.Name = "CmdAutoTrack"
-        Me.CmdAutoTrack.Size = New System.Drawing.Size(63, 64)
+        Me.CmdAutoTrack.Size = New System.Drawing.Size(95, 64)
         Me.CmdAutoTrack.TabIndex = 3
         Me.CmdAutoTrack.Text = "Auto Track (F4)"
         '
         'CmdAugmented
         '
-        Me.CmdAugmented.Location = New System.Drawing.Point(437, 26)
+        Me.CmdAugmented.Location = New System.Drawing.Point(456, 26)
         Me.CmdAugmented.Name = "CmdAugmented"
-        Me.CmdAugmented.Size = New System.Drawing.Size(63, 64)
+        Me.CmdAugmented.Size = New System.Drawing.Size(95, 64)
         Me.CmdAugmented.TabIndex = 4
         Me.CmdAugmented.Text = "Augmented"
         '
         'CmdProgramTrack
         '
-        Me.CmdProgramTrack.Location = New System.Drawing.Point(524, 26)
+        Me.CmdProgramTrack.Location = New System.Drawing.Point(556, 26)
         Me.CmdProgramTrack.Name = "CmdProgramTrack"
-        Me.CmdProgramTrack.Size = New System.Drawing.Size(63, 64)
+        Me.CmdProgramTrack.Size = New System.Drawing.Size(95, 64)
         Me.CmdProgramTrack.TabIndex = 5
         Me.CmdProgramTrack.Text = "Program Track"
         '
         'CmdOffset
         '
-        Me.CmdOffset.Location = New System.Drawing.Point(611, 26)
+        Me.CmdOffset.Location = New System.Drawing.Point(656, 26)
         Me.CmdOffset.Name = "CmdOffset"
-        Me.CmdOffset.Size = New System.Drawing.Size(63, 64)
+        Me.CmdOffset.Size = New System.Drawing.Size(95, 64)
         Me.CmdOffset.TabIndex = 6
         Me.CmdOffset.Text = "Offset"
         Me.CmdOffset.Visible = False
         '
         'CmdAutoSearch
         '
-        Me.CmdAutoSearch.Location = New System.Drawing.Point(698, 26)
+        Me.CmdAutoSearch.Location = New System.Drawing.Point(756, 26)
         Me.CmdAutoSearch.Name = "CmdAutoSearch"
-        Me.CmdAutoSearch.Size = New System.Drawing.Size(63, 64)
+        Me.CmdAutoSearch.Size = New System.Drawing.Size(95, 64)
         Me.CmdAutoSearch.TabIndex = 7
         Me.CmdAutoSearch.Text = "Auto Search"
         '
         'LblStepTrack
         '
         Me.LblStepTrack.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.LblStepTrack.Location = New System.Drawing.Point(282, 41)
+        Me.LblStepTrack.Location = New System.Drawing.Point(307, 41)
+        Me.LblStepTrack.BackColor = System.Drawing.Color.Yellow
         Me.LblStepTrack.Name = "LblStepTrack"
         Me.LblStepTrack.Size = New System.Drawing.Size(44, 25)
         Me.LblStepTrack.TabIndex = 8
@@ -1637,9 +1654,10 @@ Partial Class FrmLog
         '
         'TxtFreqBeacon
         '
-        Me.TxtFreqBeacon.BackColor = System.Drawing.SystemColors.Control
+        Me.TxtFreqBeacon.BackColor = System.Drawing.Color.Yellow
         Me.TxtFreqBeacon.Location = New System.Drawing.Point(938, 585)
         Me.TxtFreqBeacon.Name = "TxtFreqBeacon"
+        Me.TxtFreqBeacon.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtFreqBeacon.ReadOnly = True
         Me.TxtFreqBeacon.Size = New System.Drawing.Size(80, 22)
         Me.TxtFreqBeacon.TabIndex = 16
@@ -1665,6 +1683,7 @@ Partial Class FrmLog
         Me.TxtThrAz.BackColor = System.Drawing.SystemColors.Control
         Me.TxtThrAz.Location = New System.Drawing.Point(1202, 586)
         Me.TxtThrAz.Name = "TxtThrAz"
+        Me.TxtThrAz.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtThrAz.Size = New System.Drawing.Size(51, 22)
         Me.TxtThrAz.TabIndex = 19
         '
@@ -1681,6 +1700,7 @@ Partial Class FrmLog
         Me.TxtSogliaAuto.BackColor = System.Drawing.SystemColors.Control
         Me.TxtSogliaAuto.Location = New System.Drawing.Point(1202, 555)
         Me.TxtSogliaAuto.Name = "TxtSogliaAuto"
+        Me.TxtSogliaAuto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtSogliaAuto.Size = New System.Drawing.Size(51, 22)
         Me.TxtSogliaAuto.TabIndex = 21
         '
@@ -1705,6 +1725,7 @@ Partial Class FrmLog
         Me.TxtThrEl.BackColor = System.Drawing.SystemColors.Control
         Me.TxtThrEl.Location = New System.Drawing.Point(1202, 617)
         Me.TxtThrEl.Name = "TxtThrEl"
+        Me.TxtThrEl.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtThrEl.Size = New System.Drawing.Size(51, 22)
         Me.TxtThrEl.TabIndex = 24
         '
@@ -1729,6 +1750,7 @@ Partial Class FrmLog
         Me.TxtOffsetMax.BackColor = System.Drawing.SystemColors.Control
         Me.TxtOffsetMax.Location = New System.Drawing.Point(1202, 648)
         Me.TxtOffsetMax.Name = "TxtOffsetMax"
+        Me.TxtOffsetMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtOffsetMax.Size = New System.Drawing.Size(51, 22)
         Me.TxtOffsetMax.TabIndex = 26
         '
@@ -1752,6 +1774,7 @@ Partial Class FrmLog
         '
         Me.LblBackUp.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblBackUp.Location = New System.Drawing.Point(1001, 681)
+        Me.LblBackUp.BackColor = System.Drawing.Color.Yellow
         Me.LblBackUp.Name = "LblBackUp"
         Me.LblBackUp.Size = New System.Drawing.Size(155, 18)
         Me.LblBackUp.TabIndex = 29
@@ -1768,29 +1791,32 @@ Partial Class FrmLog
         '
         Me.LblSwitches.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblSwitches.Location = New System.Drawing.Point(1003, 707)
+        Me.LblSwitches.BackColor = System.Drawing.Color.Yellow
         Me.LblSwitches.Name = "LblSwitches"
         Me.LblSwitches.Size = New System.Drawing.Size(155, 18)
         Me.LblSwitches.TabIndex = 31
         '
         'TxtFrequency
         '
-        Me.TxtFrequency.BackColor = System.Drawing.SystemColors.Control
+        Me.TxtFrequency.BackColor = System.Drawing.Color.Yellow
         Me.TxtFrequency.Location = New System.Drawing.Point(938, 557)
         Me.TxtFrequency.Name = "TxtFrequency"
-        Me.TxtFrequency.Visible = False
+        Me.TxtFrequency.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtFrequency.ReadOnly = True
         Me.TxtFrequency.Size = New System.Drawing.Size(80, 22)
         Me.TxtFrequency.TabIndex = 32
+        Me.TxtFrequency.Visible = False
         '
         'TxtPowerOut
         '
-        Me.TxtPowerOut.BackColor = System.Drawing.SystemColors.Control
+        Me.TxtPowerOut.BackColor = System.Drawing.Color.Yellow
         Me.TxtPowerOut.Location = New System.Drawing.Point(938, 616)
         Me.TxtPowerOut.Name = "TxtPowerOut"
-        Me.TxtPowerOut.Visible = False
+        Me.TxtPowerOut.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtPowerOut.ReadOnly = True
         Me.TxtPowerOut.Size = New System.Drawing.Size(80, 22)
         Me.TxtPowerOut.TabIndex = 33
+        Me.TxtPowerOut.Visible = False
         '
         'TdbLog
         '
@@ -1876,47 +1902,43 @@ Partial Class FrmLog
         Me.LblConfCNL5in.Text = "INT"
         Me.LblConfCNL5in.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        '
-        '
-        '
-        '
         'Label4
         '
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(841, 563)
         Me.Label4.Name = "Label4"
-        Me.Label4.Visible = False
         Me.Label4.Size = New System.Drawing.Size(92, 16)
         Me.Label4.TabIndex = 42
         Me.Label4.Text = "Frequency out"
+        Me.Label4.Visible = False
         '
         'Label5
         '
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(841, 615)
         Me.Label5.Name = "Label5"
-        Me.Label5.Visible = False
         Me.Label5.Size = New System.Drawing.Size(68, 16)
         Me.Label5.TabIndex = 43
         Me.Label5.Text = "Power Out"
+        Me.Label5.Visible = False
         '
         'Label6
         '
         Me.Label6.Location = New System.Drawing.Point(1020, 561)
         Me.Label6.Name = "Label6"
-        Me.Label6.Visible = False
         Me.Label6.Size = New System.Drawing.Size(42, 16)
         Me.Label6.TabIndex = 44
         Me.Label6.Text = "MHz"
+        Me.Label6.Visible = False
         '
         'Label7
         '
         Me.Label7.Location = New System.Drawing.Point(1024, 619)
         Me.Label7.Name = "Label7"
-        Me.Label7.Visible = False
         Me.Label7.Size = New System.Drawing.Size(38, 16)
         Me.Label7.TabIndex = 45
         Me.Label7.Text = "dBm"
+        Me.Label7.Visible = False
         '
         'FrmLog
         '

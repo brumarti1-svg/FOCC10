@@ -43,7 +43,7 @@ Partial Class FrmPol1
         Me.MskElevazione.Location = New System.Drawing.Point(150, 10)
         Me.MskElevazione.Name = "MskElevazione"
         Me.MskElevazione.Size = New System.Drawing.Size(70, 22)
-        Me.MskElevazione.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.MskElevazione.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'CmdDown
         '
@@ -115,6 +115,7 @@ Partial Class FrmPol1
         '
         Me.TxtFreccia.Location = New System.Drawing.Point(10, 188)
         Me.TxtFreccia.Name = "TxtFreccia"
+        Me.TxtFreccia.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtFreccia.Size = New System.Drawing.Size(20, 22)
         Me.TxtFreccia.TabStop = False
         '

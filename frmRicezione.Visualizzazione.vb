@@ -20,9 +20,9 @@ Partial Public Class FrmRicezione
     ' -------------------------------------------------------
     ' Costanti colore di stato (consistenza visiva)
     ' -------------------------------------------------------
-    Private Shared ReadOnly COL_OK       As Color = Color.LimeGreen
-    Private Shared ReadOnly COL_WARN     As Color = Color.Yellow
-    Private Shared ReadOnly COL_FAIL     As Color = Color.Red
+    Private Shared ReadOnly COL_OK       As Color = COL_VALIDO
+    Private Shared ReadOnly COL_WARN     As Color = COL_NON_COLLEGATO
+    Private Shared ReadOnly COL_FAIL     As Color = COL_ALLARME
     Private Shared ReadOnly COL_IDLE     As Color = Color.Gray
     Private Shared ReadOnly COL_BLINK_ON As Color = Color.Orange
     Private Shared ReadOnly COL_BLINK_OFF As Color = Color.DarkOrange
@@ -353,10 +353,10 @@ Partial Public Class FrmRicezione
 
         ' Label enable/disable errori (etichette ausiliarie)
         If LblAzErrEn IsNot Nothing Then
-            LblAzErrEn.BackColor = If(Math.Abs(errAz) > g_ThrAz, COL_FAIL, COL_IDLE)
+            LblAzErrEn.BackColor = If(Math.Abs(errAz) > g_ThrAz, COL_FAIL, COL_OK)
         End If
         If LblElErrEn IsNot Nothing Then
-            LblElErrEn.BackColor = If(Math.Abs(errEl) > g_ThrEl, COL_FAIL, COL_IDLE)
+            LblElErrEn.BackColor = If(Math.Abs(errEl) > g_ThrEl, COL_FAIL, COL_OK)
         End If
 
     End Sub
@@ -408,7 +408,7 @@ Partial Public Class FrmRicezione
             Case PCS_FAIL
                 Lbl.BackColor = COL_FAIL
             Case PCS_STOP
-                Lbl.BackColor = COL_IDLE
+                Lbl.BackColor = COL_WARN   ' VB6: PCS_STOP_COL = vbYellow
             Case Else   ' PCS_INIT / non inizializzato
                 Lbl.BackColor = COL_WARN
         End Select
@@ -624,7 +624,7 @@ Partial Public Class FrmRicezione
     ''' </summary>
     Public Sub AggiornaSatellite(valido As Boolean)
         If LblSatellite Is Nothing Then Return
-        LblSatellite.BackColor = If(valido, COL_OK, COL_WARN)
+        LblSatellite.BackColor = If(valido, COL_DATO_NOTO, COL_DATO_IGNOTO)
     End Sub
 
     ''' <summary>

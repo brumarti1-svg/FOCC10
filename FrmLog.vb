@@ -37,6 +37,13 @@ Partial Public Class FrmLog
     End Sub
 
     Private Sub FrmLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Campi di sola presentazione: giallo se sconosciuti, 128,255,255 se noti
+        ColoriStandard.RegistraDati(TxtMode, LblCommand, LblSatellite, TxtAz, LblAzimuth, LblAzError,
+            LblAzSpeed, LblAzTBrk, TxtEl, LblElevazione, LblElError, LblElSpeed,
+            LblElTBrk, LblAzStow, LblAzAligned, LblElStow, LblElAligned, LblElHand,
+            TxtPol, LblPol, LblPol1, LblLNA, TxtPolErr, TxtLev,
+            TxtAzEr, TxtElEr, LblLev, LblWarning, LblStepTrack, TxtFreqBeacon,
+            LblBackUp, LblSwitches, TxtFrequency, TxtPowerOut)
         ' Soglie Auto Track e offset massimo (Form_Load del VB6).
         TxtSogliaAuto.Text = CStr(g_ThrAuto)
         TxtThrAz.Text = CStr(g_ThrAz)
@@ -278,51 +285,51 @@ Partial Public Class FrmLog
                 End Select
 
                 If (vBytesold(1) And BIT6) = BIT6 Then
-                    TxtACU.BackColor = Color.Green
+                    TxtACU.BackColor = Color.Lime
                     TxtACU.Text = "REM"
                 Else
                     TxtACU.BackColor = Color.Red
                     TxtACU.Text = "LOC"
                 End If
 
-                LblSumAlarm.BackColor = If((vBytesold(1) And BIT5) = BIT5, Color.Red, Color.Green)
+                LblSumAlarm.BackColor = If((vBytesold(1) And BIT5) = BIT5, Color.Red, Color.Lime)
 
-                LblAllarme1.BackColor = If((vBytesold(3) And BIT1) = BIT1, Color.Green, Color.Red)
-                LblAllarme2.BackColor = If((vBytesold(3) And BIT3) = BIT3, Color.Green, Color.Red)
-                LblAllarme3.BackColor = If((vBytesold(2) And BIT3) = BIT3, Color.Red, Color.Green)
-                LblAllarme4.BackColor = If((vBytesold(2) And BIT4) = BIT4, Color.Red, Color.Green)
-                LblAllarme5.BackColor = If((vBytesold(3) And BIT2) = BIT2, Color.Green, Color.Red)
-                LblAllarme6.BackColor = If((vBytesold(3) And BIT4) = BIT4, Color.Green, Color.Red)
-                LblAllarme7.BackColor = If((vBytesold(2) And BIT1) = BIT1, Color.Red, Color.Green)
-                LblAllarme8.BackColor = If((vBytesold(2) And BIT2) = BIT2, Color.Red, Color.Green)
+                LblAllarme1.BackColor = If((vBytesold(3) And BIT1) = BIT1, Color.Lime, Color.Red)
+                LblAllarme2.BackColor = If((vBytesold(3) And BIT3) = BIT3, Color.Lime, Color.Red)
+                LblAllarme3.BackColor = If((vBytesold(2) And BIT3) = BIT3, Color.Red, Color.Lime)
+                LblAllarme4.BackColor = If((vBytesold(2) And BIT4) = BIT4, Color.Red, Color.Lime)
+                LblAllarme5.BackColor = If((vBytesold(3) And BIT2) = BIT2, Color.Lime, Color.Red)
+                LblAllarme6.BackColor = If((vBytesold(3) And BIT4) = BIT4, Color.Lime, Color.Red)
+                LblAllarme7.BackColor = If((vBytesold(2) And BIT1) = BIT1, Color.Red, Color.Lime)
+                LblAllarme8.BackColor = If((vBytesold(2) And BIT2) = BIT2, Color.Red, Color.Lime)
                 ' Indice 9 (HIGH ALARM) disattivato anche nel VB6 originale (riga commentata).
-                LblAllarme10.BackColor = If((vBytesold(12) And BIT3) = BIT3, Color.Green, Color.Red)
-                LblAllarme11.BackColor = If((vBytesold(12) And BIT1) = BIT1, Color.Green, Color.Red)
-                LblAllarme12.BackColor = If((vBytesold(11) And BIT1) = BIT1, Color.Red, Color.Green)
-                LblAllarme13.BackColor = If((vBytesold(11) And BIT2) = BIT2, Color.Red, Color.Green)
-                LblAllarme14.BackColor = If((vBytesold(11) And BIT4) = BIT4, Color.Red, Color.Green)
-                LblAllarme15.BackColor = If((vBytesold(11) And BIT3) = BIT3, Color.Red, Color.Green)
-                LblAllarme16.BackColor = If((vBytesold(8) And BIT3) = BIT3, Color.Green, Color.Red)
+                LblAllarme10.BackColor = If((vBytesold(12) And BIT3) = BIT3, Color.Lime, Color.Red)
+                LblAllarme11.BackColor = If((vBytesold(12) And BIT1) = BIT1, Color.Lime, Color.Red)
+                LblAllarme12.BackColor = If((vBytesold(11) And BIT1) = BIT1, Color.Red, Color.Lime)
+                LblAllarme13.BackColor = If((vBytesold(11) And BIT2) = BIT2, Color.Red, Color.Lime)
+                LblAllarme14.BackColor = If((vBytesold(11) And BIT4) = BIT4, Color.Red, Color.Lime)
+                LblAllarme15.BackColor = If((vBytesold(11) And BIT3) = BIT3, Color.Red, Color.Lime)
+                LblAllarme16.BackColor = If((vBytesold(8) And BIT3) = BIT3, Color.Lime, Color.Red)
                 ' C10: indici 17/18 (CCW/CW Pol software prelimit) attivi
                 ' (in FOC6 erano commentati nel VB6).
-                LblAllarme17.BackColor = If((vBytesold(2) And BIT6) = BIT6, Color.Red, Color.Green)
-                LblAllarme18.BackColor = If((vBytesold(2) And BIT5) = BIT5, Color.Red, Color.Green)
+                LblAllarme17.BackColor = If((vBytesold(2) And BIT6) = BIT6, Color.Red, Color.Lime)
+                LblAllarme18.BackColor = If((vBytesold(2) And BIT5) = BIT5, Color.Red, Color.Lime)
 
-                LblAzMaFault.BackColor = If((vBytesold(4) And BIT1) = BIT1, Color.Green, Color.Red)
-                LblAzMiFault.BackColor = If((vBytesold(4) And BIT3) = BIT3, Color.Green, Color.Red)
-                LblElMaFault.BackColor = If((vBytesold(4) And BIT2) = BIT2, Color.Green, Color.Red)
-                LblElMiFault.BackColor = If((vBytesold(4) And BIT4) = BIT4, Color.Green, Color.Red)
+                LblAzMaFault.BackColor = If((vBytesold(4) And BIT1) = BIT1, Color.Lime, Color.Red)
+                LblAzMiFault.BackColor = If((vBytesold(4) And BIT3) = BIT3, Color.Lime, Color.Red)
+                LblElMaFault.BackColor = If((vBytesold(4) And BIT2) = BIT2, Color.Lime, Color.Red)
+                LblElMiFault.BackColor = If((vBytesold(4) And BIT4) = BIT4, Color.Lime, Color.Red)
 
                 LblAzDR.Text = If((vBytesold(5) And BIT1) = BIT1, "ON ", "OFF ")
-                LblAzDR.BackColor = If((vBytesold(5) And BIT1) = BIT1, Color.Green, Color.Red)
+                LblAzDR.BackColor = If((vBytesold(5) And BIT1) = BIT1, Color.Lime, Color.Red)
                 LblPCU.Text = If((vBytesold(5) And BIT2) = BIT2, "PCU", "ACU")
-                LblPCU.BackColor = If((vBytesold(5) And BIT2) = BIT2, Color.Red, Color.Green)
+                LblPCU.BackColor = If((vBytesold(5) And BIT2) = BIT2, Color.Red, Color.Lime)
 
                 LblElTBrk.Text = If((vBytesold(5) And BIT4) = BIT4, "RELEASED", "APPLIED ")
                 LblAzTBrk.Text = If((vBytesold(5) And BIT3) = BIT3, "RELEASED", "APPLIED ")
 
-                LblEmergency.BackColor = If((vBytesold(6) And BIT3) = BIT3, Color.Green, Color.Red)
-                LblEmergency1.BackColor = If((vBytesold(6) And BIT4) = BIT4, Color.Green, Color.Red)
+                LblEmergency.BackColor = If((vBytesold(6) And BIT3) = BIT3, Color.Lime, Color.Red)
+                LblEmergency1.BackColor = If((vBytesold(6) And BIT4) = BIT4, Color.Lime, Color.Red)
 
                 LblAzStow.Text = ""
                 LblAzAligned.Text = ""
@@ -335,12 +342,12 @@ Partial Public Class FrmLog
                 If (vBytesold(8) And BIT1) = BIT1 Then LblElStow.Text = "Retracted"
                 If (vBytesold(8) And BIT2) = BIT2 Then LblElAligned.Text = "Aligned"
                 ' C10: fault polarizzatore attivo (commentato nel VB6 di FOC6).
-                LblPolFault.BackColor = If((vBytesold(8) And BIT4) = BIT4, Color.Red, Color.Green)
+                LblPolFault.BackColor = If((vBytesold(8) And BIT4) = BIT4, Color.Red, Color.Lime)
 
                 LblElHand.Text = If((vBytesold(9) And BIT2) = BIT2, "CW", "CCW")
-                LblLowAngle.BackColor = If((vBytesold(9) And BIT3) = BIT3, Color.Red, Color.Green)
+                LblLowAngle.BackColor = If((vBytesold(9) And BIT3) = BIT3, Color.Red, Color.Lime)
 
-                LblLock.BackColor = If((vBytesold(9) And BIT4) = BIT4, Color.Green, Color.Red)
+                LblLock.BackColor = If((vBytesold(9) And BIT4) = BIT4, Color.Lime, Color.Red)
                 LblLock.Text = If((vBytesold(9) And BIT4) = BIT4, "LOCK", "UNLOCK")
 
                 If (vBytesold(15) And BIT6) = BIT6 Then

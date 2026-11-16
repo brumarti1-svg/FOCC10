@@ -327,6 +327,12 @@ Partial Public Class FrmRicezione
     ' FORM LOAD
     ' -------------------------------------------------------
     Private Sub FrmRicezione_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Campi di sola presentazione: giallo se sconosciuti, 128,255,255 se noti
+        ColoriStandard.RegistraDati(LblAzimuth, TxtAzEr, LblAzimuthC, LblAzError, LblAzTBrk, LblElevazione,
+            TxtElEr, LblElevazioneC, LblElError, LblElTBrk, TxtPhaseEl, LblRevAz_ctrl,
+            TxtInpFreq, TxtPhAz, LblPolRic, TxtLna, TxtMode_ctrl, LblPol1,
+            TxtPolErr, LblPol, TxtPol, TxtFrqBeacon, TxtPhase, TxtRevAz,
+            LblLNA, LblSwitches, LblBackUp, LblRisposta, TxtPhasAz)
         ' STARTUP_TIMING: strumentazione temporanea (vedi frmMain.vb).
         Dim swLoad As New System.Diagnostics.Stopwatch()
         swLoad.Start()
@@ -455,7 +461,7 @@ ErrLoad:
         ' Fase
         If g_ChangePhase = "Y" Then
             CmdPhase.Text = "N"
-            LblPhase.BackColor = Color.LimeGreen
+            LblPhase.BackColor = COL_VALIDO
         Else
             CmdPhase.Text = "Y"
             LblPhase.BackColor = Color.Yellow
@@ -467,7 +473,7 @@ ErrLoad:
             LblPC1.BackColor = Color.Yellow
         Else
             LblPC1.Text = "REM"
-            LblPC1.BackColor = Color.LimeGreen
+            LblPC1.BackColor = COL_VALIDO
         End If
 
         b_frequency = False
@@ -717,7 +723,7 @@ RicActive:
         a = LeggiFileIni("Default", "ChangePhase")
         If a = "N" Then
             CmdPhase.Text = "N"
-            LblPhase.BackColor = Color.LimeGreen
+            LblPhase.BackColor = COL_VALIDO
             g_ChangePhase = "Y"
         Else
             CmdPhase.Text = "Y"
@@ -1376,7 +1382,7 @@ Proiez:
             b_StatusPC1 = False
         Else
             LblPC1.Text = "REM"
-            LblPC1.BackColor = Color.LimeGreen
+            LblPC1.BackColor = COL_VALIDO
             b_StatusPC1 = True
         End If
     End Sub
@@ -1404,7 +1410,7 @@ Proiez:
         Else
             g_ChangePhase = "Y"
             CmdPhase.Text = "N"
-            LblPhase.BackColor = Color.LimeGreen
+            LblPhase.BackColor = COL_VALIDO
         End If
     End Sub
 
@@ -1415,7 +1421,7 @@ Proiez:
             TxtAz.BackColor = Color.Yellow
         Else
             AzInibhit = False
-            TxtAz.BackColor = Color.Yellow
+            TxtAz.BackColor = COL_DATO_NOTO
         End If
     End Sub
 
@@ -1426,7 +1432,7 @@ Proiez:
             TxtEl.BackColor = Color.Yellow
         Else
             ElInibhit = False
-            TxtEl.BackColor = Color.Yellow
+            TxtEl.BackColor = COL_DATO_NOTO
         End If
     End Sub
 
@@ -1454,7 +1460,7 @@ Proiez:
                 If rs_Load!Algoritmo = 0 OrElse rs_Load!Algoritmo = 2 Then
                     AggAlgo = CInt(rs_Load!Algoritmo)
                     b_Calcola = InitPar11()
-                    If b_Calcola Then LblSatellite.BackColor = Color.LightGreen
+                    If b_Calcola Then LblSatellite.BackColor = COL_DATO_NOTO
 
                 ElseIf rs_Load!Algoritmo = 1 Then
                     If Not IsDBNull(rs_Load!FileAgg) AndAlso CStr(rs_Load!FileAgg) <> "" Then
@@ -1468,24 +1474,24 @@ Proiez:
                             MainForm.MessaggioStatus = "TLE loading failed for satellite " & s_Satellite & " (file: " & s_TwoLine & ")"
                             If tmrAlarm IsNot Nothing Then tmrAlarm.Enabled = True
                         Else
-                            LblSatellite.BackColor = Color.LightGreen
+                            LblSatellite.BackColor = COL_DATO_NOTO
                             b_Sat = True : b_Calcola = True
                             g_Verso = CBool(rs_Load!Verso?.ToString().ToUpper() = "VERO" OrElse
                                            rs_Load!Verso?.ToString().ToUpper() = "TRUE")
                         End If
                     Else
-                        LblSatellite.BackColor = Color.LightGreen
+                        LblSatellite.BackColor = COL_DATO_NOTO
                     End If
 
                 ElseIf rs_Load!Algoritmo = 3 Then
                     s_FileStars = CStr(rs_Load!FileAgg)
                     SatChange = True
                     RiempiMemory(s_FileStars)
-                    LblSatellite.BackColor = Color.LightGreen
+                    LblSatellite.BackColor = COL_DATO_NOTO
                     b_Calcola = True
 
                 ElseIf rs_Load!Algoritmo = 4 Then
-                    LblSatellite.BackColor = Color.LightGreen
+                    LblSatellite.BackColor = COL_DATO_NOTO
                     b_Calcola = True
                 End If
             Else
@@ -1574,13 +1580,13 @@ Proiez:
             Define_Derived_Constants()
             b_Sat = Convert_Satellite_Data(s_Satellite)
             b_Calcola = b_Sat
-            If b_Calcola Then LblSatellite.BackColor = Color.LightGreen
+            If b_Calcola Then LblSatellite.BackColor = COL_DATO_NOTO
         ElseIf Algoritmo = 0 OrElse Algoritmo = 2 Then
             b_Calcola = InitPar11()
-            If b_Calcola Then LblSatellite.BackColor = Color.LightGreen
+            If b_Calcola Then LblSatellite.BackColor = COL_DATO_NOTO
         Else
             b_Calcola = True
-            LblSatellite.BackColor = Color.LightGreen
+            LblSatellite.BackColor = COL_DATO_NOTO
         End If
 
         ' Riallinea "Ultima" e invia gli offset di fase all'ACU
@@ -1675,7 +1681,7 @@ ErrLoad2:
                 b_Calcola = True
                 ScriviFileIni("Default", "Satellite", s_Satellite)
                 g_SatelliteCaricato = s_Satellite
-                LblSatellite.BackColor = Color.LightGreen
+                LblSatellite.BackColor = COL_DATO_NOTO
                 rs_Sel.Close()
                 Return True
             End If
@@ -1869,14 +1875,14 @@ ErrLoad2:
         Define_Derived_Constants()
         b_Sat = Convert_Satellite_Data(s_Satellite)
         b_Calcola = b_Sat
-        LblSatellite.BackColor = If(b_Calcola, Color.LightGreen, Color.Yellow)
+        LblSatellite.BackColor = If(b_Calcola, COL_DATO_NOTO, COL_DATO_IGNOTO)
     End Sub
 
     Private Sub MnuTLETwoLine_Click(sender As Object, e As EventArgs) Handles MnuTLETwoLine.Click
         frmBrowse.ShowDialog(Me)
         If g_Parametri <> "" Then
             Dim agg As Boolean = AggiornaTLE(g_Parametri, 1)
-            LblSatellite.BackColor = If(agg, Color.LightGreen, Color.Yellow)
+            LblSatellite.BackColor = If(agg, COL_DATO_NOTO, COL_DATO_IGNOTO)
         End If
     End Sub
 
@@ -1884,7 +1890,7 @@ ErrLoad2:
         frmBrowse.ShowDialog(Me)
         If g_Parametri <> "" Then
             Dim agg As Boolean = AggiornaTLE(g_Parametri, 2)
-            LblSatellite.BackColor = If(agg, Color.LightGreen, Color.Yellow)
+            LblSatellite.BackColor = If(agg, COL_DATO_NOTO, COL_DATO_IGNOTO)
         End If
     End Sub
 
@@ -1892,7 +1898,7 @@ ErrLoad2:
         frmBrowse.ShowDialog(Me)
         If g_Parametri <> "" Then
             Dim agg As Boolean = RiempiMemory(g_Parametri)
-            LblSatellite.BackColor = If(agg, Color.LightGreen, Color.Yellow)
+            LblSatellite.BackColor = If(agg, COL_DATO_NOTO, COL_DATO_IGNOTO)
         End If
     End Sub
 

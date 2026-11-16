@@ -307,11 +307,13 @@ Partial Class FrmConfigurazione
 
         Me.mskTimeOUT1.Location = New System.Drawing.Point(495, 35)
         Me.mskTimeOUT1.Name = "mskTimeOUT1"
+        Me.mskTimeOUT1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.mskTimeOUT1.Size = New System.Drawing.Size(50, 21)
         Me.mskTimeOUT1.TabIndex = 5
 
         Me.TxtInter1.Location = New System.Drawing.Point(550, 35)
         Me.TxtInter1.Name = "TxtInter1"
+        Me.TxtInter1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtInter1.Size = New System.Drawing.Size(50, 21)
         Me.TxtInter1.TabIndex = 6
 
@@ -336,6 +338,7 @@ Partial Class FrmConfigurazione
 
         Me.TxtPorta1.Location = New System.Drawing.Point(835, 35)
         Me.TxtPorta1.Name = "TxtPorta1"
+        Me.TxtPorta1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtPorta1.Size = New System.Drawing.Size(50, 21)
         Me.TxtPorta1.TabIndex = 10
 
@@ -387,11 +390,13 @@ Partial Class FrmConfigurazione
 
         Me.mskTimeOUT2.Location = New System.Drawing.Point(495, 65)
         Me.mskTimeOUT2.Name = "mskTimeOUT2"
+        Me.mskTimeOUT2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.mskTimeOUT2.Size = New System.Drawing.Size(50, 21)
         Me.mskTimeOUT2.TabIndex = 5
 
         Me.TxtInter2.Location = New System.Drawing.Point(550, 65)
         Me.TxtInter2.Name = "TxtInter2"
+        Me.TxtInter2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtInter2.Size = New System.Drawing.Size(50, 21)
         Me.TxtInter2.TabIndex = 6
 
@@ -416,6 +421,7 @@ Partial Class FrmConfigurazione
 
         Me.TxtPorta2.Location = New System.Drawing.Point(835, 65)
         Me.TxtPorta2.Name = "TxtPorta2"
+        Me.TxtPorta2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtPorta2.Size = New System.Drawing.Size(50, 21)
         Me.TxtPorta2.TabIndex = 10
 
@@ -467,11 +473,13 @@ Partial Class FrmConfigurazione
 
         Me.mskTimeOUT3.Location = New System.Drawing.Point(495, 95)
         Me.mskTimeOUT3.Name = "mskTimeOUT3"
+        Me.mskTimeOUT3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.mskTimeOUT3.Size = New System.Drawing.Size(50, 21)
         Me.mskTimeOUT3.TabIndex = 5
 
         Me.TxtInter3.Location = New System.Drawing.Point(550, 95)
         Me.TxtInter3.Name = "TxtInter3"
+        Me.TxtInter3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtInter3.Size = New System.Drawing.Size(50, 21)
         Me.TxtInter3.TabIndex = 6
 
@@ -496,6 +504,7 @@ Partial Class FrmConfigurazione
 
         Me.TxtPorta3.Location = New System.Drawing.Point(835, 95)
         Me.TxtPorta3.Name = "TxtPorta3"
+        Me.TxtPorta3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtPorta3.Size = New System.Drawing.Size(50, 21)
         Me.TxtPorta3.TabIndex = 10
 
@@ -547,11 +556,13 @@ Partial Class FrmConfigurazione
 
         Me.mskTimeOUT4.Location = New System.Drawing.Point(495, 125)
         Me.mskTimeOUT4.Name = "mskTimeOUT4"
+        Me.mskTimeOUT4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.mskTimeOUT4.Size = New System.Drawing.Size(50, 21)
         Me.mskTimeOUT4.TabIndex = 5
 
         Me.TxtInter4.Location = New System.Drawing.Point(550, 125)
         Me.TxtInter4.Name = "TxtInter4"
+        Me.TxtInter4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtInter4.Size = New System.Drawing.Size(50, 21)
         Me.TxtInter4.TabIndex = 6
 
@@ -576,6 +587,7 @@ Partial Class FrmConfigurazione
 
         Me.TxtPorta4.Location = New System.Drawing.Point(835, 125)
         Me.TxtPorta4.Name = "TxtPorta4"
+        Me.TxtPorta4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtPorta4.Size = New System.Drawing.Size(50, 21)
         Me.TxtPorta4.TabIndex = 10
 
@@ -627,11 +639,13 @@ Partial Class FrmConfigurazione
 
         Me.mskTimeOUT5.Location = New System.Drawing.Point(495, 155)
         Me.mskTimeOUT5.Name = "mskTimeOUT5"
+        Me.mskTimeOUT5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.mskTimeOUT5.Size = New System.Drawing.Size(50, 21)
         Me.mskTimeOUT5.TabIndex = 5
 
         Me.TxtInter5.Location = New System.Drawing.Point(550, 155)
         Me.TxtInter5.Name = "TxtInter5"
+        Me.TxtInter5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtInter5.Size = New System.Drawing.Size(50, 21)
         Me.TxtInter5.TabIndex = 6
 
@@ -656,6 +670,7 @@ Partial Class FrmConfigurazione
 
         Me.TxtPorta5.Location = New System.Drawing.Point(835, 155)
         Me.TxtPorta5.Name = "TxtPorta5"
+        Me.TxtPorta5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtPorta5.Size = New System.Drawing.Size(50, 21)
         Me.TxtPorta5.TabIndex = 10
 
@@ -707,11 +722,13 @@ Partial Class FrmConfigurazione
 
         Me.mskTimeOUT6.Location = New System.Drawing.Point(495, 185)
         Me.mskTimeOUT6.Name = "mskTimeOUT6"
+        Me.mskTimeOUT6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.mskTimeOUT6.Size = New System.Drawing.Size(50, 21)
         Me.mskTimeOUT6.TabIndex = 5
 
         Me.TxtInter6.Location = New System.Drawing.Point(550, 185)
         Me.TxtInter6.Name = "TxtInter6"
+        Me.TxtInter6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtInter6.Size = New System.Drawing.Size(50, 21)
         Me.TxtInter6.TabIndex = 6
 
@@ -736,6 +753,7 @@ Partial Class FrmConfigurazione
 
         Me.TxtPorta6.Location = New System.Drawing.Point(835, 185)
         Me.TxtPorta6.Name = "TxtPorta6"
+        Me.TxtPorta6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtPorta6.Size = New System.Drawing.Size(50, 21)
         Me.TxtPorta6.TabIndex = 10
 
@@ -832,7 +850,7 @@ Partial Class FrmConfigurazione
         Me.CmdLOG.TabIndex = 50
         Me.CmdLOG.Text = "SI"
 
-        Me.LblLog.BackColor = System.Drawing.Color.Red
+        Me.LblLog.BackColor = System.Drawing.Color.Yellow
         Me.LblLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.LblLog.Location = New System.Drawing.Point(170, 445)
         Me.LblLog.Name = "LblLog"
@@ -847,66 +865,79 @@ Partial Class FrmConfigurazione
 
         Me.TxtValidita.Location = New System.Drawing.Point(490, 445)
         Me.TxtValidita.Name = "TxtValidita"
+        Me.TxtValidita.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtValidita.Size = New System.Drawing.Size(70, 21)
         Me.TxtValidita.TabIndex = 53
 
         Me.TxtValTLE.Location = New System.Drawing.Point(730, 445)
         Me.TxtValTLE.Name = "TxtValTLE"
+        Me.TxtValTLE.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtValTLE.Size = New System.Drawing.Size(70, 21)
         Me.TxtValTLE.TabIndex = 54
 
         Me.TxtTolleranza.Location = New System.Drawing.Point(10, 500)
         Me.TxtTolleranza.Name = "TxtTolleranza"
+        Me.TxtTolleranza.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtTolleranza.Size = New System.Drawing.Size(80, 21)
         Me.TxtTolleranza.TabIndex = 55
 
         Me.TxtMin.Location = New System.Drawing.Point(250, 500)
         Me.TxtMin.Name = "TxtMin"
+        Me.TxtMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtMin.Size = New System.Drawing.Size(70, 21)
         Me.TxtMin.TabIndex = 56
 
         Me.TxtMax.Location = New System.Drawing.Point(490, 500)
         Me.TxtMax.Name = "TxtMax"
+        Me.TxtMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtMax.Size = New System.Drawing.Size(70, 21)
         Me.TxtMax.TabIndex = 57
 
         Me.TxtPendenza.Location = New System.Drawing.Point(730, 500)
         Me.TxtPendenza.Name = "TxtPendenza"
+        Me.TxtPendenza.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtPendenza.Size = New System.Drawing.Size(80, 21)
         Me.TxtPendenza.TabIndex = 58
 
         Me.TxtPendenza1.Location = New System.Drawing.Point(10, 555)
         Me.TxtPendenza1.Name = "TxtPendenza1"
+        Me.TxtPendenza1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtPendenza1.Size = New System.Drawing.Size(80, 21)
         Me.TxtPendenza1.TabIndex = 59
 
         Me.TxtCentro.Location = New System.Drawing.Point(250, 555)
         Me.TxtCentro.Name = "TxtCentro"
+        Me.TxtCentro.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtCentro.Size = New System.Drawing.Size(80, 21)
         Me.TxtCentro.TabIndex = 60
 
         Me.TxtThrAuto.Location = New System.Drawing.Point(490, 555)
         Me.TxtThrAuto.Name = "TxtThrAuto"
+        Me.TxtThrAuto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtThrAuto.Size = New System.Drawing.Size(70, 21)
         Me.TxtThrAuto.TabIndex = 61
 
         Me.TxtThrAz.Location = New System.Drawing.Point(730, 555)
         Me.TxtThrAz.Name = "TxtThrAz"
+        Me.TxtThrAz.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtThrAz.Size = New System.Drawing.Size(70, 21)
         Me.TxtThrAz.TabIndex = 62
 
         Me.TxtThrEl.Location = New System.Drawing.Point(10, 610)
         Me.TxtThrEl.Name = "TxtThrEl"
+        Me.TxtThrEl.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtThrEl.Size = New System.Drawing.Size(70, 21)
         Me.TxtThrEl.TabIndex = 63
 
         Me.TxtOffset.Location = New System.Drawing.Point(250, 610)
         Me.TxtOffset.Name = "TxtOffset"
+        Me.TxtOffset.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtOffset.Size = New System.Drawing.Size(70, 21)
         Me.TxtOffset.TabIndex = 64
 
         Me.TxtAddressDC.Location = New System.Drawing.Point(490, 610)
         Me.TxtAddressDC.Name = "TxtAddressDC"
+        Me.TxtAddressDC.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtAddressDC.Size = New System.Drawing.Size(70, 21)
         Me.TxtAddressDC.TabIndex = 65
 
@@ -914,31 +945,37 @@ Partial Class FrmConfigurazione
 
         Me.TxtElMin.Location = New System.Drawing.Point(250, 665)
         Me.TxtElMin.Name = "TxtElMin"
+        Me.TxtElMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtElMin.Size = New System.Drawing.Size(70, 21)
         Me.TxtElMin.TabIndex = 68
 
         Me.TxtAuto.Location = New System.Drawing.Point(490, 665)
         Me.TxtAuto.Name = "TxtAuto"
+        Me.TxtAuto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtAuto.Size = New System.Drawing.Size(80, 21)
         Me.TxtAuto.TabIndex = 70
 
         Me.TxtAugmented.Location = New System.Drawing.Point(730, 665)
         Me.TxtAugmented.Name = "TxtAugmented"
+        Me.TxtAugmented.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtAugmented.Size = New System.Drawing.Size(80, 21)
         Me.TxtAugmented.TabIndex = 71
 
         Me.TxtCoorOff.Location = New System.Drawing.Point(10, 720)
         Me.TxtCoorOff.Name = "TxtCoorOff"
+        Me.TxtCoorOff.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtCoorOff.Size = New System.Drawing.Size(80, 21)
         Me.TxtCoorOff.TabIndex = 72
 
         Me.TxtIntCom.Location = New System.Drawing.Point(250, 720)
         Me.TxtIntCom.Name = "TxtIntCom"
+        Me.TxtIntCom.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtIntCom.Size = New System.Drawing.Size(70, 21)
         Me.TxtIntCom.TabIndex = 73
 
         Me.TxtStepLog.Location = New System.Drawing.Point(490, 720)
         Me.TxtStepLog.Name = "TxtStepLog"
+        Me.TxtStepLog.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtStepLog.Size = New System.Drawing.Size(70, 21)
         Me.TxtStepLog.TabIndex = 74
 
@@ -954,41 +991,49 @@ Partial Class FrmConfigurazione
 
         Me.TxtIT.Location = New System.Drawing.Point(70, 20)
         Me.TxtIT.Name = "TxtIT"
+        Me.TxtIT.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtIT.Size = New System.Drawing.Size(60, 21)
         Me.TxtIT.TabIndex = 75
 
         Me.TxtAT.Location = New System.Drawing.Point(70, 49)
         Me.TxtAT.Name = "TxtAT"
+        Me.TxtAT.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtAT.Size = New System.Drawing.Size(60, 21)
         Me.TxtAT.TabIndex = 76
 
         Me.TxtET.Location = New System.Drawing.Point(290, 49)
         Me.TxtET.Name = "TxtET"
+        Me.TxtET.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtET.Size = New System.Drawing.Size(60, 21)
         Me.TxtET.TabIndex = 77
 
         Me.TxtXT.Location = New System.Drawing.Point(510, 20)
         Me.TxtXT.Name = "TxtXT"
+        Me.TxtXT.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtXT.Size = New System.Drawing.Size(60, 21)
         Me.TxtXT.TabIndex = 78
 
         Me.TxtYT.Location = New System.Drawing.Point(730, 20)
         Me.TxtYT.Name = "TxtYT"
+        Me.TxtYT.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtYT.Size = New System.Drawing.Size(60, 21)
         Me.TxtYT.TabIndex = 79
 
         Me.TxtRT.Location = New System.Drawing.Point(290, 20)
         Me.TxtRT.Name = "TxtRT"
+        Me.TxtRT.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtRT.Size = New System.Drawing.Size(60, 21)
         Me.TxtRT.TabIndex = 80
 
         Me.TxtCY.Location = New System.Drawing.Point(510, 49)
         Me.TxtCY.Name = "TxtCY"
+        Me.TxtCY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtCY.Size = New System.Drawing.Size(60, 21)
         Me.TxtCY.TabIndex = 81
 
         Me.TxtBM.Location = New System.Drawing.Point(730, 49)
         Me.TxtBM.Name = "TxtBM"
+        Me.TxtBM.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtBM.Size = New System.Drawing.Size(60, 21)
         Me.TxtBM.TabIndex = 82
 
@@ -1024,12 +1069,14 @@ Partial Class FrmConfigurazione
         Me.CmbPtic.TabIndex = 87
 
         Me.TxtBackUp.Location = New System.Drawing.Point(10, 830)
+        Me.TxtBackUp.BackColor = System.Drawing.Color.Yellow
         Me.TxtBackUp.Name = "TxtBackUp"
         Me.TxtBackUp.ReadOnly = True
         Me.TxtBackUp.Size = New System.Drawing.Size(130, 21)
         Me.TxtBackUp.TabIndex = 88
 
         Me.TxtAutoTrackBackUp.Location = New System.Drawing.Point(250, 830)
+        Me.TxtAutoTrackBackUp.BackColor = System.Drawing.Color.Yellow
         Me.TxtAutoTrackBackUp.Name = "TxtAutoTrackBackUp"
         Me.TxtAutoTrackBackUp.ReadOnly = True
         Me.TxtAutoTrackBackUp.Size = New System.Drawing.Size(130, 21)

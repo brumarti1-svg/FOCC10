@@ -300,26 +300,26 @@ Partial Public Class FrmRicezione
         'MnuConfiguration
         '
         Me.MnuConfiguration.Name = "MnuConfiguration"
-        Me.MnuConfiguration.Size = New System.Drawing.Size(224, 26)
+        Me.MnuConfiguration.Size = New System.Drawing.Size(183, 26)
         Me.MnuConfiguration.Text = "Configuration"
         '
         'MnuPrint
         '
         Me.MnuPrint.Enabled = False
         Me.MnuPrint.Name = "MnuPrint"
-        Me.MnuPrint.Size = New System.Drawing.Size(224, 26)
+        Me.MnuPrint.Size = New System.Drawing.Size(183, 26)
         Me.MnuPrint.Text = "Print"
         '
         'MnuBell
         '
         Me.MnuBell.Name = "MnuBell"
-        Me.MnuBell.Size = New System.Drawing.Size(224, 26)
+        Me.MnuBell.Size = New System.Drawing.Size(183, 26)
         Me.MnuBell.Text = "Bell"
         '
         'MnuExit
         '
         Me.MnuExit.Name = "MnuExit"
-        Me.MnuExit.Size = New System.Drawing.Size(224, 26)
+        Me.MnuExit.Size = New System.Drawing.Size(183, 26)
         Me.MnuExit.Text = "Exit"
         '
         'MnuACU
@@ -789,7 +789,7 @@ Partial Public Class FrmRicezione
         '
         'LblAzimuth
         '
-        Me.LblAzimuth.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblAzimuth.BackColor = System.Drawing.Color.Yellow
         Me.LblAzimuth.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold)
         Me.LblAzimuth.Location = New System.Drawing.Point(285, 6)
         Me.LblAzimuth.Name = "LblAzimuth"
@@ -799,7 +799,7 @@ Partial Public Class FrmRicezione
         '
         'TxtAzEr
         '
-        Me.TxtAzEr.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TxtAzEr.BackColor = System.Drawing.Color.Yellow
         Me.TxtAzEr.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TxtAzEr.Font = New System.Drawing.Font("Arial", 13.8!, System.Drawing.FontStyle.Bold)
         Me.TxtAzEr.Location = New System.Drawing.Point(227, 9)
@@ -810,7 +810,7 @@ Partial Public Class FrmRicezione
         '
         'LblAzimuthC
         '
-        Me.LblAzimuthC.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblAzimuthC.BackColor = System.Drawing.Color.Yellow
         Me.LblAzimuthC.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold)
         Me.LblAzimuthC.Location = New System.Drawing.Point(373, 6)
         Me.LblAzimuthC.Name = "LblAzimuthC"
@@ -820,7 +820,7 @@ Partial Public Class FrmRicezione
         '
         'LblAzError
         '
-        Me.LblAzError.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblAzError.BackColor = System.Drawing.Color.Yellow
         Me.LblAzError.Location = New System.Drawing.Point(461, 9)
         Me.LblAzError.Name = "LblAzError"
         Me.LblAzError.Size = New System.Drawing.Size(48, 27)
@@ -829,7 +829,7 @@ Partial Public Class FrmRicezione
         '
         'LblAzErrEn
         '
-        Me.LblAzErrEn.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblAzErrEn.BackColor = System.Drawing.Color.Yellow
         Me.LblAzErrEn.Location = New System.Drawing.Point(515, 9)
         Me.LblAzErrEn.Name = "LblAzErrEn"
         Me.LblAzErrEn.Size = New System.Drawing.Size(48, 27)
@@ -854,7 +854,7 @@ Partial Public Class FrmRicezione
         '
         'LblAllarme4
         '
-        Me.LblAllarme4.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblAllarme4.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme4.Font = New System.Drawing.Font("Arial", 9.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme4.ForeColor = System.Drawing.Color.White
@@ -867,7 +867,7 @@ Partial Public Class FrmRicezione
         '
         'LblAllarme5
         '
-        Me.LblAllarme5.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblAllarme5.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme5.Font = New System.Drawing.Font("Arial", 9.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme5.ForeColor = System.Drawing.Color.White
@@ -880,7 +880,7 @@ Partial Public Class FrmRicezione
         '
         'LblAzTBrk
         '
-        Me.LblAzTBrk.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblAzTBrk.BackColor = System.Drawing.Color.Yellow
         Me.LblAzTBrk.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAzTBrk.Font = New System.Drawing.Font("Arial", 10.2!, System.Drawing.FontStyle.Bold)
         Me.LblAzTBrk.Location = New System.Drawing.Point(689, 11)
@@ -929,7 +929,7 @@ Partial Public Class FrmRicezione
         '
         'LblElevazione
         '
-        Me.LblElevazione.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblElevazione.BackColor = System.Drawing.Color.Yellow
         Me.LblElevazione.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold)
         Me.LblElevazione.Location = New System.Drawing.Point(282, 7)
         Me.LblElevazione.Name = "LblElevazione"
@@ -939,7 +939,7 @@ Partial Public Class FrmRicezione
         '
         'TxtElEr
         '
-        Me.TxtElEr.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TxtElEr.BackColor = System.Drawing.Color.Yellow
         Me.TxtElEr.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TxtElEr.Font = New System.Drawing.Font("Arial", 13.8!, System.Drawing.FontStyle.Bold)
         Me.TxtElEr.Location = New System.Drawing.Point(229, 10)
@@ -950,7 +950,7 @@ Partial Public Class FrmRicezione
         '
         'LblElevazioneC
         '
-        Me.LblElevazioneC.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblElevazioneC.BackColor = System.Drawing.Color.Yellow
         Me.LblElevazioneC.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold)
         Me.LblElevazioneC.Location = New System.Drawing.Point(370, 7)
         Me.LblElevazioneC.Name = "LblElevazioneC"
@@ -960,7 +960,7 @@ Partial Public Class FrmRicezione
         '
         'LblElError
         '
-        Me.LblElError.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblElError.BackColor = System.Drawing.Color.Yellow
         Me.LblElError.Location = New System.Drawing.Point(461, 11)
         Me.LblElError.Name = "LblElError"
         Me.LblElError.Size = New System.Drawing.Size(48, 27)
@@ -969,7 +969,7 @@ Partial Public Class FrmRicezione
         '
         'LblElErrEn
         '
-        Me.LblElErrEn.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblElErrEn.BackColor = System.Drawing.Color.Yellow
         Me.LblElErrEn.Location = New System.Drawing.Point(515, 10)
         Me.LblElErrEn.Name = "LblElErrEn"
         Me.LblElErrEn.Size = New System.Drawing.Size(48, 27)
@@ -984,7 +984,7 @@ Partial Public Class FrmRicezione
         '
         'LblAllarme12
         '
-        Me.LblAllarme12.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblAllarme12.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme12.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme12.Font = New System.Drawing.Font("Arial", 9.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme12.ForeColor = System.Drawing.Color.White
@@ -997,7 +997,7 @@ Partial Public Class FrmRicezione
         '
         'LblAllarme13
         '
-        Me.LblAllarme13.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblAllarme13.BackColor = System.Drawing.Color.Yellow
         Me.LblAllarme13.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblAllarme13.Font = New System.Drawing.Font("Arial", 9.0!, System.Drawing.FontStyle.Bold)
         Me.LblAllarme13.ForeColor = System.Drawing.Color.White
@@ -1010,7 +1010,7 @@ Partial Public Class FrmRicezione
         '
         'LblElTBrk
         '
-        Me.LblElTBrk.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblElTBrk.BackColor = System.Drawing.Color.Yellow
         Me.LblElTBrk.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblElTBrk.Font = New System.Drawing.Font("Arial", 10.2!, System.Drawing.FontStyle.Bold)
         Me.LblElTBrk.Location = New System.Drawing.Point(686, 12)
@@ -1121,7 +1121,7 @@ Partial Public Class FrmRicezione
         '
         'LblStepTrack
         '
-        Me.LblStepTrack.BackColor = System.Drawing.Color.White
+        Me.LblStepTrack.BackColor = System.Drawing.Color.Yellow
         Me.LblStepTrack.Location = New System.Drawing.Point(272, 25)
         Me.LblStepTrack.Name = "LblStepTrack"
         Me.LblStepTrack.Size = New System.Drawing.Size(51, 27)
@@ -1172,7 +1172,7 @@ Partial Public Class FrmRicezione
         '
         'TxtACU_ctrl
         '
-        Me.TxtACU_ctrl.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.TxtACU_ctrl.BackColor = System.Drawing.Color.Yellow
         Me.TxtACU_ctrl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TxtACU_ctrl.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold)
         Me.TxtACU_ctrl.Location = New System.Drawing.Point(68, 7)
@@ -1193,7 +1193,7 @@ Partial Public Class FrmRicezione
         '
         'LblPC1_ctrl
         '
-        Me.LblPC1_ctrl.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.LblPC1_ctrl.BackColor = System.Drawing.Color.Yellow
         Me.LblPC1_ctrl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblPC1_ctrl.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold)
         Me.LblPC1_ctrl.Location = New System.Drawing.Point(194, 7)
@@ -1279,14 +1279,14 @@ Partial Public Class FrmRicezione
         '
         'TxtPhaseEl
         '
-        Me.TxtPhaseEl.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TxtPhaseEl.BackColor = System.Drawing.Color.Yellow
         Me.TxtPhaseEl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TxtPhaseEl.Font = New System.Drawing.Font("Arial", 10.2!, System.Drawing.FontStyle.Bold)
         Me.TxtPhaseEl.Location = New System.Drawing.Point(65, 14)
         Me.TxtPhaseEl.Name = "TxtPhaseEl"
         Me.TxtPhaseEl.Size = New System.Drawing.Size(42, 22)
         Me.TxtPhaseEl.TabIndex = 1
-        Me.TxtPhaseEl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.TxtPhaseEl.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'LblRevAzTag
         '
@@ -1300,14 +1300,14 @@ Partial Public Class FrmRicezione
         '
         'LblRevAz_ctrl
         '
-        Me.LblRevAz_ctrl.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblRevAz_ctrl.BackColor = System.Drawing.Color.Yellow
         Me.LblRevAz_ctrl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblRevAz_ctrl.Font = New System.Drawing.Font("Arial", 10.2!, System.Drawing.FontStyle.Bold)
         Me.LblRevAz_ctrl.Location = New System.Drawing.Point(270, 14)
         Me.LblRevAz_ctrl.Name = "LblRevAz_ctrl"
         Me.LblRevAz_ctrl.Size = New System.Drawing.Size(25, 22)
         Me.LblRevAz_ctrl.TabIndex = 3
-        Me.LblRevAz_ctrl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.LblRevAz_ctrl.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'LblRFTag
         '
@@ -1321,7 +1321,7 @@ Partial Public Class FrmRicezione
         '
         'TxtInpFreq
         '
-        Me.TxtInpFreq.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TxtInpFreq.BackColor = System.Drawing.Color.Yellow
         Me.TxtInpFreq.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TxtInpFreq.Font = New System.Drawing.Font("Arial", 10.2!, System.Drawing.FontStyle.Bold)
         Me.TxtInpFreq.Location = New System.Drawing.Point(374, 12)
@@ -1332,7 +1332,7 @@ Partial Public Class FrmRicezione
         '
         'TxtPhAz
         '
-        Me.TxtPhAz.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TxtPhAz.BackColor = System.Drawing.Color.Yellow
         Me.TxtPhAz.Location = New System.Drawing.Point(141, 12)
         Me.TxtPhAz.Name = "TxtPhAz"
         Me.TxtPhAz.Size = New System.Drawing.Size(51, 22)
@@ -1342,7 +1342,7 @@ Partial Public Class FrmRicezione
         '
         'LblPolRic
         '
-        Me.LblPolRic.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer))
+        Me.LblPolRic.BackColor = System.Drawing.Color.Yellow
         Me.LblPolRic.Location = New System.Drawing.Point(625, 10)
         Me.LblPolRic.Name = "LblPolRic"
         Me.LblPolRic.Size = New System.Drawing.Size(78, 22)
@@ -1359,7 +1359,7 @@ Partial Public Class FrmRicezione
         '
         'LblCommand
         '
-        Me.LblCommand.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LblCommand.BackColor = System.Drawing.Color.Yellow
         Me.LblCommand.ForeColor = System.Drawing.SystemColors.Window
         Me.LblCommand.Location = New System.Drawing.Point(506, 120)
         Me.LblCommand.Name = "LblCommand"
@@ -1369,7 +1369,7 @@ Partial Public Class FrmRicezione
         '
         'LblPhase
         '
-        Me.LblPhase.BackColor = System.Drawing.Color.Cyan
+        Me.LblPhase.BackColor = System.Drawing.Color.Yellow
         Me.LblPhase.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblPhase.Location = New System.Drawing.Point(1127, 603)
         Me.LblPhase.Name = "LblPhase"
@@ -1453,7 +1453,7 @@ Partial Public Class FrmRicezione
         '
         'LblEmergency
         '
-        Me.LblEmergency.BackColor = System.Drawing.Color.Red
+        Me.LblEmergency.BackColor = System.Drawing.Color.Yellow
         Me.LblEmergency.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblEmergency.Location = New System.Drawing.Point(1064, 195)
         Me.LblEmergency.Name = "LblEmergency"
@@ -1461,11 +1461,10 @@ Partial Public Class FrmRicezione
         Me.LblEmergency.TabIndex = 60
         Me.LblEmergency.Text = "IN"
         Me.LblEmergency.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.LblEmergency.Visible = False
         '
         'LblEmergency1
         '
-        Me.LblEmergency1.BackColor = System.Drawing.Color.LightGreen
+        Me.LblEmergency1.BackColor = System.Drawing.Color.Yellow
         Me.LblEmergency1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblEmergency1.Location = New System.Drawing.Point(1105, 193)
         Me.LblEmergency1.Name = "LblEmergency1"
@@ -1486,6 +1485,7 @@ Partial Public Class FrmRicezione
         '
         Me.LblWarning.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblWarning.Location = New System.Drawing.Point(550, 568)
+        Me.LblWarning.BackColor = System.Drawing.Color.Yellow
         Me.LblWarning.Name = "LblWarning"
         Me.LblWarning.Size = New System.Drawing.Size(390, 27)
         Me.LblWarning.TabIndex = 27
@@ -1612,7 +1612,7 @@ Partial Public Class FrmRicezione
         '
         'TxtPhase
         '
-        Me.TxtPhase.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TxtPhase.BackColor = System.Drawing.Color.Yellow
         Me.TxtPhase.Location = New System.Drawing.Point(768, 600)
         Me.TxtPhase.Name = "TxtPhase"
         Me.TxtPhase.Size = New System.Drawing.Size(51, 22)
@@ -1621,9 +1621,10 @@ Partial Public Class FrmRicezione
         '
         'TxtRevAz
         '
-        Me.TxtRevAz.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TxtRevAz.BackColor = System.Drawing.Color.Yellow
         Me.TxtRevAz.Location = New System.Drawing.Point(1048, 601)
         Me.TxtRevAz.Name = "TxtRevAz"
+        Me.TxtRevAz.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtRevAz.Size = New System.Drawing.Size(51, 22)
         Me.TxtRevAz.TabIndex = 47
         '
@@ -1708,7 +1709,7 @@ Partial Public Class FrmRicezione
         '
         'LblMemParamInd
         '
-        Me.LblMemParamInd.BackColor = System.Drawing.Color.Red
+        Me.LblMemParamInd.BackColor = System.Drawing.Color.Yellow
         Me.LblMemParamInd.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblMemParamInd.Location = New System.Drawing.Point(975, 404)
         Me.LblMemParamInd.Name = "LblMemParamInd"
@@ -1727,7 +1728,7 @@ Partial Public Class FrmRicezione
         '
         'LblMemDataInd
         '
-        Me.LblMemDataInd.BackColor = System.Drawing.Color.Red
+        Me.LblMemDataInd.BackColor = System.Drawing.Color.Yellow
         Me.LblMemDataInd.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblMemDataInd.Location = New System.Drawing.Point(1064, 406)
         Me.LblMemDataInd.Name = "LblMemDataInd"
@@ -1745,7 +1746,7 @@ Partial Public Class FrmRicezione
         '
         'LblSatDataInd
         '
-        Me.LblSatDataInd.BackColor = System.Drawing.Color.Red
+        Me.LblSatDataInd.BackColor = System.Drawing.Color.Yellow
         Me.LblSatDataInd.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblSatDataInd.Location = New System.Drawing.Point(1143, 406)
         Me.LblSatDataInd.Name = "LblSatDataInd"
@@ -1763,7 +1764,7 @@ Partial Public Class FrmRicezione
         '
         'LblStowUnstowInd
         '
-        Me.LblStowUnstowInd.BackColor = System.Drawing.Color.Red
+        Me.LblStowUnstowInd.BackColor = System.Drawing.Color.Yellow
         Me.LblStowUnstowInd.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblStowUnstowInd.Location = New System.Drawing.Point(1253, 408)
         Me.LblStowUnstowInd.Name = "LblStowUnstowInd"
@@ -1833,6 +1834,7 @@ Partial Public Class FrmRicezione
         '
         Me.TxtCoorOff.Location = New System.Drawing.Point(415, 746)
         Me.TxtCoorOff.Name = "TxtCoorOff"
+        Me.TxtCoorOff.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtCoorOff.Size = New System.Drawing.Size(44, 22)
         Me.TxtCoorOff.TabIndex = 0
         Me.TxtCoorOff.Visible = False
@@ -1875,6 +1877,7 @@ Partial Public Class FrmRicezione
         '
         Me.LblSwitches.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblSwitches.Location = New System.Drawing.Point(580, 761)
+        Me.LblSwitches.BackColor = System.Drawing.Color.Yellow
         Me.LblSwitches.Name = "LblSwitches"
         Me.LblSwitches.Size = New System.Drawing.Size(155, 18)
         Me.LblSwitches.TabIndex = 0
@@ -1895,6 +1898,7 @@ Partial Public Class FrmRicezione
         '
         Me.LblBackUp.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblBackUp.Location = New System.Drawing.Point(1000, 746)
+        Me.LblBackUp.BackColor = System.Drawing.Color.Yellow
         Me.LblBackUp.Name = "LblBackUp"
         Me.LblBackUp.Size = New System.Drawing.Size(155, 18)
         Me.LblBackUp.TabIndex = 0
@@ -2140,9 +2144,10 @@ Partial Public Class FrmRicezione
         '
         'TxtPhasAz
         '
-        Me.TxtPhasAz.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TxtPhasAz.BackColor = System.Drawing.Color.Yellow
         Me.TxtPhasAz.Location = New System.Drawing.Point(900, 601)
         Me.TxtPhasAz.Name = "TxtPhasAz"
+        Me.TxtPhasAz.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtPhasAz.Size = New System.Drawing.Size(81, 22)
         Me.TxtPhasAz.TabIndex = 63
         '

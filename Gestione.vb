@@ -116,7 +116,7 @@ Module Gestione
                     AggAlgo = rs_Orbite!Algoritmo
                     b_Calcola = InitPar11()
                     ' C10: azzurro se calcolabile, giallo se no
-                    FrmRicezione.LblSatellite.BackColor = If(b_Calcola, Color.Cyan, Color.Yellow)
+                    FrmRicezione.LblSatellite.BackColor = If(b_Calcola, COL_DATO_NOTO, COL_DATO_IGNOTO)
                 ElseIf rs_Orbite!Algoritmo = 1 Then
                     LATSTA = LATSTA11 * GradiRad
                     LONSTA = LONSTA11 * GradiRad
@@ -132,10 +132,10 @@ Module Gestione
                     SatChange = True
                     RiempiMemory(s_FileStars)
                     b_Calcola = True
-                    FrmRicezione.LblSatellite.BackColor = Color.Cyan     ' C10 (VB6 &HFFFF00)
+                    FrmRicezione.LblSatellite.BackColor = COL_DATO_NOTO     ' C10 (VB6 &HFFFF00)
                 ElseIf rs_Orbite!Algoritmo = 4 Then
                     b_Calcola = True
-                    FrmRicezione.LblSatellite.BackColor = Color.Cyan     ' C10 (VB6 &HFFFF00)
+                    FrmRicezione.LblSatellite.BackColor = COL_DATO_NOTO     ' C10 (VB6 &HFFFF00)
                 End If
             Else
                 '            Response = MessageBox.Show("There is not information for the Satellite " & Antenna, vbOKOnly)

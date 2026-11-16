@@ -184,7 +184,7 @@ Public Class FrmConfigurazione
         TxtDirBackUp.Text = tmpDato
         g_DirBackUp = TxtDirBackUp.Text
         If g_Log Then
-            Me.LblLog.BackColor = Color.LightGreen
+            Me.LblLog.BackColor = Color.Lime
             Me.CmdLOG.Text = "NO"
         Else
             Me.LblLog.BackColor = Color.Red
@@ -344,7 +344,7 @@ Public Class FrmConfigurazione
         Loop
         rs_Orbite.Close()
         If g_Log Then
-            Me.LblLog.BackColor = Color.LightGreen
+            Me.LblLog.BackColor = Color.Lime
             Me.CmdLOG.Text = "NO"
         Else
             Me.LblLog.BackColor = Color.Red
@@ -412,7 +412,7 @@ Public Class FrmConfigurazione
         Try
             If CmdLOG.Text = "YES" Then
                 CmdLOG.Text = "NO"
-                LblLog.BackColor = Color.LightGreen
+                LblLog.BackColor = Color.Lime
                 g_Log = True
                 Dim logPath1 As String = Application.StartupPath & "\" & Canali(ACU).File_Log
                 System.IO.File.WriteAllText(logPath1, "")
@@ -456,6 +456,8 @@ Public Class FrmConfigurazione
     End Sub
 
     Private Sub FrmConfigurazione_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Campi di sola presentazione: giallo se sconosciuti, 128,255,255 se noti
+        ColoriStandard.RegistraDati(TxtBackUp, TxtAutoTrackBackUp)
         InitArrays()
         PreparaForm()
         ImpostaValoriAttuali()

@@ -499,6 +499,7 @@ Partial Class FrmParametri
         '
         Me.TxtCY.Location = New System.Drawing.Point(200, 105)
         Me.TxtCY.Name = "TxtCY"
+        Me.TxtCY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtCY.Size = New System.Drawing.Size(45, 22)
         Me.TxtCY.TabIndex = 19
         '
@@ -516,6 +517,7 @@ Partial Class FrmParametri
         '
         Me.TxtBM.Location = New System.Drawing.Point(627, 119)
         Me.TxtBM.Name = "TxtBM"
+        Me.TxtBM.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtBM.Size = New System.Drawing.Size(45, 22)
         Me.TxtBM.TabIndex = 21
         '
@@ -698,6 +700,7 @@ Partial Class FrmParametri
         '
         Me.TxtSPPCW.Location = New System.Drawing.Point(616, 67)
         Me.TxtSPPCW.Name = "TxtSPPCW"
+        Me.TxtSPPCW.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtSPPCW.Size = New System.Drawing.Size(55, 22)
         Me.TxtSPPCW.TabIndex = 15
         '
@@ -714,6 +717,7 @@ Partial Class FrmParametri
         '
         Me.TxtSPPCC.Location = New System.Drawing.Point(246, 67)
         Me.TxtSPPCC.Name = "TxtSPPCC"
+        Me.TxtSPPCC.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtSPPCC.Size = New System.Drawing.Size(65, 22)
         Me.TxtSPPCC.TabIndex = 13
         '
@@ -825,6 +829,7 @@ Partial Class FrmParametri
         '
         Me.TxtMT.Location = New System.Drawing.Point(616, 91)
         Me.TxtMT.Name = "TxtMT"
+        Me.TxtMT.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtMT.Size = New System.Drawing.Size(55, 22)
         Me.TxtMT.TabIndex = 11
         '
@@ -910,6 +915,7 @@ Partial Class FrmParametri
         '
         Me.TxtMTT.Location = New System.Drawing.Point(286, 88)
         Me.TxtMTT.Name = "TxtMTT"
+        Me.TxtMTT.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtMTT.Size = New System.Drawing.Size(30, 22)
         Me.TxtMTT.TabIndex = 7
         '
@@ -1600,6 +1606,7 @@ Partial Class FrmParametri
         Me.TxtAltri.Location = New System.Drawing.Point(14, 30)
         Me.TxtAltri.Multiline = True
         Me.TxtAltri.Name = "TxtAltri"
+        Me.TxtAltri.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtAltri.Size = New System.Drawing.Size(240, 181)
         Me.TxtAltri.TabIndex = 0
         '

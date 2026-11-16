@@ -21,6 +21,8 @@ Public Class FrmDownConverter
     End Sub
 
     Private Sub frmDownConverter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Campi di sola presentazione: giallo se sconosciuti, 128,255,255 se noti
+        ColoriStandard.RegistraDati(LblAtt1, LblFreq, LblAtt2)
         LblFreq.Text = ""
         LblAtt1.Text = ""
         LblAtt2.Text = ""
