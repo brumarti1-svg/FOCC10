@@ -331,8 +331,8 @@ Partial Public Class FrmLog
                 LblPCU.Text = If((vBytesold(5) And BIT2) = BIT2, "PCU", "ACU")
                 LblPCU.BackColor = If((vBytesold(5) And BIT2) = BIT2, Color.Red, Color.Lime)
 
-                LblElTBrk.Text = If((vBytesold(5) And BIT4) = BIT4, "RELEASED", "APPLIED ")
-                LblAzTBrk.Text = If((vBytesold(5) And BIT3) = BIT3, "RELEASED", "APPLIED ")
+                LblElTBrk.Text = If((vBytesold(5) And BIT3) = BIT3, "RELEASED", "APPLIED ")
+                LblAzTBrk.Text = If((vBytesold(5) And BIT4) = BIT4, "RELEASED", "APPLIED ")
 
                 LblEmergency.BackColor = If((vBytesold(6) And BIT3) = BIT3, Color.Lime, Color.Red)
                 LblEmergency1.BackColor = If((vBytesold(6) And BIT4) = BIT4, Color.Lime, Color.Red)
