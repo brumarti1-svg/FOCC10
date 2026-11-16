@@ -208,7 +208,13 @@ Partial Public Class FrmLog
     End Sub
 
     Private Sub MnuEphemeris_Click(sender As Object, e As EventArgs) Handles MnuEphemeris.Click
-        FrmEffemeridi.Show()
+        ' Effemeridi del satellite operativo (come Ephemeris > Satellite di frmRicezione)
+        If Algoritmo = 3 Then
+            FrmTrackTable.Show()
+        Else
+            i_Ephemeris = 2
+            FrmEffemeridi.Show()
+        End If
     End Sub
 
     Private Sub MnuParameterACU_Click(sender As Object, e As EventArgs) Handles MnuParameterACU.Click

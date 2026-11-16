@@ -504,19 +504,9 @@ Partial Public Class FrmRicezione
         LblCommand.Text = testo
 
         If colore = Nothing OrElse colore = Color.Empty Then
-            ' Colore automatico in base al contenuto
-            Select Case testo.ToUpperInvariant()
-                Case "STANDBY", "STAND BY"
-                    LblCommand.BackColor = COL_IDLE
-                Case "PROGRAM TRACK"
-                    LblCommand.BackColor = COL_OK
-                Case "AUGMENTED"
-                    LblCommand.BackColor = COL_OK
-                Case "STOW"
-                    LblCommand.BackColor = COL_WARN
-                Case Else
-                    LblCommand.BackColor = SystemColors.Control
-            End Select
+            ' Dato di sola presentazione (modo comandato, VB6 senza colori per modo):
+            ' 128,255,255 se noto, giallo se "---"
+            LblCommand.BackColor = If(ColoriStandard.DatoNoto(testo), COL_DATO_NOTO, COL_DATO_IGNOTO)
         Else
             LblCommand.BackColor = colore
         End If
