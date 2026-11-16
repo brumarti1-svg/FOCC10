@@ -44,41 +44,40 @@ Public Class FrmParametri
 
         If Campo = "?" Then
             ClearAllTxt(Me)
+            ' Tracciato del messaggio parametri come nel VB6 (frmParametri.frm,
+            ' ValoreParametri): STEP 7, IT 9, AT 11, ET 13, SS 15, XT 17 ...
+            ' SPPCW, poi AOS da 73. Prima il .NET leggeva un tracciato diverso
+            ' (AOS 7, EOS 13, SPCC 19, IT 43, ...) che non corrisponde al VB6.
             pos = 7
-            TxtAOS.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 3)
-            pos = pos + 6
-            TxtEOS.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 3)
-            pos = 19
-            TxtSPCC.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 3)
-            pos = pos + 6
-            TxtSPCW.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 3)
-            pos = pos + 6
-            TxtSPDW.Text = Mid(Messaggio, pos, 2) & "." & Mid(Messaggio, pos + 2, 3)
-            pos = pos + 5
-            TxtSPUP.Text = Mid(Messaggio, pos, 2) & "." & Mid(Messaggio, pos + 2, 3)
-            pos = 41
+            TxtSTEP.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
-            TxtIT.Text  = Mid(Messaggio, pos, 2)
+            TxtIT.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
-            TxtAT.Text  = Mid(Messaggio, pos, 2)
+            TxtAT.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
-            TxtET.Text  = Mid(Messaggio, pos, 2)
-            pos = 51
-            TxtXT.Text  = Mid(Messaggio, pos, 2)
+            TxtET.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
-            TxtYT.Text  = Mid(Messaggio, pos, 2)
+            TxtSS.Text = Mid(Messaggio, pos, 2)
+            pos = 17
+            TxtXT.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
-            TxtRT.Text  = Mid(Messaggio, pos, 2)
+            TxtYT.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
+            TxtRT.Text = Mid(Messaggio, pos, 2)
+            pos = pos + 2
+            TxtCY.Text = Mid(Messaggio, pos, 2)
+            pos = pos + 2
+            TxtBM.Text = Mid(Messaggio, pos, 1)
+            pos = pos + 1
             TxtATTS.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
             TxtATTA.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
             TxtATTE.Text = Mid(Messaggio, pos, 2)
-            pos = pos + 3
-            TxtAli.Text  = Mid(Messaggio, pos, 1)
+            pos = pos + 2
+            TxtAli.Text = Mid(Messaggio, pos, 1)
             pos = pos + 1
-            TxtEli.Text  = Mid(Messaggio, pos, 1)
+            TxtEli.Text = Mid(Messaggio, pos, 1)
             pos = pos + 1
             TxtPli.Text = Mid(Messaggio, pos, 1)
             pos = pos + 1
@@ -91,6 +90,22 @@ Public Class FrmParametri
             TxtMR.Text = Mid(Messaggio, pos, 1)
             pos = pos + 1
             TxtPT.Text = Mid(Messaggio, pos, 1)
+            pos = pos + 1
+            TxtFST.Text = Mid(Messaggio, pos, 1)
+            pos = pos + 1
+            TxtMT.Text = Mid(Messaggio, pos, 2)
+            pos = pos + 2
+            TxtSPCC.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 3)
+            pos = pos + 6
+            TxtSPCW.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 3)
+            pos = pos + 6
+            TxtSPDW.Text = Mid(Messaggio, pos, 2) & "." & Mid(Messaggio, pos + 2, 3)
+            pos = pos + 5
+            TxtSPUP.Text = Mid(Messaggio, pos, 2) & "." & Mid(Messaggio, pos + 2, 3)
+            pos = pos + 5
+            TxtSPPCC.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 1)
+            pos = pos + 4
+            TxtSPPCW.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 1)
 
             ' Tabelle di calibrazione per settore (AO/EO/PO) e campi singoli —
             ' porting diretto dal VB6 di FOC6 (Prog0357-FOC6\frmParametri.frm,
